@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>One Relay Ballooned to 94 GiB — Tor's Built-In Memory Defense Never Fired | 1st Amendment Encrypted Openness</title>
+  <meta name="description" content="Why Tor's MaxMemInQueues defense did not trigger while a relay reached 94 GiB during the 2026 circuit-building flood.">
+  <link rel="canonical" href="https://1aeo.com/blog/tor-memory-defense-blindspot-june-2026.html">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; background-color: #121212; color: #ffffff; }
+    .nav { background-color: #1e1e1e; padding: 10px 0; box-shadow: 0 2px 10px rgba(0, 255, 127, 0.2); position: sticky; top: 0; z-index: 1000; }
+    .nav-toggle { display: none; background: none; border: none; font-size: 24px; color: #00ff7f; position: absolute; top: 10px; right: 20px; cursor: pointer; }
+    .nav-links { display: flex; justify-content: center; flex-wrap: wrap; }
+    .nav-links a { color: #00ff7f; text-decoration: none; margin: 0 15px; font-size: 18px; }
+    .nav-links a:hover { text-decoration: underline; }
+    @media (max-width: 600px) { .nav-links { display: none; flex-direction: column; margin-top: 40px; } .nav-links.show { display: flex; } .nav-toggle { display: block; } }
+    .container { max-width: 800px; margin: 50px auto; padding: 20px; background: #1e1e1e; box-shadow: 0px 0px 15px rgba(0, 255, 127, 0.6); border-radius: 10px; text-align: left; }
+    h1, h2, h3 { color: #00ff7f; }
+    h1 { text-align: center; font-size: 26px; }
+    p { font-size: 18px; color: #cccccc; line-height: 1.6; margin-bottom: 1em; }
+    .meta { font-size: 14px; color: #888; margin-bottom: 20px; text-align: center; }
+    ul, ol { color: #cccccc; margin-bottom: 1em; }
+    li { font-size: 18px; margin-bottom: 8px; line-height: 1.6; }
+    code { background-color: #2d2d2d; padding: 2px 6px; border-radius: 3px; font-family: monospace; color: #00ff7f; }
+    pre { background-color: #2d2d2d; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 14px; }
+    pre code { background: none; padding: 0; color: #ffffff; }
+    a { color: #00ff7f; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container img { display: block; margin: 20px auto; max-width: 100%; height: auto; border-radius: 5px; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #444; }
+    th { background-color: #2d2d2d; color: #00ff7f; }
+    td { color: #cccccc; }
+    tr:hover { background-color: #252525; }
+    .warning { background-color: #2d2d2d; border-left: 4px solid #ff6b6b; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .callout { background-color: #2d2d2d; border-left: 4px solid #00ff7f; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; font-size: 14px; color: #777; text-align: center; }
+    .btn { display: inline-block; margin-top: 20px; padding: 12px 24px; font-size: 18px; color: #121212; background-color: #00ff7f; text-decoration: none; font-weight: bold; border-radius: 5px; transition: background 0.3s; }
+    .btn:hover { background-color: #00cc66; text-decoration: none; }
+    .highlight { color: #ff6b6b; font-weight: bold; }
+    .success { color: #00ff7f; font-weight: bold; }
+    .series { font-size: 15px; color: #aaa; background-color: #181818; border-left: 4px solid #00ff7f; padding: 12px 16px; margin: 0 0 24px; border-radius: 0 5px 5px 0; line-height: 1.5; }
+    .series a { color: #00ff7f; }
+    h2, h3 { scroll-margin-top: 70px; }
+    .anchor { color: #3f3f3f; text-decoration: none; margin-left: 8px; font-size: 0.85em; font-weight: normal; }
+    h2:hover .anchor, h3:hover .anchor { color: #00ff7f; }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')">&#9776;</button>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/blog/">Blog</a>
+      <a href="https://metrics.1aeo.com">Metrics</a>
+      <a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
+      <a href="https://aroivalidator.1aeo.com">AROI Validator</a>
+      <a href="https://routefluxmap.1aeo.com">RouteFluxMap</a>
+      <a href="/#contact">Contact</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1>One Relay Ballooned to 94 GiB &mdash; Tor's Built-In Memory Defense Never Fired</h1>
+    <p class="meta"><em>By 1AEO Team • Updated July 29, 2026 • Per-relay process memory from 1AEO's fleet telemetry, checked against tor 0.4.9.9 source • Telemetry through July 28, 2026; flood ongoing in its circuit-rejection mode</em></p>
+
+    <p>Tor ships a last-line memory defense. <code>MaxMemInQueues</code> sets a cap on the memory tor believes it is using; when tor's accounting crosses that cap, tor kills circuits to free RAM. The default cap is min(0.4&nbsp;&times;&nbsp;RAM, 8&nbsp;GiB) &mdash; on any big-RAM relay host, exactly <strong>8 GiB</strong>. During the June flood we watched that defense sit silent while relay processes grew to more than ten times its ceiling. A month later the same defense fired hard against a different mode of the same campaign. The blindspot is <strong>vector-specific</strong>, and that is the whole story.</p>
+
+    <h2 id="what-it-counts">What the Defense Counts &mdash; and What It Doesn't <a class="anchor" href="#what-it-counts" aria-label="Link to this section">#</a></h2>
+    <p>The cap is enforced against a specific set of internal pools: cell queues, half-streams, connection buffers, compression state, the onion-service descriptor cache, GeoIP and DNS caches, and conflux. It does <em>not</em> account the per-circuit structures, relay crypto state, or allocator overhead. That second list is exactly where an idle-circuit flood's memory lives &mdash; millions of open-but-idle circuits carrying almost no cells.</p>
+
+    <h2 id="the-94-gib-spike">1.3 GiB to 94 GiB, and Tor Never Noticed <a class="anchor" href="#the-94-gib-spike" aria-label="Link to this section">#</a></h2>
+    <p>The worst-ballooning relay we observed went from ~1.3&nbsp;GiB of resident memory to <strong class="highlight">~94 GiB</strong> &mdash; <strong class="highlight">11.7x</strong> the defense's 8&nbsp;GiB ceiling &mdash; and the defense never fired. Then, in the space of about 30 minutes, <strong class="success">~89 GiB came back in-process</strong>: no restart, no kill. Tor never noticed the memory on the way up or on the way down, because by its own accounting almost none of it existed.</p>
+
+    <img width="2080" height="1120" src="images/tor-memory-defense-chart-blindspot.png" alt="Time-series chart of tor process resident memory in GiB for the single worst-ballooning 1AEO relay, 10-minute samples, June 25 to June 27 2026. The line sits near 1.3 GiB, then spikes in a narrow column to a peak of about 94 GiB — 11.7 times the dashed red MaxMemInQueues default ceiling of 8 GiB drawn near the bottom — and then falls back as roughly 89 GiB is released in-process in about 30 minutes, with no restart and no kill. Annotations note that this memory lives in pools tor does not count, such as per-circuit structures and allocator slack, so the defense never fired in either direction.">
+
+    <h2 id="kernel-did-the-job">In That Phase, the Kernel Did the Defense's Job <a class="anchor" href="#kernel-did-the-job" aria-label="Link to this section">#</a></h2>
+    <p>Over the idle-circuit accumulation phase &mdash; June 24 through July 13 &mdash; tor's defense freed <strong class="highlight">less than 2%</strong> of the memory the Linux kernel OOM killer ultimately had to reclaim by killing relay processes outright; the kernel reclaimed roughly <strong class="highlight">67x</strong> more. We count <strong class="highlight">~31 tor-relay kernel OOM kills</strong> in that phase, each verified in the systemd journal. When the application-level defense is blind, the operating system's last resort becomes the actual defense &mdash; and its remedy is killing the whole relay. That ratio describes <em>that phase</em> &mdash; not the campaign as a whole.</p>
+
+    <h2 id="vector-specific">The Blindspot Is Vector-Specific <a class="anchor" href="#vector-specific" aria-label="Link to this section">#</a></h2>
+    <p>From July 23 the flood switched to a directory-write / slow-read mode. That mode does not park memory in idle circuits &mdash; it backs up <strong>outbound cell queues</strong>, which <em>are</em> an accounted pool. The defense saw it immediately and fired hard: roughly <strong class="success">221 GB</strong> freed fleet-wide on July 23, another <strong class="success">117 GB</strong> on July 27, <strong class="success">~475 GB</strong> in total, and then quiet since the early hours of July 28 &mdash; three hours before that morning's planned fleet-wide restart, so the stop is not a restart artifact. It worked. Kernel OOM kills across that entire stretch: <strong class="success">zero</strong> &mdash; the last one on our fleet was July 11, more than two weeks before this update &mdash; against ~31 in the June phase.</p>
+
+    <img width="2080" height="1120" src="images/tor-memory-defense-chart-reclaimed.png" alt="Grouped bar chart comparing what each memory defense reclaimed in two phases of the same 2026 campaign, shown relative to tor's own phase-A total. Phase A, June 24 to July 13, idle-circuit accumulation with memory in pools tor does not count: tor's built-in MaxMemInQueues defense is a thin sliver at 1x while the Linux kernel OOM killer towers at 67x, so tor freed less than 2 percent of what the kernel reclaimed by killing 31 relay processes. Phase B, July 23 to 28, directory-write and slow-read mode with memory in outbound cell queues that tor does count: tor's defense freed about 20 times its phase-A total while the kernel OOM killer reclaimed nothing at all, zero kills. Attack ongoing in its circuit-rejection mode as of July 29.">
+
+    <h2 id="cost-of-working">What It Costs When It Works <a class="anchor" href="#cost-of-working" aria-label="Link to this section">#</a></h2>
+    <p>Every invocation of the handler also sets tor's <code>overload-general</code> flag. So while the defense was doing exactly its job, our fleet self-reported up to <strong class="highlight">92 relays "overloaded"</strong> across six days (94 in the public descriptor archive) &mdash; <strong>135 distinct relays, 13% of the fleet</strong>, at least once. Not one failed: every relay stayed up, none dropped out of the consensus, and no 1AEO relay has reported overload since July 28 &mdash; though a planned fleet-wide restart that same morning also cleared tor's in-memory overload state, so read that last point as consistent with the episode ending rather than as proof of it. Read literally, the signal said the fleet was buckling. What it actually said was "the memory defense is running."</p>
+
+    <p>The ballooning itself has not stopped either. A single relay re-ratcheted to <strong class="highlight">83.60 GiB</strong> on July 27 &mdash; the second-highest per-relay figure we have ever recorded, behind the ~94 GiB above &mdash; and went balloon, handler dump, back to normal inside four hours.</p>
+
+    <h2 id="footgun">The Same Blindspot Backwards: a 128 MB Footgun <a class="anchor" href="#footgun" aria-label="Link to this section">#</a></h2>
+    <p>The accounting cuts the other way too, with no attack needed. A relay with <code>DirCache</code> enabled runs background consensus-diff compression, and each lzma job is accounted at <strong class="highlight">~93 MiB</strong>. Two concurrent jobs exceed a 128&nbsp;MB <code>MaxMemInQueues</code> cap &mdash; so such a relay enters OOM circuit-killing <strong>every consensus cycle</strong> with zero attack traffic, and killing circuits cannot free compression state anyway. We watched this chronic false positive on a few tightly-capped test relays, firing daily since before the flood. If you cap a relay, set <code>MaxMemInQueues</code> to at least <strong class="success">~512 MB&ndash;1 GB</strong>, or set <code>DirCache 0</code>.</p>
+
+    <h2 id="scope-and-ask">What We're Asking For <a class="anchor" href="#scope-and-ask" aria-label="Link to this section">#</a></h2>
+    <p>The defense isn't broken. It sees one memory shape and not the other, and it cannot tell you which is happening. Two changes:</p>
+    <ul>
+      <li><strong>Account per-circuit memory, or add an RSS-based trigger</strong>, so the defense sees <em>both</em> shapes &mdash; queue backlog <em>and</em> idle-circuit accumulation &mdash; instead of only the one that lands in counted pools.</li>
+      <li><strong>Split the overload signal.</strong> "The memory defense is working" and "this relay is failing" currently emit the same flag. Six days of our fleet reporting overload while every relay stayed healthy is what that conflation looks like from the outside.</li>
+    </ul>
+    <p>Both belong to the list in our <a href="defending-against-circuit-dos-june-2026.html">defenses post</a>.</p>
+
+    <h2 id="how-we-measured">How We Measured <a class="anchor" href="#how-we-measured" aria-label="Link to this section">#</a></h2>
+    <p>Per-relay tor RSS from 1AEO's fleet Prometheus, 10-minute samples; memory freed by tor's handler from its own OOM byte counter, summed over 6-hour windows; kernel OOM kills from the systemd journal and the kernel's kill counter; overload reporting cross-checked against public relay descriptors. The accounting behavior (which pools <code>MaxMemInQueues</code> covers, the min(0.4&nbsp;&times;&nbsp;RAM, 8&nbsp;GiB) default, the ~93&nbsp;MiB-per-lzma-job accounting) is verified against tor 0.4.9.9 source. Private telemetry is reported as per-relay GiB, event counts and ratios only; handler totals are decimal GB, per-relay memory binary GiB. One caveat: a planned fleet-wide tor restart on the morning of July 28 reset in-memory overload state, so overload counts after that date are not comparable with earlier ones &mdash; the handler going quiet at 03:00 UTC, three hours ahead of it, is not affected.</p>
+
+    <p class="series"><strong>Related reading:</strong> <a href="circuit-building-dos-fleet-cost-june-2026.html">What It Actually Costs</a> &mdash; Part 3's memory section, where the ballooning first appeared &mdash; and <a href="defending-against-circuit-dos-june-2026.html">Defending Against Circuit-Building DoS</a> &mdash; Part 5, the full list of metric and protocol asks this post's fix belongs to.</p>
+
+    <p style="text-align: center;"><a href="/#get-involved" class="btn">Join the Mission</a></p>
+
+    <div class="footer">
+      <p>© 2026 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Securing a Fresh Ubuntu VM for a Tor Relay: A Beginner's Checklist | 1st Amendment Encrypted Openness</title>
+  <meta name="description" content="Harden a new Ubuntu 24.04/26.04 VM for a Tor relay: unique passwords, key-only SSH, two open ports, Tor from deb.torproject.org, and the checks that prove it.">
+  <link rel="canonical" href="https://1aeo.com/blog/securing-fresh-ubuntu-vm-tor-relay-checklist.html">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Securing a Fresh Ubuntu VM for a Tor Relay: A Beginner&#x27;s Checklist">
+  <meta property="og:description" content="Two doors open, SSH for you and the ORPort for Tor, no password that works over SSH, and a check from outside that the relay publishes only what you set.">
+  <meta property="og:url" content="https://1aeo.com/blog/securing-fresh-ubuntu-vm-tor-relay-checklist.html">
+  <meta property="og:image" content="https://1aeo.com/blog/images/tor-relay-intrusions-oct-2026-chart-exit-policies.png">
+  <meta property="og:site_name" content="1AEO">
+  <meta name="twitter:card" content="summary_large_image">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; background-color: #121212; color: #ffffff; }
+    .nav { background-color: #1e1e1e; padding: 10px 0; box-shadow: 0 2px 10px rgba(0, 255, 127, 0.2); position: sticky; top: 0; z-index: 1000; }
+    .nav-toggle { display: none; background: none; border: none; font-size: 24px; color: #00ff7f; position: absolute; top: 10px; right: 20px; cursor: pointer; }
+    .nav-links { display: flex; justify-content: center; flex-wrap: wrap; }
+    .nav-links a { color: #00ff7f; text-decoration: none; margin: 0 15px; font-size: 18px; }
+    .nav-links a:hover { text-decoration: underline; }
+    @media (max-width: 600px) { .nav-links { display: none; flex-direction: column; margin-top: 40px; } .nav-links.show { display: flex; } .nav-toggle { display: block; } }
+    .container { max-width: 800px; margin: 50px auto; padding: 20px; background: #1e1e1e; box-shadow: 0px 0px 15px rgba(0, 255, 127, 0.6); border-radius: 10px; text-align: left; }
+    h1, h2, h3 { color: #00ff7f; }
+    h1 { text-align: center; font-size: 26px; }
+    p { font-size: 18px; color: #cccccc; line-height: 1.6; margin-bottom: 1em; }
+    .meta { font-size: 14px; color: #888; margin-bottom: 20px; text-align: center; }
+    ul, ol { color: #cccccc; margin-bottom: 1em; }
+    li { font-size: 18px; margin-bottom: 8px; line-height: 1.6; }
+    code { background-color: #2d2d2d; padding: 2px 6px; border-radius: 3px; font-family: monospace; color: #00ff7f; }
+    pre { background-color: #2d2d2d; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 14px; }
+    pre code { background: none; padding: 0; color: #ffffff; }
+    a { color: #00ff7f; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container img { display: block; margin: 20px auto; max-width: 100%; height: auto; border-radius: 5px; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #444; vertical-align: top; }
+    th { background-color: #2d2d2d; color: #00ff7f; }
+    td { color: #cccccc; }
+    td code { display: inline-block; margin-top: 4px; white-space: pre-wrap; overflow-wrap: anywhere; }
+    tr:hover { background-color: #252525; }
+    .table-wrap { overflow-x: auto; }
+    .warning { background-color: #2d2d2d; border-left: 4px solid #ff6b6b; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .callout { background-color: #2d2d2d; border-left: 4px solid #00ff7f; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .callout p, .warning p { margin: 0 0 0.6em; }
+    .callout p:last-child, .warning p:last-child { margin-bottom: 0; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; font-size: 14px; color: #777; text-align: center; }
+    .btn { display: inline-block; margin-top: 20px; padding: 12px 24px; font-size: 18px; color: #121212; background-color: #00ff7f; text-decoration: none; font-weight: bold; border-radius: 5px; transition: background 0.3s; }
+    .btn:hover { background-color: #00cc66; text-decoration: none; }
+    .highlight { color: #ff6b6b; font-weight: bold; }
+    .success { color: #00ff7f; font-weight: bold; }
+    .series { font-size: 15px; color: #aaa; background-color: #181818; border-left: 4px solid #00ff7f; padding: 12px 16px; margin: 0 0 24px; border-radius: 0 5px 5px 0; line-height: 1.5; }
+    .series a { color: #00ff7f; }
+    .refs { font-size: 15px; color: #999; }
+    h2, h3 { scroll-margin-top: 70px; }
+    .anchor { color: #3f3f3f; text-decoration: none; margin-left: 8px; font-size: 0.85em; font-weight: normal; }
+    h2:hover .anchor, h3:hover .anchor { color: #00ff7f; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Securing a Fresh Ubuntu VM for a Tor Relay: A Beginner's Checklist",
+    "datePublished": "2026-10-10",
+    "dateModified": "2026-10-10",
+    "author": {"@type": "Organization", "name": "1AEO"},
+    "publisher": {"@type": "Organization", "name": "1AEO"},
+    "image": "https://1aeo.com/blog/images/tor-relay-intrusions-oct-2026-chart-exit-policies.png",
+    "mainEntityOfPage": "https://1aeo.com/blog/securing-fresh-ubuntu-vm-tor-relay-checklist.html",
+    "description": "Harden a new Ubuntu 24.04/26.04 VM for a Tor relay: unique passwords, key-only SSH, two open ports, Tor from deb.torproject.org, and the checks that prove it."
+  }
+  </script>
+</head>
+<body>
+  <div class="nav">
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')" aria-label="Toggle navigation">&#9776;</button>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/onionvanity/">Onion Vanity</a>
+      <a href="/blog/">Blog</a>
+      <a href="https://metrics.1aeo.com">Metrics</a>
+      <a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
+      <a href="https://aroivalidator.1aeo.com">AROI Validator</a>
+      <a href="https://routefluxmap.1aeo.com">RouteFluxMap</a>
+      <a href="/#contact">Contact</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <!--email_off-->
+    <h1>Securing a Fresh Ubuntu VM for a Tor Relay: A Beginner's Checklist</h1>
+    <p class="meta"><em>By 1AEO Team &bull; Published October 10, 2026 &bull; A non-exit relay on Ubuntu 24.04 or 26.04 LTS</em></p>
+
+    <p class="series"><strong>Part 1 of a two-part series</strong> on securing Tor relay hosts after the October 2026 intrusions. &nbsp;1.&nbsp;<strong>Securing a Fresh Ubuntu VM for a Tor Relay</strong> (you are here) &mdash; one non-exit relay. &nbsp;2.&nbsp;<strong>Hardening Tor Relay Hosts After the October 2026 Intrusions</strong> (coming soon) &mdash; several relays, offline keys, monitoring, incident response.</p>
+
+    <div class="callout">
+      <p><strong>Short answer:</strong> open exactly two doors, SSH for you (keys only, never a password) and the ORPort for Tor, then check from outside that the relay publishes only what you set. Five steps, about 30 minutes:</p>
+      <ol>
+        <li><a href="#prepare">Prepare</a>: unique passwords, an SSH key, Ubuntu's official image</li>
+        <li><a href="#ssh">Lock SSH to keys</a>: an admin user, no passwords over SSH</li>
+        <li><a href="#firewall">Open two ports</a>: SSH and Tor, nothing else</li>
+        <li><a href="#tor">Install Tor from the Tor Project</a>: updated automatically</li>
+        <li><a href="#check">Prove it, then check monthly</a>: from outside, plus a quick Ebury check</li>
+      </ol>
+    </div>
+
+    <h2 id="why-now">Why Now <a class="anchor" href="#why-now" aria-label="Link to this section">#</a></h2>
+    <p>Between October 1 and 4, 2026, <strong class="highlight">377 relays run by 59 operators</strong> switched to one of two exit policies that open SSH (<a href="https://lists.torproject.org/mailman3/hyperkitty/list/tor-relays@lists.torproject.org/message/Z2B6XYKJZBBQADU77MSNL6FJP7MHZHIV/">our analysis</a>). On October 5 the Tor Project <a href="https://forum.torproject.org/t/tor-relays-security-incident-affecting-some-relay-operators/22231">warned</a> that attackers were breaking into Linux relay hosts and editing <code>torrc</code> so the relays would intercept SSH logins made through Tor, and <a href="https://forum.torproject.org/t/tor-relays-re-ebury-1-8-3-on-two-quetzalcoatl-relay-servers-timeline-lessons-open-questions/22243">one victim's</a> captured credentials were then used to log in to his server. The directory authorities removed the relays.</p>
+    <img width="2080" height="1120" src="images/tor-relay-intrusions-oct-2026-chart-exit-policies.png" alt="Hourly chart, September 30 to October 10 2026 (UTC), of how many relays in each Tor consensus advertised either of two exit policies written by the intruders, both open to SSH so the relays could intercept SSH logins made through Tor and steal the credentials. None before October 1; the count jumps on October 2, peaks at 353 relays on October 4, then drops away as the directory authorities act. None are left from 17:00 UTC on October 5, shortly before the Tor Project&#x27;s warning at 17:50, and the count stays at zero through October 10.">
+    <p>The one break-in documented in detail (<a href="https://forum.torproject.org/t/tor-relays-ebury-1-8-3-on-two-quetzalcoatl-relay-servers-timeline-lessons-open-questions/22238">post-mortem</a>) began with <strong class="highlight">one password reused</strong> for SSH, sudo and backups, with SSH password logins on. The attacker then installed <strong>Ebury 1.8.3</strong>, an OpenSSH backdoor that records every password typed into <code>sshd</code> and hides from the host. 81 of the other operators' 100 affected relays were at <a href="https://metrics.1aeo.com/as/AS53667/">FranTech Solutions (BuyVM), AS53667</a>; whether the provider itself was breached is unconfirmed.</p>
+    <h2 id="prepare">1. Prepare <a class="anchor" href="#prepare" aria-label="Link to this section">#</a></h2>
+    <ul>
+      <li><strong>Unique passwords, kept in a password manager.</strong> Never reuse one, and never put one in a script or file on a server. Turn on two-factor login for your hosting account and the email that can reset it: the provider's console is root on your VM.</li>
+      <li><strong>Make an SSH key on your own computer</strong> (set a passphrase when asked) and paste the <code>.pub</code> file's contents into the provider's SSH-key field when you create the VM:</li>
+    </ul>
+    <pre><code>ssh-keygen -t ed25519 -C "relay01"</code></pre>
+    <ul>
+      <li><strong>Pick Ubuntu's official 24.04 or 26.04 image</strong> on a full VM, and run nothing else on it.</li>
+    </ul>
+    <h2 id="ssh">2. Lock SSH to Keys <a class="anchor" href="#ssh" aria-label="Link to this section">#</a></h2>
+    <p>Log in with the account your provider gave you, usually <code>root</code> or <code>ubuntu</code>. On the first connection, check that the fingerprint <code>ssh</code> shows matches the one in the provider's console or boot log. Then update, add an admin user with your key, and lock SSH to keys:</p>
+    <pre><code>sudo apt update &amp;&amp; sudo apt full-upgrade -y &amp;&amp; sudo apt install -y ufw gnupg &amp;&amp; sudo reboot    # then log back in</code></pre>
+    <pre><code>sudo adduser relayadmin          # give it a unique password: sudo will ask for it
+sudo usermod -aG sudo relayadmin
+sudo cp -r ~/.ssh /home/relayadmin/ &amp;&amp; sudo chown -R relayadmin:relayadmin /home/relayadmin/.ssh
+sudo passwd -l root</code></pre>
+    <pre><code>sudo tee /etc/ssh/sshd_config.d/00-hardening.conf &gt;/dev/null &lt;&lt;'EOF'
+PermitRootLogin no
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+AuthenticationMethods publickey
+AuthorizedKeysFile .ssh/authorized_keys
+AllowUsers relayadmin
+DisableForwarding yes
+LogLevel VERBOSE
+EOF
+sudo sshd -t &amp;&amp; sudo systemctl reload ssh</code></pre>
+    <p>Keep this session open, and check that <code>ssh relayadmin@192.0.2.10</code> (your server's IP) works from a second terminal. From now on, use only <code>relayadmin</code>. Two rules come straight from the break-in above:</p>
+    <ul>
+      <li><strong>If SSH ever asks this server for a password, stop.</strong> Your server never will, so something else is answering.</li>
+      <li><strong>The relay is a destination, never a starting point.</strong> Never <code>ssh</code> or <code>scp</code> <em>from</em> it, and never use <code>ssh -A</code>.</li>
+    </ul>
+    <h2 id="firewall">3. Open Two Ports <a class="anchor" href="#firewall" aria-label="Link to this section">#</a></h2>
+    <pre><code>sudo ufw default deny incoming
+sudo ufw allow 443/tcp       # Tor
+sudo ufw limit 22/tcp        # SSH, with brute-force limiting
+sudo ufw --force enable</code></pre>
+    <p>If you always connect from the same address, allow SSH only from there (your address in place of 203.0.113.25): <code>sudo ufw allow from 203.0.113.25 to any port 22 proto tcp</code>, then <code>sudo ufw delete limit 22/tcp</code>. If that address ever changes, log in through your provider's web console as <code>relayadmin</code> to update the rule.</p>
+    <h2 id="tor">4. Install Tor From the Tor Project <a class="anchor" href="#tor" aria-label="Link to this section">#</a></h2>
+    <p>Ubuntu's own <code>tor</code> lags behind the Tor Project's security fixes, and the Tor Project <a href="https://support.torproject.org/little-t-tor/getting-started/installing/">says to install from its own repository instead</a>. Add it, and check its key before you install anything:</p>
+    <pre><code>. /etc/os-release
+sudo tee /etc/apt/sources.list.d/tor.sources &gt;/dev/null &lt;&lt;EOF
+Types: deb
+URIs: https://deb.torproject.org/torproject.org/
+Suites: ${VERSION_CODENAME}
+Components: main
+Signed-By: /usr/share/keyrings/deb.torproject.org-keyring.gpg
+EOF
+curl -fsSL https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc \
+  | gpg --dearmor | sudo tee /usr/share/keyrings/deb.torproject.org-keyring.gpg &gt;/dev/null
+gpg --show-keys /usr/share/keyrings/deb.torproject.org-keyring.gpg
+# stop unless the line under "pub" reads A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89</code></pre>
+    <p>Install Tor, let Ubuntu's automatic updates include it, and give it a minimal config:</p>
+    <pre><code>sudo apt update &amp;&amp; sudo apt install -y tor deb.torproject.org-keyring
+echo 'Unattended-Upgrade::Allowed-Origins { "TorProject:${distro_codename}"; };' \
+  | sudo tee /etc/apt/apt.conf.d/52unattended-upgrades-tor &gt;/dev/null
+sudo tee /etc/tor/torrc &gt;/dev/null &lt;&lt;'EOF'
+Nickname      myRelay01
+ContactInfo   email:tor[]example.com ciissversion:3
+ORPort        443
+ExitRelay     0
+SocksPort     0
+EOF
+sudo systemctl restart tor@default
+sudo journalctl -u tor@default -f      # wait for "...reachable from the outside. Excellent.", then Ctrl+C</code></pre>
+    <h2 id="check">5. Prove It, Then Check Monthly <a class="anchor" href="#check" aria-label="Link to this section">#</a></h2>
+    <p>Reboot, then confirm each row. The last one works once the relay is published, about three hours after Tor first starts. <code>sudo cat /var/lib/tor/fingerprint</code> shows its FINGERPRINT.</p>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Check</th><th>Expect</th></tr></thead>
+      <tbody>
+        <tr><td><code>sudo ss -tlnpH | grep -vE '127\.0\.0\.|\[::1\]'</code></td><td>only SSH (<code>sshd</code>, <code>systemd</code>) and <code>tor</code></td></tr>
+        <tr><td><code>ssh -o BatchMode=yes -o PubkeyAuthentication=no relayadmin@192.0.2.10</code> (from your computer)</td><td><code>Permission denied (publickey).</code></td></tr>
+        <tr><td><code>apt-cache policy tor</code></td><td>installed from <code>deb.torproject.org</code></td></tr>
+        <tr><td><code>curl -s "https://onionoo.torproject.org/details?lookup=FINGERPRINT&amp;fields=flags,exit_policy_summary"</code></td><td>no <code>"Exit"</code> flag; <code>{"reject":["1-65535"]}</code></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>Every month, and whenever <a href="https://lists.torproject.org/mailman3/postorius/lists/tor-relays.lists.torproject.org/">tor-relays</a> reports an incident:</p>
+    <ul>
+      <li><strong>Rerun the last row.</strong> It's the one check an intruder can't fake, and the way this incident was caught. Sign up for <a href="https://weather.torproject.org/">Tor Weather</a> to be emailed if the relay goes offline.</li>
+      <li><strong>Run the quick Ebury check</strong> below. Log in with your key and type no password. It runs the checks in a fresh shell that current Ebury builds don't hide from. A clean result is no guarantee; Part 2 (coming soon) goes deeper.</li>
+    </ul>
+    <pre><code>H=1 I=1 LD_PRELOAD=":" LD_DEBUG=":" bash -c '
+find /usr/lib -name "libkeyutils*" -perm -4000 2&gt;/dev/null   # must print nothing
+grep -E "@event-|@/dev/(event|stats)-" /proc/net/unix         # must print nothing
+grep -rniE "^\s*(%include|ExitRelay|ExitPolicy)" /etc/tor/     # only "ExitRelay 0"
+'</code></pre>
+    <h3 id="if-compromised">If Something Is Off <a class="anchor" href="#if-compromised" aria-label="Link to this section">#</a></h3>
+    <ol>
+      <li>Type no password into that host. Snapshot its disk in the provider panel, then power it off.</li>
+      <li>Email <code>bad-relays@lists.torproject.org</code> with the fingerprint, the IP address and what you found.</li>
+      <li>Rebuild on a fresh VM with this checklist and a <strong>new</strong> relay identity.</li>
+      <li>Change every password you typed there. Once you're clean, ask <code>bad-relays@</code> to lift any block on your IP address.</li>
+    </ol>
+    <p class="refs">References: Tor Project <a href="https://forum.torproject.org/t/tor-relays-security-incident-affecting-some-relay-operators/22231">incident notice</a>, <a href="https://community.torproject.org/relay/setup/guard/debian-ubuntu/">Debian/Ubuntu relay guide</a>, <a href="https://support.torproject.org/little-t-tor/getting-started/installing/">package repository</a>, <a href="https://community.torproject.org/relay/setup/guard/debian-ubuntu/updates/">automatic updates</a> and <a href="https://community.torproject.org/relay/community-resources/bad-relays/">bad-relay reporting</a>; the <a href="https://forum.torproject.org/t/tor-relays-ebury-1-8-3-on-two-quetzalcoatl-relay-servers-timeline-lessons-open-questions/22238">Ebury 1.8.3 post-mortem</a>; ESET, <a href="https://www.welivesecurity.com/en/eset-research/ebury-alive-unseen-400k-linux-servers-compromised-cryptotheft-financial-gain/">"Ebury is alive but unseen"</a> (2024); exit-policy counts from Tor's public <a href="https://collector.torproject.org/">CollecTor</a> archives.</p>
+
+    <!--/email_off-->
+    <p style="text-align: center;"><a href="/#get-involved" class="btn">Join the Mission</a></p>
+
+    <div class="footer">
+      <p>© 2026 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Year Under Flood: Two Campaigns, Ten Episodes — and the One That Broke Our Streak | 1st Amendment Encrypted Openness</title>
+  <meta name="description" content="A chronology of ten Tor denial-of-service episodes across two campaigns from September 2025 through July 2026.">
+  <link rel="canonical" href="https://1aeo.com/blog/tor-dos-year-under-flood-2025-2026.html">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; background-color: #121212; color: #ffffff; }
+    .nav { background-color: #1e1e1e; padding: 10px 0; box-shadow: 0 2px 10px rgba(0, 255, 127, 0.2); position: sticky; top: 0; z-index: 1000; }
+    .nav-toggle { display: none; background: none; border: none; font-size: 24px; color: #00ff7f; position: absolute; top: 10px; right: 20px; cursor: pointer; }
+    .nav-links { display: flex; justify-content: center; flex-wrap: wrap; }
+    .nav-links a { color: #00ff7f; text-decoration: none; margin: 0 15px; font-size: 18px; }
+    .nav-links a:hover { text-decoration: underline; }
+    @media (max-width: 600px) { .nav-links { display: none; flex-direction: column; margin-top: 40px; } .nav-links.show { display: flex; } .nav-toggle { display: block; } }
+    .container { max-width: 800px; margin: 50px auto; padding: 20px; background: #1e1e1e; box-shadow: 0px 0px 15px rgba(0, 255, 127, 0.6); border-radius: 10px; text-align: left; }
+    h1, h2, h3 { color: #00ff7f; }
+    h1 { text-align: center; font-size: 26px; }
+    p { font-size: 18px; color: #cccccc; line-height: 1.6; margin-bottom: 1em; }
+    .meta { font-size: 14px; color: #888; margin-bottom: 20px; text-align: center; }
+    ul, ol { color: #cccccc; margin-bottom: 1em; }
+    li { font-size: 18px; margin-bottom: 8px; line-height: 1.6; }
+    code { background-color: #2d2d2d; padding: 2px 6px; border-radius: 3px; font-family: monospace; color: #00ff7f; }
+    pre { background-color: #2d2d2d; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 14px; }
+    pre code { background: none; padding: 0; color: #ffffff; }
+    a { color: #00ff7f; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container img { display: block; margin: 20px auto; max-width: 100%; height: auto; border-radius: 5px; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #444; }
+    th { background-color: #2d2d2d; color: #00ff7f; }
+    td { color: #cccccc; }
+    tr:hover { background-color: #252525; }
+    .warning { background-color: #2d2d2d; border-left: 4px solid #ff6b6b; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .callout { background-color: #2d2d2d; border-left: 4px solid #00ff7f; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; font-size: 14px; color: #777; text-align: center; }
+    .btn { display: inline-block; margin-top: 20px; padding: 12px 24px; font-size: 18px; color: #121212; background-color: #00ff7f; text-decoration: none; font-weight: bold; border-radius: 5px; transition: background 0.3s; }
+    .btn:hover { background-color: #00cc66; text-decoration: none; }
+    .highlight { color: #ff6b6b; font-weight: bold; }
+    .success { color: #00ff7f; font-weight: bold; }
+    .series { font-size: 15px; color: #aaa; background-color: #181818; border-left: 4px solid #00ff7f; padding: 12px 16px; margin: 0 0 24px; border-radius: 0 5px 5px 0; line-height: 1.5; }
+    .series a { color: #00ff7f; }
+    h2, h3 { scroll-margin-top: 70px; }
+    .anchor { color: #3f3f3f; text-decoration: none; margin-left: 8px; font-size: 0.85em; font-weight: normal; }
+    h2:hover .anchor, h3:hover .anchor { color: #00ff7f; }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')">&#9776;</button>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/blog/">Blog</a>
+      <a href="https://metrics.1aeo.com">Metrics</a>
+      <a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
+      <a href="https://aroivalidator.1aeo.com">AROI Validator</a>
+      <a href="https://routefluxmap.1aeo.com">RouteFluxMap</a>
+      <a href="/#contact">Contact</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1>A Year Under Flood: Two Campaigns, Ten Episodes &mdash; and the One That Broke Our Streak</h1>
+    <p class="meta"><em>By 1AEO Team • Published July 16, 2026 • Updated July 29, 2026 • Thirteen months of flood telemetry: 1AEO fleet DoS counters through July 28 + Tor's public CollecTor archives through July 27, 2026</em></p>
+
+    <div class="warning">
+      <p style="margin-bottom:0"><strong class="highlight">Correction, July 29, 2026.</strong> This post originally said 1AEO's overload stayed near zero through every episode, and that the network's worst day was July 12. Both are wrong. A <strong>tenth episode</strong> &mdash; a directory-write mode, July 19&ndash;24 &mdash; put 135 of our relays into overload, and the network peak is now July 21.</p>
+    </div>
+
+    <p>Our recent series treats the June&ndash;July 2026 circuit-building DoS as an event. Our counters, which reach back to July 2025, say it is a chapter: <strong class="highlight">ten distinct episodes since September 2025</strong>, forming <strong>two major campaigns</strong> &mdash; autumn 2025 and summer 2026 &mdash; around smaller winter and spring floods. As of July 29 it is being wound down mode by mode, but it is not over.</p>
+
+    <h2 id="ten-episodes">Ten Episodes, Two Campaigns <a class="anchor" href="#ten-episodes" aria-label="Link to this section">#</a></h2>
+    <p>The quietest stretch in our data is August 2025. The floods begin abruptly on <strong class="highlight">September 4&ndash;6, 2025</strong>, and that autumn campaign is still the year's biggest by raw rate: circuit rejections peaked near <strong class="highlight">1.6 billion per day</strong>, roughly <strong class="highlight">125x</strong> the quiet baseline (the median of our late-2025 quiet windows). Episodes then recur about monthly, cycling between circuit floods, onion-service (INTRODUCE2) floods, a malformed-circuit vector from late March 2026, and &mdash; newest &mdash; the directory-write mode of July 19&ndash;24, a mode inside the summer campaign rather than a separate flood. Three spring episodes were visible <em>only</em> in our telemetry. This is not an escalation ramp: by rate, 2026 has been the quieter year.</p>
+
+    <img width="2080" height="1120" src="images/tor-dos-year-under-flood-chart-timeline.png" alt="Two-panel dark timeline chart, July 2025 to July 28 2026, of 1AEO fleet DoS counters as multiples of quiet baseline, with ten shaded flood-episode bands and the tenth, the directory-write mode of July 19 to 24, shown as a red band. Top panel, log scale: daily circuit-rejections in blue and INTRODUCE2-rejections in green. Circuit rejections sit near 1x through July-August 2025, jump to roughly 125x baseline at the September 2025 onset - annotated as autumn 2025, still the year's biggest by rate - stay high through October-December waves, then run mostly 2-13x through 2026, ending around 3x. A callout lists the wind-down mode by mode: July 20 malformed circuits off, July 24 directory-write mode closed, July 26 INTRODUCE2 collapses, leaving only circuit-rejection, still live. Bottom panel, linear: open circuits held, daily max, stays around 1-2x for eleven months and only in June-July 2026 spikes to roughly 21x, annotated as the only campaign that accumulates open circuits - spiky, repeatedly falling back - and the memory pressure behind both 1AEO overload events. Caption notes 2025 telemetry covered about 65 percent as many relays, so 2025 levels are undercounts.">
+
+    <h2 id="network-view">What the Network Saw <a class="anchor" href="#network-view" aria-label="Link to this section">#</a></h2>
+    <p>Tor's public data tells the same two-campaign story. Relays declaring overload peaked at <strong class="highlight">835 (9.0% of the network)</strong> on September 29, 2025; the winter floods barely registered and the spring episodes not at all (&le;74, below the 94 ordinary quiet 2026 days reach). Then the summer campaign topped out on <strong class="highlight">July 21, 2026 at 1,330 relays (12.87%)</strong> &mdash; the largest network event of the year, 1.6x autumn's peak. It has eased steadily since, to <strong class="success">721 (7.07%) on July 27</strong>, the lowest since July 8. Yet its rejection <em>rate</em> on our fleet peaked at only ~5.7x baseline, about <strong class="highlight">22x below</strong> autumn 2025's.</p>
+
+    <img width="2080" height="1120" src="images/tor-dos-year-under-flood-chart-blastradius.png" alt="Dark bar chart of relays declaring overload-general on each flood episode's peak day, from public CollecTor data, July 2025 to July 27 2026. Blue bars: September 29 2025 at 835 relays or 9.0 percent, October 11 2025 at 747, November 23 2025 at 267 or 2.6 percent, January 8 2026 at 240 or 2.2 percent, April 18 2026 at 487 or 4.6 percent, June 15 2026 at 335 or 3.3 percent. Three grey bars for the February to early-April 2026 episodes sit at or below 74, labeled within baseline noise and network-invisible, with a dashed line showing 2026 quiet days reach 94. A red bar on July 21 2026 at 1,330 relays or 12.87 percent is annotated as the largest of the year and the campaign all-time high, 1.6 times autumn 2025's peak, with a marker showing it eased six straight days to 721 relays or 7.07 percent on July 27. An amber note records the tenth episode of July 19 to 24, the directory-write mode, in which network directory-serving traffic ran 4.4 times its roughly 185 terabyte per day baseline, peaking at 808 terabytes per day on July 22 and closing July 24. A green band near the bottom marks the August 2025 quiet range of 18 to 31 relays.">
+
+    <h2 id="streak">The Tenth Episode Ended a Year-Long Streak <a class="anchor" href="#streak" aria-label="Link to this section">#</a></h2>
+    <p>From July 19 the flood added a mode nothing in the preceding year had used: it made relays <strong>transmit</strong>. Network-wide directory-serving traffic in Tor's public archives went from a <strong class="highlight">~185 TB/day</strong> baseline to <strong class="highlight">808.5 TB/day on July 22</strong> (~4.4x), then closed hard on July 24. On our fleet the written-to-read ratio &mdash; 0.99 to 1.07 for the <em>entire</em> preceding year, through every wave &mdash; hit <strong class="highlight">2.145</strong> at 12:00 UTC on July 23, then settled back to 1.02&ndash;1.04. Other operators reported the same signature in the same window.</p>
+    <p>That is the episode that broke our streak. 1AEO's overload count had sat at 2&ndash;4 relays every day for a year, through both 9&ndash;12% network events. On July 23 it went to <strong class="highlight">54</strong>, then 82, 90, <strong class="highlight">94 on July 26</strong>; the faster-refreshing Onionoo feed puts the true high at <strong class="highlight">92 relays</strong> at 06:00&ndash;09:00 UTC on July 27. These were <strong>two distinct events</strong> (July 23, 19:00&ndash;22:00 UTC and July 27, 08:00 UTC), not one echoing, and cumulatively <strong class="highlight">135 distinct relays, 13.0% of our fleet</strong>, reported overload at least once. The second event came three days after the directory-write mode itself had closed &mdash; the same memory-handler mechanism, without the write surge still running; what re-triggered it is not established from our data. The episode ended before the restart could obscure it: <strong class="success">Tor's memory handler stopped firing at 03:00 UTC on July 28</strong>, three hours before a planned fleet-wide service restart, and no 1AEO relay has reported overload since 09:00 UTC that day.</p>
+    <p>The mechanism was <strong>not CPU</strong>: onionskin drops, TCP-connection exhaustion and rate-limit hits were zero every day of the window. What fired was Tor's own memory handler (<code>MaxMemInQueues</code>), evicting ballooning <em>outbound</em> cell queues &mdash; <strong class="highlight">~221 GB freed July 23</strong>, <strong class="highlight">~117 GB July 27</strong>, ~475 GB in all &mdash; and every invocation makes a relay self-report <code>overload-general</code>. So "overloaded" here is memory pressure reported, not a relay failing: all stayed up, none dropped out of the consensus, and <strong class="success">kernel OOM kills have been zero for 13 straight days</strong>.</p>
+
+    <h2 id="broke-through">Why the Smallest Flood Did the Most Damage <a class="anchor" href="#broke-through" aria-label="Link to this section">#</a></h2>
+    <p>The 2025 floods were <strong>rejection floods</strong>: circuit requests that relays inspected, refused, and forgot. Nothing accumulated, and our fleet took zero memory impact even at 125x baseline. The summer 2026 campaign is the first to <strong>accumulate state instead of rate</strong> &mdash; its idle circuits stay open, spiking to <strong class="highlight">~21x baseline</strong> and repeatedly returning above ~13x across four weeks, where every earlier episode stayed near ~2x. Parked circuits balloon relay memory, producing the year's only kernel OOM kills (<strong class="highlight">~31</strong>, journal-verified, all before July 13) and the evictions above. The year's smallest campaign by rejection rate produced its largest blast radius &mdash; and is the only one ever to move our own overload count.</p>
+
+    <h2 id="where-it-stands">Where It Stands, July 29 <a class="anchor" href="#where-it-stands" aria-label="Link to this section">#</a></h2>
+    <p>Malformed circuits stopped at 23:00 UTC on July 20 and now run at roughly <strong class="highlight">1/175</strong> of their 17,182/second peak. The directory-write mode closed July 24 and has not returned. INTRODUCE2 rejections collapsed at 14:30 UTC on July 26, from 545/second to about 1/second &mdash; 72.62 million on July 25 down to 4.88 million on July 28. What remains is the mode the campaign started with: plain circuit rejection, <strong class="highlight">35.6&ndash;38.7 million per day</strong>, holding at that level through July 28 and showing no sign of stopping. The flood is down to its original vector, and still live.</p>
+
+    <h2 id="how-we-measured">How We Measured <a class="anchor" href="#how-we-measured" aria-label="Link to this section">#</a></h2>
+    <p>Fleet-side: our Prometheus archive of Tor's per-relay DoS-defense counters and circuit gauges, July 2025 onward, aggregated daily and shown only as multiples of per-metric quiet baselines; our 2025 telemetry covered ~65% as many relays, so 2025 levels are undercounts. Network-side: overload-general declarations and directory-write byte histories from Tor's public CollecTor archives, deduplicated per relay per day, plus the Onionoo feed for sub-daily resolution on our own relays. Partial days undercount, so CollecTor stops at July 27 and our telemetry at July 28. A planned fleet-wide service restart on July 28 clears Tor's in-memory overload state, so counts after that date are not comparable to earlier ones. Aggregate counters only &mdash; nothing is recorded about individual sources.</p>
+
+    <p class="series"><strong>Related reading</strong> &mdash; this post is the year-long frame around our five-part series on the summer 2026 campaign: &nbsp;1.&nbsp;<a href="tor-network-dos-wave-june-2026.html">The Tor Network Is Under a Circuit-Building DoS Wave</a> &mdash; the network-wide view. &nbsp;2.&nbsp;<a href="circuit-building-dos-anatomy-june-2026.html">Anatomy of the Attack</a> &mdash; the waves and vectors. &nbsp;3.&nbsp;<a href="circuit-building-dos-fleet-cost-june-2026.html">What It Actually Costs</a> &mdash; the CPU and memory bill. &nbsp;4.&nbsp;<a href="circuit-building-dos-below-tor-june-2026.html">The Flood Below Tor</a> &mdash; the kernel-level connection flood. &nbsp;5.&nbsp;<a href="defending-against-circuit-dos-june-2026.html">Defending Against Circuit-Building DoS</a> &mdash; the fixes we're asking for.</p>
+
+    <p style="text-align: center;"><a href="/#get-involved" class="btn">Join the Mission</a></p>
+
+    <div class="footer">
+      <p>© 2026 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p>
+    </div>
+  </div>
+</body>
+</html>

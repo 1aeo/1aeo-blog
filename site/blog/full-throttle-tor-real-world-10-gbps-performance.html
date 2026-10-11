@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Full-Throttle Tor: Real-World 10 Gbps Performance | 1AEO</title>
+  <meta name="description" content="Real-world lessons from operating a 10 Gbps Tor relay at maximum capacity, including performance and scaling considerations.">
+  <link rel="canonical" href="https://1aeo.com/blog/full-throttle-tor-real-world-10-gbps-performance.html">
+  <link rel="stylesheet" href="/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      background-color: #121212;
+      color: #ffffff;
+    }
+    .nav {
+        background-color: #1e1e1e;
+        padding: 10px 0;
+        box-shadow: 0 2px 10px rgba(0, 255, 127, 0.2);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+    .nav-toggle {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: #00ff7f;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        cursor: pointer;
+    }
+    .nav-links {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .nav-links a {
+        color: #00ff7f;
+        text-decoration: none;
+        margin: 0 15px;
+        font-size: 18px;
+    }
+    .nav-links a:hover {
+        text-decoration: underline;
+    }
+    @media (max-width: 600px) {
+        .nav-links {
+            display: none;
+            flex-direction: column;
+            margin-top: 40px;
+        }
+        .nav-links.show {
+            display: flex;
+        }
+        .nav-toggle {
+            display: block;
+        }
+    }
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #1e1e1e;
+      box-shadow: 0px 0px 15px rgba(0, 255, 127, 0.6);
+      border-radius: 10px;
+    }
+    h1, h2, h3 {
+      color: #00ff7f;
+    }
+    p {
+      font-size: 18px;
+      color: #cccccc;
+      line-height: 1.6;
+      margin-bottom: 1em;
+    }
+    .meta {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 10px;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 24px;
+      font-size: 18px;
+      color: #121212;
+      background-color: #00ff7f;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background-color: #00cc66;
+    }
+    .footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #777;
+    }
+    ul, ol {
+      text-align: left;
+      max-width: 700px;
+      margin: 0 auto 1em auto;
+      color: #cccccc;
+    }
+    li {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+      .post-table {
+      margin: 0 auto 1em auto;
+      border-collapse: collapse;
+    }
+    .post-table th, .post-table td {
+      padding: 8px 12px;
+    }
+    .container img {
+      display: block;
+      margin: 0 auto 1em auto;
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+          &#9776;
+      </button>
+      <div class="nav-links">
+          <a href="/">Home</a>
+          <a href="/onionvanity/">Onion Vanity</a>
+          <a href="/blog/">Blog</a>
+          <a href="https://metrics.1aeo.com">Metrics</a>
+          <a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
+          <a href="https://aroivalidator.1aeo.com">AROI Validator</a>
+          <a href="https://routefluxmap.1aeo.com">RouteFluxMap</a>
+          <a href="/#contact">Contact</a>
+      </div>
+  </div>
+  
+  <div class="container">
+        <h1 class="post-title">Full-Throttle Tor: Real-World 10 Gbps Performance</h1>
+        <p class="post-meta"><em>By 1AEO Team • April 30, 2025</em></p>
+
+        <p>If you're a software developer who cares about freedom of information—or an IT ops admin with a spare rack and skills to spare—this post is for you. Let's talk about how you can use your talents to support the Tor network.</p>
+        <h2>Summary Highlights</h2>
+        <ul>
+          <li><strong>New York and Chicago</strong> exhibited the highest average bandwidth per relay.</li>
+          <li><strong>San Jose</strong> consistently had the lowest average bandwidth per relay.</li>
+          <li><strong>Detroit</strong> and <strong>Dallas</strong> showed slow but steady increases, though they lag behind New York and Chicago.</li>
+          <li>Overall bandwidth utilization averaged around <strong>50%</strong> of the purchased capacity (~16 Gbps of 30 Gbps).</li>
+          <li>Most relays have been active for less than two months; longer 'brew' times (3–6 months) often yield more stable bandwidth patterns.</li>
+        </ul>
+        <h2>Next Steps</h2>
+        <ul>
+          <li>Discontinue underperforming relays in <strong>Detroit</strong> and <strong>Dallas (Server 2)</strong>.</li>
+          <li>Begin deployments with a fifth provider in <strong>New Jersey (Secaucus)</strong> and <strong>Montreal</strong>.</li>
+          <li>Consider adding extra relays in <strong>New York</strong> and <strong>Chicago</strong> based on the new provider's performance.</li>
+        </ul>
+        <h2>Detailed Analysis</h2>
+        <p>New York saw the fastest growth, rising from 7.38&nbsp;Mbps to 8.70&nbsp;Mbps over three weeks. Chicago improved steadily, while Detroit’s performance increased modestly. Dallas experienced mixed results, and San Jose’s lower performance is likely related to further distance from US East / Europe where there's more Tor traffic allocated.</p>
+        <p>Temporary dips in bandwidth corresponded to migration from rented IPv4 ranges to our own prefixes. All servers run Ubuntu&nbsp;24.04.02 with the latest Tor versions, using 88–192&nbsp;CPU threads and 384–1000&nbsp;GB&nbsp;RAM on unmetered&nbsp;10&nbsp;Gbps connections. Each server costs approximately&nbsp;$500/month.</p>
+        <h3>Average Bandwidth per Relay (Mbps)</h3>
+        <table class="post-table">
+          <thead>
+            <tr><th>Provider (Rank)</th><th>Apr 26th 2025</th><th>Apr 19th 2025</th><th>Apr 12, 2025</th><th>Apr 3, 2025</th><th>Mar 30, 2025</th><th>Mar 22, 2025</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1 – New York</td><td>6.4</td><td>7.8</td><td>8.70</td><td>8.25</td><td>7.91</td><td>7.38</td></tr>
+            <tr><td>2 – Chicago</td><td>7.6</td><td>7.3</td><td>8.22</td><td>5.44</td><td>4.73</td><td>4.24</td></tr>
+            <tr><td>5 – New Jersey</td><td>6.8</td><td>5.6</td><td>6.1</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>5 – Montreal</td><td>5.0</td><td>5.4</td><td>4.2</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>1 – Detroit</td><td>0</td><td>0</td><td>5.25</td><td>5.17</td><td>4.55</td><td>4.60</td></tr>
+            <tr><td>3 – Dallas 1</td><td>4.8</td><td>4.7</td><td>4.95</td><td>2.82</td><td>2.46</td><td>4.34</td></tr>
+            <tr><td>3 – Dallas 2</td><td>0</td><td>0</td><td>4.73</td><td>2.84</td><td>2.76</td><td>3.52</td></tr>
+            <tr><td>4 – San Jose</td><td>4.2</td><td>3.5</td><td>3.38</td><td>3.90</td><td>3.26</td><td>3.06</td></tr>
+          </tbody>
+        </table>
+        <h3>Chart: Average Bandwidth per Relay Over Time</h3>
+        <p><img src="./full-throttle-tor-real-world-10-gbps-performance-chart.png" alt="Average Bandwidth Chart Over Time by Provider"></p>
+        <p><img src="./full-throttle-tor-real-world-10-gbps-performance-chart2.png" alt="Average Bandwidth Chart By Provider Over Time"></p>
+        <h2>Community Feedback & Recommendations</h2>
+        <p>Another Tor relay contributor, John Crow highlighted that New York and Chicago are major hubs (often Secaucus, NJ for “New York”). He recommended exploring <strong>Ashburn, VA</strong>—an established Internet hub with robust US and EU connectivity—and <strong>Miami, FL</strong>, which offers strong connectivity to South America. He also noted San Jose’s underperformance likely stems from additional hops through Los Angeles.</p>
+        <h2>Conclusion</h2>
+        <p>Early data suggests that while New York and Chicago deliver the best bandwidth per relay, alternative locations like Ashburn and Miami warrant testing. Patience is crucial; as relays “brew” beyond two months, performance patterns often stabilize. We’ll continue refining our deployments and welcome further community insights.</p>
+        <p>For full details and discussion, see the <a href="https://lists.torproject.org/mailman3/hyperkitty/list/tor-relays@lists.torproject.org/message/QFLHHZ4Q6ZAG52VH67NKNUHZ5YF3KY5I/">Tor Project mailing list thread</a>.</p>
+
+    <a href="/#get-involved" class="btn">Join the Mission</a>
+
+    <div class="footer">
+      <p>© 2025 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p>
+    </div>
+  </div>
+</body>
+</html>

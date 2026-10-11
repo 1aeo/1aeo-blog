@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Tor Network Is Under a Circuit-Building DoS Wave (June–July 2026) | 1st Amendment Encrypted Openness</title>
+  <meta name="description" content="A reproducible analysis of the June–July 2026 Tor circuit-building denial-of-service wave using CollecTor and Onionoo data.">
+  <link rel="canonical" href="https://1aeo.com/blog/tor-network-dos-wave-june-2026.html">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; background-color: #121212; color: #ffffff; }
+    .nav { background-color: #1e1e1e; padding: 10px 0; box-shadow: 0 2px 10px rgba(0, 255, 127, 0.2); position: sticky; top: 0; z-index: 1000; }
+    .nav-toggle { display: none; background: none; border: none; font-size: 24px; color: #00ff7f; position: absolute; top: 10px; right: 20px; cursor: pointer; }
+    .nav-links { display: flex; justify-content: center; flex-wrap: wrap; }
+    .nav-links a { color: #00ff7f; text-decoration: none; margin: 0 15px; font-size: 18px; }
+    .nav-links a:hover { text-decoration: underline; }
+    @media (max-width: 600px) { .nav-links { display: none; flex-direction: column; margin-top: 40px; } .nav-links.show { display: flex; } .nav-toggle { display: block; } }
+    .container { max-width: 800px; margin: 50px auto; padding: 20px; background: #1e1e1e; box-shadow: 0px 0px 15px rgba(0, 255, 127, 0.6); border-radius: 10px; text-align: left; }
+    h1, h2, h3 { color: #00ff7f; }
+    h1 { text-align: center; font-size: 26px; }
+    p { font-size: 18px; color: #cccccc; line-height: 1.6; margin-bottom: 1em; }
+    .meta { font-size: 14px; color: #888; margin-bottom: 20px; text-align: center; }
+    ul, ol { color: #cccccc; margin-bottom: 1em; }
+    li { font-size: 18px; margin-bottom: 8px; line-height: 1.6; }
+    code { background-color: #2d2d2d; padding: 2px 6px; border-radius: 3px; font-family: monospace; color: #00ff7f; }
+    pre { background-color: #2d2d2d; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 14px; }
+    pre code { background: none; padding: 0; color: #ffffff; }
+    a { color: #00ff7f; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container img { display: block; margin: 20px auto; max-width: 100%; height: auto; border-radius: 5px; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #444; }
+    th { background-color: #2d2d2d; color: #00ff7f; }
+    td { color: #cccccc; }
+    tr:hover { background-color: #252525; }
+    .warning { background-color: #2d2d2d; border-left: 4px solid #ff6b6b; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .callout { background-color: #2d2d2d; border-left: 4px solid #00ff7f; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; font-size: 14px; color: #777; text-align: center; }
+    .btn { display: inline-block; margin-top: 20px; padding: 12px 24px; font-size: 18px; color: #121212; background-color: #00ff7f; text-decoration: none; font-weight: bold; border-radius: 5px; transition: background 0.3s; }
+    .btn:hover { background-color: #00cc66; text-decoration: none; }
+    .highlight { color: #ff6b6b; font-weight: bold; }
+    .success { color: #00ff7f; font-weight: bold; }
+    .series { font-size: 15px; color: #aaa; background-color: #181818; border-left: 4px solid #00ff7f; padding: 12px 16px; margin: 0 0 24px; border-radius: 0 5px 5px 0; line-height: 1.5; }
+    .series a { color: #00ff7f; }
+    h2, h3 { scroll-margin-top: 70px; }
+    .anchor { color: #3f3f3f; text-decoration: none; margin-left: 8px; font-size: 0.85em; font-weight: normal; }
+    h2:hover .anchor, h3:hover .anchor { color: #00ff7f; }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')">&#9776;</button>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/onionvanity/">Onion Vanity</a>
+      <a href="/blog/">Blog</a>
+      <a href="https://metrics.1aeo.com">Metrics</a>
+      <a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
+      <a href="https://aroivalidator.1aeo.com">AROI Validator</a>
+      <a href="https://routefluxmap.1aeo.com">RouteFluxMap</a>
+      <a href="/#contact">Contact</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1>The Tor Network Is Under a Circuit-Building DoS Wave — Seen Through Its Own Public Data</h1>
+    <p class="meta"><em>By 1AEO Team • July 13, 2026 • A network-wide view, reconstructed from Tor's own signed archives</em></p>
+
+    <p>Since late June 2026 the Tor network has been under a <strong>circuit-building denial-of-service wave</strong>. This post reconstructs it from Tor's own signed archives &mdash; the <a href="https://collector.torproject.org/">CollecTor</a> archive of relay descriptors and consensuses, and the <a href="https://onionoo.torproject.org/">Onionoo</a> API. Every number below is reproducible; the commands are at the end.</p>
+
+    <p class="series"><strong>Part 1 of a five-part series</strong> on the June&ndash;July 2026 circuit-building DoS. &nbsp;1.&nbsp;<strong>The Tor Network Is Under a Circuit-Building DoS Wave</strong> (you are here) &mdash; the network-wide view from Tor's public data. &nbsp;2.&nbsp;<a href="circuit-building-dos-anatomy-june-2026.html">Anatomy of the Attack</a> &mdash; the three waves and how each one works. &nbsp;3.&nbsp;<a href="circuit-building-dos-fleet-cost-june-2026.html">What It Actually Costs</a> &mdash; the CPU and memory bill, and how 1AEO ranked. &nbsp;4.&nbsp;<a href="circuit-building-dos-below-tor-june-2026.html">The Flood Below Tor</a> &mdash; the connection flood Tor's own counters cannot see. &nbsp;5.&nbsp;<a href="defending-against-circuit-dos-june-2026.html">Defending Against Circuit-Building DoS</a> &mdash; better metrics and the protocol fixes we're asking for.</p>
+
+    <h2 id="what-a-circuit-dos-looks-like">What a Circuit-Building DoS Looks Like <a class="anchor" href="#what-a-circuit-dos-looks-like" aria-label="Link to this section">#</a></h2>
+    <p>Every Tor circuit begins with a CPU-costly cryptographic handshake (an "onionskin"), and every open circuit holds memory on the relay. Built at scale and left idle, circuits load a relay's CPU and RAM while moving almost no traffic. When relays cross an internal overload threshold, current Tor versions publish an <code>overload-general</code> line in the descriptor they sign and upload &mdash; and those descriptors are archived, publicly, forever. So "how much of the network is overloaded, day by day" is a question the public record can answer directly.</p>
+
+    <h2 id="overload-waves">Two Overload Waves Across the Network <a class="anchor" href="#overload-waves" aria-label="Link to this section">#</a></h2>
+    <p>Parsing the <code>overload-general</code> line out of every relay's signed server-descriptor, for every day in June–July 2026, gives the fraction of the network reporting overload over time:</p>
+
+    <img width="1999" height="938" src="images/circuit-building-dos-wave-june-2026-chart-network-overload-only.png" alt="Time-series chart, Jun 15 to Jul 13 2026, share of Tor relays reporting overload. It sits at a 1.5 to 3.3 percent baseline through Jun 25, jumps to a first-wave peak of 8.2 percent (814 relays) on Jun 28, settles at a 5 to 6 percent floor, then climbs a second wave through 11.4 percent on Jul 11 to a peak of 12.2 percent (1,254 relays) on Jul 12, before easing to 11.3 percent on Jul 13 — the second hump plateauing rather than climbing further.">
+
+    <ul>
+      <li><strong>Baseline (Jun 15&ndash;25):</strong> a steady <strong>1.5&ndash;3.3%</strong> of relays overloaded &mdash; ordinary background, dipping to 1.55% on Jun 23.</li>
+      <li><strong>Wave 1 (circuit flood):</strong> Jun 26 jumps to 4.9%, Jun 27 to 8.0%, peaking <strong class="highlight">Jun 28 at 8.2% (814 relays)</strong>. It never fully clears &mdash; a 5&ndash;6% floor holds through Jul 8.</li>
+      <li><strong>Second hump (same campaign):</strong> Jul 9 at 7.7%, Jul 10 at 9.5%, Jul 11 at 11.4%, and <strong class="highlight">Jul 12 at 12.2% (1,254 relays) &mdash; the second hump's high</strong>, roughly 4x the pre-flood baseline; it eased to ~11.3% on Jul 13 rather than climbing further &mdash; part of the same campaign, not a separate new attack.</li>
+    </ul>
+    <p>The overloaded relays are spread across roughly <strong>290 distinct networks (autonomous systems)</strong> &mdash; OVH, Hetzner, netcup, IONOS, DigitalOcean, Oracle and many more. This is a broad, network-wide flood, not something aimed at any single operator, and it has the same shape as the <a href="https://blog.torproject.org/tor-network-ddos-attack/">2022&ndash;2023 network DDoS</a> the Tor Project documented.</p>
+
+    <h2 id="guard-position">The Flood Lands on the Guard Position <a class="anchor" href="#guard-position" aria-label="Link to this section">#</a></h2>
+    <p>A circuit-<em>creation</em> flood hits the <strong>guard position</strong> &mdash; the first hop of a circuit, where CREATE cells arrive and Tor's per-source circuit-rate defense (<code>DoSCircuitCreation</code>) fires. This shows cleanly if you track overload <em>by role, over time</em>: for each day, join every relay's consensus flags (its role) with the <code>overload-general</code> line it signed (its overload state), both from CollecTor, and take the share of each role that was overloaded:</p>
+
+    <img width="1999" height="977" src="images/circuit-building-dos-wave-june-2026-chart-guards-vs-exits.png" alt="Line chart, May 31 to Jul 12 2026, share of relays overloaded by consensus role. Before the Jun 25 flood onset every role sits at a low single-digit baseline, with a brief guard bump in mid-June. From onset, the guard-only line (red) erupts to about 13 percent by Jun 28 and climbs to about 18 percent by Jul 12. The guard-plus-exit line (amber) climbs steadily to about 15 percent by Jul 12, nearly matching guard-only, because those relays also sit in the guard position. The exit-only line (green) stays under 1 percent for the first two weeks, then climbs sharply in the second week to about 6 percent as the flood begins reaching exits too. Middle relays sit lower, around 8 percent. A dashed cyan line for relays holding HSDir but not Guard stays in the middle band throughout, around 7 percent, far below the guard lines.">
+
+    <p>The split is clear. Through early June the baseline was low &mdash; around 1% for most roles, with guards a few points higher and a brief bump in mid-June that subsided. Then, from the <strong>Jun 25 onset, the guard-only overload rate climbs sharply &mdash; to ~13% within three days, ~17.9% by Jul 12</strong>, while <strong>exit-only relays stayed near their baseline</strong>, under 1% for the first two weeks. Relays that are <em>both</em> guard and guard+exit relays climb almost as steeply as guard-only &mdash; to ~14.9% by Jul 12 &mdash; because they, too, sit in the guard position; middle relays stay lower. The flood lands on the first hop, as the mechanism predicts &mdash; and it is the guard <em>position</em>, not any directory role: at the Jul&nbsp;12 peak, relays holding <code>HSDir</code> but not <code>Guard</code> overloaded at just <strong>~7%</strong> &mdash; down in the middle-relay band, far below the guard rate (the dashed line above), with no HSDir effect beyond the Guard overlap. The one recent shift: in the second week the <strong>pure-exit rate began climbing too</strong> &mdash; from under 1% to ~6% by Jul 12 &mdash; so the flood is starting to reach the exit position as well, though guards are still hit several times harder.</p>
+
+    <p>This also matters when comparing operators: an exit-heavy operator can show a low overall overload rate simply because much of its fleet sits in a position the flood doesn't target. To compare fairly, you have to compare <em>guards to guards</em> &mdash; which is exactly what we do in the <a href="circuit-building-dos-fleet-cost-june-2026.html">companion cost post</a>.</p>
+
+    <p>The campaign's onion-service component selects its targets by a different rule again. A relay carries <code>INTRODUCE2</code> traffic only while it is serving as an onion service's <a href="https://community.torproject.org/onion-services/overview/">introduction point</a>, and Tor's source picks intro points <a href="https://gitlab.torproject.org/tpo/core/tor/-/blob/tor-0.4.9.6/src/feature/hs/hs_service.c">by uptime &mdash; the <code>Stable</code> flag</a> &mdash; not the Guard or HSDir flag, rotating through them continuously. So that load spreads across a broad, shifting set of relays instead of concentrating on the guard position, and it isn't gated on the directory flags either: only about three-quarters of our own relays carry <code>V2Dir</code>, yet the introduction role rotates across essentially the whole <code>Stable</code> pool. "Who gets hit" depends on <em>which</em> load you mean &mdash; the <a href="circuit-building-dos-anatomy-june-2026.html">companion anatomy post</a> traces the introduction flood in detail.</p>
+
+    <h2 id="relays-offline">Did It Knock Relays Offline? <a class="anchor" href="#relays-offline" aria-label="Link to this section">#</a></h2>
+    <p>Counting relays that carry the <code>Running</code> flag in each signed consensus (again, straight from CollecTor) shows the network's online count over the event. The flood did cost the network some relays, but less than a casual read of "% running" suggests:</p>
+    <ul>
+      <li>At the trough (around <strong>Jun 30</strong>) the network was down roughly <strong>3&ndash;4%</strong> of its relays versus the pre-flood level, then recovered.</li>
+      <li>That is <em>on top of</em> the ~9% of known relays that sit "not running" at any given time for ordinary, unrelated reasons (churn, maintenance, retired relays still in the directory). The flood-attributable dip is the ~3&ndash;4%, not the standing 9%.</li>
+    </ul>
+    <p>In other words: the network got stressed and shed a few percent of relays briefly, but it did not fall over. The dominant, measurable cost is <strong>overload</strong> (relays pushed past their limits while still running), not mass outage.</p>
+
+    <p>We can watch that flicker directly in the same signed consensuses &mdash; the share of all Tor relays that dropped the <code>Running</code> flag in each 6-hour window:</p>
+
+    <img width="1999" height="938" src="images/circuit-building-dos-wave-june-2026-chart-netflap-rate.png" alt="Time-series chart, Jun 1 to Jul 13 2026, whole Tor network. A red line shows the share of relays that dropped the Running flag each 6 hours: it oscillates around a 0.5 to 1 percent baseline before the Jun 25 onset, then steps up to a band around 1.5 to 2.5 percent through the flood, peaking at 2.9 percent of the network. The elevation is sustained but small: a flicker, not an outage. From the signed CollecTor consensuses.">
+
+    <h2 id="running-flag-flap">The Flood Made the Running Flag Flap &mdash; Network-Wide <a class="anchor" href="#running-flag-flap" aria-label="Link to this section">#</a></h2>
+    <p>That dip is only half the story. Beneath a nearly-flat online count, the flood made a large share of the network <em>churn</em> its <code>Running</code> flag &mdash; relays dropping out of the consensus and reappearing an hour or two later, over and over. Diffing the whole network's <code>Running</code> set between consecutive hourly consensuses (each one signed and archived on CollecTor) gives the network-wide flag-flux over time:</p>
+
+    <img width="2247" height="1360" src="images/circuit-building-dos-wave-june-2026-chart-network-flap.png" alt="Two stacked panels, June 15 to July 12 2026, hourly, whole Tor network. Top: the number of relays holding the Running flag — steady around a 9,802 baseline, sliding after the June 26 onset to an hourly low of 9,333 on June 30 (minus 4.8 percent), then recovering above baseline as about 400 brand-new relays join in early July. Bottom: relays entering or leaving the Running set per hour — around 46 per hour before the flood, then jumping to an average of 3.2 times baseline in wave one and 2.8 times in wave two, with a dotted line marking 3 times baseline; a box notes about 5,925 relays flapped Running at least twice during the flood, 2.9 times the roughly 2,036 in an equal pre-flood window.">
+
+    <ul>
+      <li><strong>Flag-flux roughly tripled.</strong> Before the flood, about <strong>46</strong> relays changed <code>Running</code> state per hour across the whole Tor network. From the Jun 25&ndash;26 onset it ran at an average of <strong class="highlight">&times;3.2 baseline through wave one</strong> (peaking at a daily-median ~172/hr on Jun 29, 3.9&times;) and <strong class="highlight">&times;2.8 through wave two</strong>, with only a brief single-day dip (~1.6&times; on Jul 6) in between.</li>
+      <li><strong>Yet the network barely shrank.</strong> The total online count dipped only <strong>~3.5%</strong> (daily median; the single worst hour touched 9,333, &minus;4.8%) to its Jun 30 trough, then recovered &mdash; even running a couple of percent <em>above</em> its pre-flood level on Jul 6, helped along by an unrelated batch of several hundred brand-new relays (one operator alone added ~400) joining the network in early July &mdash; before settling back near baseline. High flux with a nearly-flat total is the fingerprint of <em>flapping</em>: relays losing and regaining reachability under load, not relays leaving for good. (The flapping evidence itself is immune to those new arrivals: a relay's first appearance is never counted as a flap, so the ~5,900 repeat-flappers are relays that genuinely dropped out and came back.)</li>
+      <li><strong>It touched a broad set of relays.</strong> Comparing two equal 16-day windows, the number of distinct relays that flapped <code>Running</code> at least twice rose from about <strong>2,000</strong> before the flood to about <strong>5,900</strong> during it (2.9&times;); roughly <strong>1,300</strong> flapped eight or more times. This is a broad, network-wide effect across thousands of distinct relays, not a handful.</li>
+    </ul>
+    <p>Why does a loaded relay lose its flag without going offline? Because <code>Running</code> is a <em>reachability vote</em>. Tor's directory authorities &mdash; <strong>seven to nine</strong> of them voting in any given hour across this period &mdash; each independently test every relay per the <a href="https://spec.torproject.org/dir-spec/assigning-flags-vote.html">directory spec</a>: a relay counts as Running for an authority only if that authority managed to connect to it within the last 45 minutes, and the hourly consensus grants the flag only when <strong>a majority of the authorities voting that hour</strong> agree; a relay without it is dropped from the consensus entirely. (The count drifts as the authorities themselves go up and down &mdash; nine in mid-June, eight on Jun 24, seven now &mdash; and the majority is always taken over whoever actually voted that hour, whatever their number.) A relay saturated by the flood keeps serving the circuits it already carries, but can be too far behind to answer fresh probe connections &mdash; so it flickers out of the consensus for an hour or two at a time and then returns. A measurement failure with real consequences, not an outage. (Our own fleet's share of this flapping was roughly proportional to our ~10% share of the network &mdash; the flood flapped everyone, us no worse than the rest.)</p>
+
+    <p>The same public archive that answers "how many relays were overloaded" also answers "how steady is the flag they publish" &mdash; and through this flood, reachability itself became visibly noisier across the network, even as the total stayed up.</p>
+
+    <h2 id="reproduce">How to Reproduce This Yourself <a class="anchor" href="#reproduce" aria-label="Link to this section">#</a></h2>
+    <p>Everything above comes from two public endpoints. No relay access, no private data.</p>
+    <p><strong>Network overload over time</strong> &mdash; from the signed server-descriptor archives:</p>
+    <pre><code># Monthly archive of every signed server descriptor:
+https://collector.torproject.org/archive/relay-descriptors/server-descriptors/
+
+# Each descriptor that was overloaded contains a line:
+#   overload-general 1 &lt;timestamp&gt;
+# Tally, per published-day, the fraction of relays carrying that line.</code></pre>
+    <p><strong>Overload by role, over time</strong> &mdash; join the two CollecTor archives, per day:</p>
+    <pre><code># role: from each day's consensus, read every relay's flags (the "s" line):
+https://collector.torproject.org/archive/relay-descriptors/consensuses/
+#   Guard-only / Exit-only / both / neither
+# overload: from the server descriptors, which relays signed overload-general that day.
+# Then, per day and per role, take the overloaded share.
+
+# For a quick CURRENT snapshot instead, Onionoo gives both fields in one call:
+curl "https://onionoo.torproject.org/details?fields=fingerprint,overload_general_timestamp,flags"
+# overloaded now = overload_general_timestamp within the last 72h; role from "flags".</code></pre>
+    <p><strong>Online / Running counts over time</strong> &mdash; from the signed consensus archives:</p>
+    <pre><code>https://collector.torproject.org/archive/relay-descriptors/consensuses/
+# Count relays whose entry carries the "Running" flag, per hourly consensus.</code></pre>
+
+    <h2 id="same-class-as-2022-2023">Same Symptom Class as 2022&ndash;2023 <a class="anchor" href="#same-class-as-2022-2023" aria-label="Link to this section">#</a></h2>
+    <p>Circuit-creation floods overloading relays' onionskin processing &mdash; concentrated on guards &mdash; are the same class of event the Tor Project documented during the last big wave:</p>
+    <ul>
+      <li><a href="https://forum.torproject.org/t/tor-relays-dos-attacks-status-update/5333">tor-relays: DoS attacks &mdash; status update (Oct 2022)</a></li>
+      <li><a href="https://blog.torproject.org/tor-network-ddos-attack/">Tor blog: "Tor is slow right now. Here is what is happening."</a></li>
+      <li><a href="https://blog.torproject.org/introducing-proof-of-work-defense-for-onion-services/">Tor blog: "Introducing Proof-of-Work Defense for Onion Services" (2023)</a></li>
+      <li><a href="https://support.torproject.org/relay-operators/relay-bridge-overloaded/">Tor relay overload guide</a> &mdash; how to read the overload signals</li>
+    </ul>
+
+    <p>If you run relays and want to compare notes, or you're a researcher who wants the parsed data, <a href="/#contact">get in touch</a> &mdash; we're happy to share.</p>
+
+    <p>The scripts that rebuild every chart in this post straight from Tor's public archives are published at <a href="https://github.com/1aeo/1aeo-blog-charts">github.com/1aeo/1aeo-blog-charts</a> &mdash; each is self-contained and fetches only from CollecTor and Onionoo.</p>
+
+    <p style="text-align: center;"><a href="/#get-involved" class="btn">Join the Mission</a></p>
+
+    <div class="footer">
+      <p>© 2026 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p>
+    </div>
+  </div>
+</body>
+</html>

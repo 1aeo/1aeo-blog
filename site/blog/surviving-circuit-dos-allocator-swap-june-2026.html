@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Actually Saved Our Relays: An Allocator That Lets Go, and Swap Sized to Park the Rest | 1st Amendment Encrypted Openness</title>
+  <meta name="description" content="Weight-matched Tor relay pairs show how allocator choice and properly sized swap affected survival during a circuit flood.">
+  <link rel="canonical" href="https://1aeo.com/blog/surviving-circuit-dos-allocator-swap-june-2026.html">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; background-color: #121212; color: #ffffff; }
+    .nav { background-color: #1e1e1e; padding: 10px 0; box-shadow: 0 2px 10px rgba(0, 255, 127, 0.2); position: sticky; top: 0; z-index: 1000; }
+    .nav-toggle { display: none; background: none; border: none; font-size: 24px; color: #00ff7f; position: absolute; top: 10px; right: 20px; cursor: pointer; }
+    .nav-links { display: flex; justify-content: center; flex-wrap: wrap; }
+    .nav-links a { color: #00ff7f; text-decoration: none; margin: 0 15px; font-size: 18px; }
+    .nav-links a:hover { text-decoration: underline; }
+    @media (max-width: 600px) { .nav-links { display: none; flex-direction: column; margin-top: 40px; } .nav-links.show { display: flex; } .nav-toggle { display: block; } }
+    .container { max-width: 800px; margin: 50px auto; padding: 20px; background: #1e1e1e; box-shadow: 0px 0px 15px rgba(0, 255, 127, 0.6); border-radius: 10px; text-align: left; }
+    h1, h2, h3 { color: #00ff7f; }
+    h1 { text-align: center; font-size: 26px; }
+    p { font-size: 18px; color: #cccccc; line-height: 1.6; margin-bottom: 1em; }
+    .meta { font-size: 14px; color: #888; margin-bottom: 20px; text-align: center; }
+    ul, ol { color: #cccccc; margin-bottom: 1em; }
+    li { font-size: 18px; margin-bottom: 8px; line-height: 1.6; }
+    code { background-color: #2d2d2d; padding: 2px 6px; border-radius: 3px; font-family: monospace; color: #00ff7f; }
+    pre { background-color: #2d2d2d; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 14px; }
+    pre code { background: none; padding: 0; color: #ffffff; }
+    a { color: #00ff7f; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container img { display: block; margin: 20px auto; max-width: 100%; height: auto; border-radius: 5px; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #444; }
+    th { background-color: #2d2d2d; color: #00ff7f; }
+    td { color: #cccccc; }
+    tr:hover { background-color: #252525; }
+    .warning { background-color: #2d2d2d; border-left: 4px solid #ff6b6b; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .callout { background-color: #2d2d2d; border-left: 4px solid #00ff7f; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; font-size: 14px; color: #777; text-align: center; }
+    .btn { display: inline-block; margin-top: 20px; padding: 12px 24px; font-size: 18px; color: #121212; background-color: #00ff7f; text-decoration: none; font-weight: bold; border-radius: 5px; transition: background 0.3s; }
+    .btn:hover { background-color: #00cc66; text-decoration: none; }
+    .highlight { color: #ff6b6b; font-weight: bold; }
+    .success { color: #00ff7f; font-weight: bold; }
+    .series { font-size: 15px; color: #aaa; background-color: #181818; border-left: 4px solid #00ff7f; padding: 12px 16px; margin: 0 0 24px; border-radius: 0 5px 5px 0; line-height: 1.5; }
+    .series a { color: #00ff7f; }
+    h2, h3 { scroll-margin-top: 70px; }
+    .anchor { color: #3f3f3f; text-decoration: none; margin-left: 8px; font-size: 0.85em; font-weight: normal; }
+    h2:hover .anchor, h3:hover .anchor { color: #00ff7f; }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')">&#9776;</button>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/blog/">Blog</a>
+      <a href="https://metrics.1aeo.com">Metrics</a>
+      <a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
+      <a href="https://aroivalidator.1aeo.com">AROI Validator</a>
+      <a href="https://routefluxmap.1aeo.com">RouteFluxMap</a>
+      <a href="/#contact">Contact</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1>What Actually Saved Our Relays: An Allocator That Lets Go, and Swap Sized to Park the Rest</h1>
+    <p class="meta"><em>By 1AEO Team &bull; July 29, 2026 &bull; A matched-pair allocator experiment on 1AEO's relay fleet &bull; Prometheus + kernel journals, Jun 26 &ndash; Jul 28</em></p>
+
+    <p>The circuit-building flood ballooned individual 1AEO relays to tens of GiB of resident memory. Some relays were repeatedly OOM-killed by the kernel; most rode the flood out untouched. Our <a href="circuit-building-dos-fleet-cost-june-2026.html">cost post</a> tallied the bill; this short companion post reports the controlled comparison behind who survived and why. The answer has two ingredients, and neither works alone &mdash; and in late July, production ran the test again for us.</p>
+
+    <h2 id="the-experiment">The Experiment: Five Matched Pairs <a class="anchor" href="#the-experiment" aria-label="Link to this section">#</a></h2>
+    <p>We paired five relays running glibc's allocator with five running mimalloc 2.1, matched ex-ante on consensus weight (within 10%), and followed each pair through the whole flood. Matching on weight matters because the flood's load tracks weight &mdash; and the exposure was indeed comparable: both sides of every pair ballooned to roughly the same peaks, about <strong class="highlight">24&ndash;54 GiB</strong> of resident memory per relay.</p>
+
+    <img width="2069" height="1507" src="images/surviving-circuit-dos-chart-pairs.png" alt="Five panels of paired relay resident-memory time series, June 26 to July 15 2026, one glibc relay in red versus its consensus-weight-matched mimalloc 2.1 twin in blue per panel. In the featured pair both relays reach about 41 GiB together around July 3 to 4; the glibc relay then holds that 41 GiB flat for over five days with zero bytes released until a journal-verified kernel OOM kill marked with a red X, while the mimalloc relay releases about 27 GiB in-process within roughly 30 minutes and returns to a few GiB. All five glibc relays end in a verified OOM kill; all five mimalloc twins drain back to 7 to 13 percent of peak with zero kills.">
+
+    <h2 id="five-for-five">The Split Was 5-for-5 <a class="anchor" href="#five-for-five" aria-label="Link to this section">#</a></h2>
+    <p>Then the endings diverged completely. Every glibc relay held <strong class="highlight">99&ndash;100% of its balloon</strong> &mdash; zero bytes released, for days &mdash; until the kernel OOM-killer terminated it (about <strong class="highlight">15 tor-relay kills</strong> on the host running them, verified in the kernel journal). Every mimalloc twin returned its balloon to the operating system in-process &mdash; <strong class="success">17&ndash;58 GiB per relay</strong>, one of them within a single 30-minute sample &mdash; and finished the flood with <strong class="success">zero kills</strong>.</p>
+
+    <p>The allocator does <em>not</em> cap the peak. Mimalloc's single worst balloon, roughly <strong class="highlight">94 GiB</strong>, was the largest in our fleet. What the allocator decides is whether that memory ever comes back without intervention.</p>
+
+    <h2 id="two-ingredients">A Kill Required Both Ingredients <a class="anchor" href="#two-ingredients" aria-label="Link to this section">#</a></h2>
+    <p>A kernel kill required <strong>both</strong> a hold-everything allocator <strong>and</strong> thin swap headroom. The allocator decides whether a host <em>needs</em> headroom; swap decides whether it <em>has</em> any. Our mimalloc hosts survived while using essentially none of their swap. A glibc cohort with large swap also survived &mdash; by parking the retained ratchet there, filling about <strong class="success">40% of swap capacity</strong>. The only kills happened where glibc retention met swap that filled to <strong class="highlight">100%</strong>.</p>
+
+    <img width="1912" height="1146" src="images/surviving-circuit-dos-chart-quadrant.png" alt="Two-by-two quadrant diagram: allocator behavior (glibc holds every balloon versus mimalloc 2.1 releases in-process) against swap headroom (thin versus large). Every kernel OOM kill of the flood sits in the glibc-plus-thin-swap cell, where swap filled to 100 percent and memory stalls reached about 12 percent of time. Glibc with large swap shows zero kills with the ratchet parked at about 40 percent of swap capacity and stalls at or below 0.2 percent. Mimalloc with large headroom shows zero kills with swap at most 2 percent used and 0.00 percent stalls. Mimalloc with thin swap is an unobserved cell.">
+
+    <h2 id="swap-parked">Swap Parked the Flood &mdash; It Did Not Thrash <a class="anchor" href="#swap-parked" aria-label="Link to this section">#</a></h2>
+    <p>&ldquo;Park it in swap&rdquo; sounds like a recipe for thrashing. It was not &mdash; because the flood's balloon is overwhelmingly <em>cold</em> memory. On the parking host, pages swapped back <em>in</em> stayed near zero for the entire flood (99th percentile under <strong class="success">0.7 MiB/s</strong>), about <strong class="success">72%</strong> of parked bytes were never touched again, and time stalled on memory (PSI) stayed at or below <strong class="success">0.2%</strong> of the worst half-hour. The thrash failure mode is real &mdash; but it appeared only where swap was too small and both pools were exhausted: there, stalls reached up to <strong class="highlight">~12% of time</strong>.</p>
+
+    <img width="2055" height="1522" src="images/surviving-circuit-dos-chart-paging.png" alt="Two-panel chart, June 26 to July 16 2026. Top: the glibc host with a large swap parks up to 42 percent of swap capacity while RAM available never exhausts and swap-in rate stays near zero the whole flood, 99th percentile under 0.7 MiB per second, with about 72 percent of parked bytes never touched again. Bottom: memory-stall time (PSI) per half-hour; thin-swap glibc hosts spike to about 12 percent of time after their swap filled to 100 percent, while the large-swap host stays at or below 0.2 percent and the mimalloc host, using zero swap, stays at 0.00 percent.">
+
+    <h2 id="july-retest">The July Re-Test &mdash; And the Conversion We Shipped <a class="anchor" href="#july-retest" aria-label="Link to this section">#</a></h2>
+    <p>The flood then changed shape, and production re-ran the experiment for us. Between July 23 and July 27 a different mode &mdash; a directory-write / slow-read pattern that ballooned <em>outbound cell queues</em> instead of accumulating idle circuits &mdash; drove memory straight back to cliff levels. Free RAM on the hosts still running glibc fell to <strong class="highlight">2.70%</strong> and <strong class="highlight">2.58%</strong> of capacity and kept dropping back into that band across roughly three days. Elsewhere on the fleet a relay on one of the mimalloc hosts re-ratcheted to <strong class="highlight">83.60 GiB</strong> resident &mdash; the second-largest balloon we have recorded, and it gave the whole thing back within four hours. The ~94 GiB record still stands.</p>
+
+    <p>And nothing died &mdash; though the pressure was not invisible: 1AEO relays reported consensus overload for the first time in a year, an episode that had already turned before our July 28 restart (the count was falling in the July 27 descriptors, and tor's memory handler went quiet hours ahead of the restart). <strong class="success">Zero kernel OOM kills for 13 straight days</strong> and counting, against roughly <strong class="highlight">31 relay kills</strong> during the June&ndash;July phase of the flood. The swap we added to those hosts after the June phase took its first real load, peaking at <strong class="success">6.4% of capacity</strong>, and tor's own memory handler released about <strong class="success">475 GB</strong> across those six days. That is the layering this post argues for, working end to end: the allocator and tor's handler give back what they can, swap parks the cold remainder, and the kernel never has to shoot anything.</p>
+
+    <img width="2080" height="1120" src="images/surviving-circuit-dos-chart-validation.png" alt="Two-panel chart, July 18 to 28 2026. Top: free RAM as a percentage of host capacity for the 1AEO hosts still running glibc; both fall from about 30 percent to floors of 2.70 and 2.58 percent on July 23 to 24, inside the same under-5-percent cliff band as the June peak, and keep dropping back into that band across roughly three days before a July 28 mimalloc conversion restart returns them above 90 percent. A green label reads zero kernel OOM kills for 13 straight days. Bottom: swap used as a percentage of capacity, flat at zero until July 23, then stepping up to peaks of 6.4 and 4.4 percent — its first real load since deployment — and dropping back to zero at the restart.">
+
+    <p>On July 28 the glibc relays that carried every one of this flood's kernel kills were converted to mimalloc 2.1, in a fleet-wide service restart of about <strong class="success">781 relays</strong> &mdash; hosts not rebooted. A small remainder of the fleet still runs glibc. This post's own top recommendation, executed where it mattered most.</p>
+
+    <h2 id="operator-checklist">What We'd Tell Another Operator <a class="anchor" href="#operator-checklist" aria-label="Link to this section">#</a></h2>
+    <ol>
+      <li><strong>Run an allocator that returns memory to the OS.</strong> Mimalloc 2.1 released in-process for us. It is not a peak cap &mdash; plan for the balloon anyway.</li>
+      <li><strong>Size swap to park a multi-day ratchet.</strong> Swap holds the flood's <em>cold</em> memory. If your RAM cannot hold the <em>active</em> working set, you will thrash &mdash; that is where our thin-swap hosts landed.</li>
+      <li><strong>Monitor PSI memory pressure and swap-in rate, not just RSS.</strong> RSS tells you the balloon's size; PSI and swap-in tell you whether it is actually hurting. July re-validated this one.</li>
+      <li><strong>Keep a hard bound (a cgroup memory limit) as the last-resort layer.</strong></li>
+    </ol>
+
+    <h2 id="how-we-measured">How We Measured <a class="anchor" href="#how-we-measured" aria-label="Link to this section">#</a></h2>
+    <p>Per-process resident memory and allocator identity come from our fleet Prometheus; OOM-kill counts from kernel journals; swap usage, swap-in rates and PSI memory-stall percentages from host kernel counters. Caveats: five pairs is a small sample, but the split was 5-for-5 and the mechanism (release vs. retention) is visible in each trace; RAM and swap figures are percentages of each host's own capacity; the mimalloc-with-thin-swap cell was never observed here. The July re-test uses the same counters over July 18&ndash;28; the July 28 fleet-wide service restart is that conversion, not a relay failure &mdash; our Running relay count held flat through it. The flood is not over: as of July 29 its malformed-circuit, directory-write and onion-service introduction modes have gone quiet in our telemetry, while the original circuit-rejection mode still runs. As always, aggregate counters only: nothing here involves inspecting sources.</p>
+
+    <p class="series"><strong>Related reading:</strong> <a href="circuit-building-dos-fleet-cost-june-2026.html">What It Actually Costs</a> &mdash; the CPU and memory bill this experiment sits inside &mdash; and <a href="tor-memory-defense-blindspot-june-2026.html">Tor's own memory defense</a> &mdash; why tor's built-in OOM handler could not see this memory at all.</p>
+
+    <p style="text-align: center;"><a href="/#get-involved" class="btn">Join the Mission</a></p>
+
+    <div class="footer">
+      <p>© 2026 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BGP Configurations for Tor Relay Servers | 1st Amendment Encrypted Openness</title>
+  <meta name="description" content="Turnkey BGP configuration examples for announcing Tor relay server networks quickly and consistently.">
+  <link rel="canonical" href="https://1aeo.com/blog/bgp-configs-for-tor-relay-servers.html">
+  <link rel="stylesheet" href="/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      background-color: #121212;
+      color: #ffffff;
+    }
+    .nav {
+        background-color: #1e1e1e;
+        padding: 10px 0;
+        box-shadow: 0 2px 10px rgba(0, 255, 127, 0.2);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+    .nav-toggle {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: #00ff7f;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        cursor: pointer;
+    }
+    .nav-links {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .nav-links a {
+        color: #00ff7f;
+        text-decoration: none;
+        margin: 0 15px;
+        font-size: 18px;
+    }
+    .nav-links a:hover {
+        text-decoration: underline;
+    }
+    @media (max-width: 600px) {
+        .nav-links {
+            display: none;
+            flex-direction: column;
+            margin-top: 40px;
+        }
+        .nav-links.show {
+            display: flex;
+        }
+        .nav-toggle {
+            display: block;
+        }
+    }
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #1e1e1e;
+      box-shadow: 0px 0px 15px rgba(0, 255, 127, 0.6);
+      border-radius: 10px;
+    }
+    h1, h2, h3 {
+      color: #00ff7f;
+    }
+    p {
+      font-size: 18px;
+      color: #cccccc;
+      line-height: 1.6;
+      margin-bottom: 1em;
+    }
+    .meta {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 10px;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 24px;
+      font-size: 18px;
+      color: #121212;
+      background-color: #00ff7f;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background-color: #00cc66;
+    }
+    .footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #777;
+    }
+    ul, ol {
+      text-align: left;
+      max-width: 700px;
+      margin: 0 auto 1em auto;
+      color: #cccccc;
+    }
+    li {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+    pre {
+      background: #2a2a2a;
+      padding: 10px;
+      text-align: left;
+      overflow-x: auto;
+      max-width: 700px;
+      margin: 0 auto 1em auto;
+      color: #00ff7f;
+    }
+    .section {
+      margin: 50px 0;
+      padding-top: 30px;
+      border-top: 1px solid #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+          &#9776;
+      </button>
+      <div class="nav-links">
+          <a href="/">Home</a>
+          <a href="/onionvanity/">Onion Vanity</a>
+          <a href="/blog/">Blog</a>
+          <a href="https://metrics.1aeo.com">Metrics</a>
+          <a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
+          <a href="https://aroivalidator.1aeo.com">AROI Validator</a>
+          <a href="https://routefluxmap.1aeo.com">RouteFluxMap</a>
+          <a href="/#contact">Contact</a>
+      </div>
+  </div>
+  
+  <div class="container">
+        <h1 class="post-title">BGP Configurations for Tor Relay Servers</h1>
+        <p class="post-meta"><em>By 1AEO Team • May 1, 2025</em></p>
+
+        <p>Supercharge your Tor relay deployments with turnkey BGP configs that take you from zero to announced in minutes</p>
+        <p>The <strong><a href="https://github.com/1aeo/TorBGPConfigs/">TorBGPConfigs</a></strong> repository provides a reference collection of BGP configuration files to announce your Autonomous System Number (ASN) and IP address ranges for Tor relay servers across different upstream providers.</p>
+
+        <div class="section">
+        <h2>BGP Server Configuration Files</h2>
+        <ul>
+          <li><a href="https://github.com/1aeo/TorBGPConfigs/blob/main/server1.frr.conf"><code>server1.frr.conf</code></a>: FRR on Ubuntu 24.02.2, announcing the same IP range used for local traffic.</li>
+          <li><a href="https://github.com/1aeo/TorBGPConfigs/blob/main/server2.frr.conf"><code>server2.frr.conf</code></a>: FRR on Ubuntu 24.02.2, similar to <code>server1</code>, for announcing hosted prefixes.</li>
+          <li><a href="https://github.com/1aeo/TorBGPConfigs/blob/main/server3.frr.conf"><code>server3.frr.conf</code></a>: FRR on OPNsense 25.4, announcing an IP range not directly routed by the host.</li>
+        </ul>
+
+        <h2>Common Variables</h2>
+        <ul>
+          <li><code>&lt;local machine hostname&gt;</code> (e.g. localhost.domain.com)</li>
+          <li><code>&lt;my AS&gt;</code> (e.g. 12345)</li>
+          <li><code>&lt;remote AS&gt;</code> (e.g. 54321)</li>
+          <li><code>&lt;name of upstream provider&gt;</code></li>
+          <li><code>&lt;my IP address to announce&gt;</code> (e.g. 8.8.8.1)</li>
+          <li><code>&lt;neighbor IP&gt;</code> (e.g. 8.8.1.1)</li>
+          <li><code>&lt;my IP range and subnet to announce&gt;</code> (e.g. 8.8.8.0/24)</li>
+        </ul>
+
+        <h2>Common BGP Commands</h2>
+        <h3>Show BGP Unicast Summary</h3>
+        <pre>sudo vtysh -c "show bgp ipv4 unicast summary"</pre>
+        <p>Displays a summary of all BGP routes along with peer states.</p>
+
+        <h3>Show Detailed Routing Information for an IP Prefix</h3>
+        <pre>sudo vtysh -c "show bgp ipv4 unicast xxx.xxx.xxx.0/24"</pre>
+        <p>Provides detailed routing information for a specific prefix.</p>
+
+        <h3>Show Advertised Routes to a Specific BGP Neighbor</h3>
+        <pre>sudo vtysh -c "show ip bgp neighbors xxx.xxx.xxx.xxx advertised-routes"</pre>
+        <p>Shows the routes being advertised to the specified neighbor.</p>
+        </div>
+
+        <div class="section">
+        <h2>Community Discussion: BGP Management Choices</h2>
+        <p>Highlights from a Tor relays mailing list thread, <a href="https://lists.torproject.org/mailman3/hyperkitty/list/tor-relays%40lists.torproject.org/thread/YLRVXFQPXUMQHBJADG6P66LNFR6YBIVA/">Tor Relay Deployment Dilemma: Handle BGP yourself or have it done upstream to announce your own AS?</a> on April 8, 2025, covering whether to self-manage BGP sessions or delegate to upstream providers, resource considerations, and monitoring options:</p>
+        <ul>
+          <li>Consider delegating BGP to upstream providers if expertise is limited or managed BGP fees are reasonable.</li>
+          <li>For single-homed relays, receiving only default IPv4/IPv6 routes conserves CPU/RAM;</li>
+          <li>Default-only setups simplify route filtering; for full tables, follow established filtering guides (e.g., <a href="https://bgpfilterguide.nlnog.net/">NLNOG's BGP Filter Guide</a>).</li>
+          <li>Full routing tables could be justified as a learning experience and to experiment with.</li>
+          <li>A full global BGP table requires a few hundred megabytes of memory and modest CPU compared to Tor traffic and crypto operations.</li>
+          <li>Monitoring recommendations include self-hosted <a href="https://github.com/nttgin/BGPalerter">BGPalerter</a>, hosted services like <a href="https://packetvis.com">PacketVis</a>, <a href="https://bgpwatch.cgtf.net">BGPWatch</a>, or free accounts on BGP.Tools.</li>
+        </ul>
+
+        <div class="section">
+        <h2>Communicating With Your Upstream Provider</h2>
+        <p>Before setting up your BGP session, gather these details:</p>
+        <h3>Information You Should Share</h3>
+        <ol>
+          <li><strong>Your ASN:</strong> </li>
+          <li><strong>Your Peering IP Address:</strong></li>
+          <li><strong>Prefix to Announce:</strong> </li>    
+          <li><strong>Preferred Table Type:</strong> Default only, Full Table only, Full Table + Default</li>    
+        </ol>
+        </div>
+    
+        <h3>Questions to Ask Your Upstream Provider</h3>
+        <ol>
+          <li><strong>Upstream ASN:</strong> </li>
+          <li><strong>Upstream Peering IP Address:</strong></li>
+          <li><strong>Upstream Continuation ASNs:</strong> Will you announce to ASXXXX and ASXXX?</li>
+          <li><strong>Session Timers:</strong> Keepalive interval? Hold time?</li>
+          <li><strong>Capabilities:</strong> Do you support graceful restart, route refresh, etc.?</li>
+          <li><strong>Prefix and Community Policies:</strong> Any inbound/outbound filters or community settings?</li>
+          <li><strong>VLAN or Interface Settings:</strong> Any VLAN tags or interface-specific requirements?</li>
+          <li><strong>Operational Guidelines:</strong> Maintenance windows or other operational guidelines?</li>
+        </ol>
+        </div>
+
+    <a href="/#get-involved" class="btn">Join the Mission</a>
+
+    <div class="footer">
+      <p>© 2025 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p>
+    </div>
+  </div>
+</body>
+</html>

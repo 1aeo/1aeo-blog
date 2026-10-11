@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2080" height="1120" viewBox="0 0 2080 1120" role="img" aria-labelledby="title desc">
+  <title id="title">Average Tor vanity onion address search time by exact prefix length</title>
+  <desc id="desc">A dark linear-scale line chart showing average search time rising from 6 seconds at 8 characters to 67 days at 12 characters. The first four values remain near the baseline while the 12-character value rises sharply. Each additional Base32 prefix character requires 32 times as many candidates on average.</desc>
+  <rect width="2080" height="1120" fill="#1e1e1e"/>
+
+  <text x="150" y="95" fill="#ffffff" font-family="Arial, sans-serif" font-size="52" font-weight="700">One more prefix character means 32× more search work</text>
+  <text x="150" y="145" fill="#929292" font-family="Arial, sans-serif" font-size="28">Average wall-clock examples at 1AEO’s current published search-capacity estimate · linear time scale</text>
+
+  <g stroke="#3a3a3a" stroke-width="2">
+    <line x1="250" y1="850" x2="1940" y2="850"/>
+    <line x1="250" y1="754" x2="1940" y2="754"/>
+    <line x1="250" y1="659" x2="1940" y2="659"/>
+    <line x1="250" y1="563" x2="1940" y2="563"/>
+    <line x1="250" y1="468" x2="1940" y2="468"/>
+    <line x1="250" y1="372" x2="1940" y2="372"/>
+    <line x1="250" y1="277" x2="1940" y2="277"/>
+    <line x1="250" y1="181" x2="1940" y2="181"/>
+  </g>
+
+  <g fill="#929292" font-family="Arial, sans-serif" font-size="27" text-anchor="end">
+    <text x="225" y="859">0 days</text>
+    <text x="225" y="763">10 days</text>
+    <text x="225" y="668">20 days</text>
+    <text x="225" y="572">30 days</text>
+    <text x="225" y="477">40 days</text>
+    <text x="225" y="381">50 days</text>
+    <text x="225" y="286">60 days</text>
+    <text x="225" y="190">70 days</text>
+  </g>
+
+  <line x1="250" y1="850" x2="1940" y2="850" stroke="#888888" stroke-width="3"/>
+  <path d="M340 850 L710 850 L1080 849 L1450 821 L1820 210" fill="none" stroke="#4ea5ff" stroke-width="8" stroke-linejoin="round"/>
+
+  <g stroke="#00ff7f" stroke-width="5" fill="#1e1e1e">
+    <circle cx="340" cy="850" r="15"/>
+    <circle cx="710" cy="850" r="15"/>
+    <circle cx="1080" cy="849" r="15"/>
+  </g>
+  <circle cx="1450" cy="821" r="15" fill="#1e1e1e" stroke="#ffbd59" stroke-width="5"/>
+  <circle cx="1820" cy="210" r="15" fill="#1e1e1e" stroke="#ff6b6b" stroke-width="5"/>
+
+  <g font-family="Arial, sans-serif" font-size="31" font-weight="700" text-anchor="middle">
+    <text x="340" y="805" fill="#00ff7f">6 seconds</text>
+    <text x="710" y="805" fill="#00ff7f">3 minutes</text>
+    <text x="1080" y="805" fill="#00ff7f">2 hours</text>
+    <text x="1450" y="780" fill="#ffbd59">3 days</text>
+    <text x="1820" y="165" fill="#ff6b6b">67 days</text>
+  </g>
+
+  <g fill="#ffffff" font-family="Arial, sans-serif" font-size="34" font-weight="700" text-anchor="middle">
+    <text x="340" y="910">8 characters</text>
+    <text x="710" y="910">9 characters</text>
+    <text x="1080" y="910">10 characters</text>
+    <text x="1450" y="910">11 characters</text>
+    <text x="1820" y="910">12 characters</text>
+  </g>
+
+  <g fill="#4ea5ff" font-family="Arial, sans-serif" font-size="26" font-weight="700" text-anchor="middle">
+    <text x="525" y="970">×32 candidates</text>
+    <text x="895" y="970">×32 candidates</text>
+    <text x="1265" y="970">×32 candidates</text>
+    <text x="1635" y="970">×32 candidates</text>
+  </g>
+  <g stroke="#4ea5ff" stroke-width="3">
+    <path d="M420 946 H630 M620 936 L630 946 L620 956" fill="none"/>
+    <path d="M790 946 H1000 M990 936 L1000 946 L990 956" fill="none"/>
+    <path d="M1160 946 H1370 M1360 936 L1370 946 L1360 956" fill="none"/>
+    <path d="M1530 946 H1740 M1730 936 L1740 946 L1730 956" fill="none"/>
+  </g>
+
+  <text x="150" y="1065" fill="#929292" font-family="Arial, sans-serif" font-size="25">Times are averages, not deadlines. A search can finish earlier or continue much longer.</text>
+  <text x="1930" y="1065" fill="#929292" font-family="Arial, sans-serif" font-size="25" text-anchor="end">Produced by 1AEO</text>
+</svg>

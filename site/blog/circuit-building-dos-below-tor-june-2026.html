@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Flood Below Tor: A Billion Handshakes the Relays Never Saw (June–July 2026) | 1st Amendment Encrypted Openness</title>
+  <meta name="description" content="How Linux accept queues dropped about 1.3 billion completed connections beneath Tor during the June–July 2026 circuit flood.">
+  <link rel="canonical" href="https://1aeo.com/blog/circuit-building-dos-below-tor-june-2026.html">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; background-color: #121212; color: #ffffff; }
+    .nav { background-color: #1e1e1e; padding: 10px 0; box-shadow: 0 2px 10px rgba(0, 255, 127, 0.2); position: sticky; top: 0; z-index: 1000; }
+    .nav-toggle { display: none; background: none; border: none; font-size: 24px; color: #00ff7f; position: absolute; top: 10px; right: 20px; cursor: pointer; }
+    .nav-links { display: flex; justify-content: center; flex-wrap: wrap; }
+    .nav-links a { color: #00ff7f; text-decoration: none; margin: 0 15px; font-size: 18px; }
+    .nav-links a:hover { text-decoration: underline; }
+    @media (max-width: 600px) { .nav-links { display: none; flex-direction: column; margin-top: 40px; } .nav-links.show { display: flex; } .nav-toggle { display: block; } }
+    .container { max-width: 800px; margin: 50px auto; padding: 20px; background: #1e1e1e; box-shadow: 0px 0px 15px rgba(0, 255, 127, 0.6); border-radius: 10px; text-align: left; }
+    h1, h2, h3 { color: #00ff7f; }
+    h1 { text-align: center; font-size: 26px; }
+    p { font-size: 18px; color: #cccccc; line-height: 1.6; margin-bottom: 1em; }
+    .meta { font-size: 14px; color: #888; margin-bottom: 20px; text-align: center; }
+    ul, ol { color: #cccccc; margin-bottom: 1em; }
+    li { font-size: 18px; margin-bottom: 8px; line-height: 1.6; }
+    code { background-color: #2d2d2d; padding: 2px 6px; border-radius: 3px; font-family: monospace; color: #00ff7f; }
+    pre { background-color: #2d2d2d; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 14px; }
+    pre code { background: none; padding: 0; color: #ffffff; }
+    a { color: #00ff7f; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container img { display: block; margin: 20px auto; max-width: 100%; height: auto; border-radius: 5px; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #444; }
+    th { background-color: #2d2d2d; color: #00ff7f; }
+    td { color: #cccccc; }
+    tr:hover { background-color: #252525; }
+    .warning { background-color: #2d2d2d; border-left: 4px solid #ff6b6b; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .callout { background-color: #2d2d2d; border-left: 4px solid #00ff7f; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; font-size: 14px; color: #777; text-align: center; }
+    .btn { display: inline-block; margin-top: 20px; padding: 12px 24px; font-size: 18px; color: #121212; background-color: #00ff7f; text-decoration: none; font-weight: bold; border-radius: 5px; transition: background 0.3s; }
+    .btn:hover { background-color: #00cc66; text-decoration: none; }
+    .highlight { color: #ff6b6b; font-weight: bold; }
+    .success { color: #00ff7f; font-weight: bold; }
+    .series { font-size: 15px; color: #aaa; background-color: #181818; border-left: 4px solid #00ff7f; padding: 12px 16px; margin: 0 0 24px; border-radius: 0 5px 5px 0; line-height: 1.5; }
+    .series a { color: #00ff7f; }
+    h2, h3 { scroll-margin-top: 70px; }
+    .anchor { color: #3f3f3f; text-decoration: none; margin-left: 8px; font-size: 0.85em; font-weight: normal; }
+    h2:hover .anchor, h3:hover .anchor { color: #00ff7f; }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')">&#9776;</button>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/onionvanity/">Onion Vanity</a>
+      <a href="/blog/">Blog</a>
+      <a href="https://metrics.1aeo.com">Metrics</a>
+      <a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
+      <a href="https://aroivalidator.1aeo.com">AROI Validator</a>
+      <a href="https://routefluxmap.1aeo.com">RouteFluxMap</a>
+      <a href="/#contact">Contact</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1>The Flood Below Tor: A Billion Handshakes the Relays Never Saw</h1>
+    <p class="meta"><em>By 1AEO Team • July 14, 2026 • Kernel-level view from 1AEO's guard fleet • Linux TCP counters + Tor MetricsPort, Jun 1 &ndash; Jul 14</em></p>
+
+    <p class="series"><strong>Part 4 of a five-part series</strong> on the June&ndash;July 2026 circuit-building DoS. &nbsp;1.&nbsp;<a href="tor-network-dos-wave-june-2026.html">The Tor Network Is Under a Circuit-Building DoS Wave</a> &mdash; the network-wide view from Tor's public data. &nbsp;2.&nbsp;<a href="circuit-building-dos-anatomy-june-2026.html">Anatomy of the Attack</a> &mdash; the three waves and how each one works. &nbsp;3.&nbsp;<a href="circuit-building-dos-fleet-cost-june-2026.html">What It Actually Costs</a> &mdash; the CPU and memory bill, and how 1AEO ranked. &nbsp;4.&nbsp;<strong>The Flood Below Tor</strong> (you are here) &mdash; the connection flood Tor's own counters cannot see. &nbsp;5.&nbsp;<a href="defending-against-circuit-dos-june-2026.html">Defending Against Circuit-Building DoS</a> &mdash; better metrics and the protocol fixes we're asking for.</p>
+
+    <p>Everything in the earlier posts happened <em>inside</em> Tor &mdash; circuits, handshakes, DoS counters, memory. This post is about what was happening <em>underneath</em> it. Over the same weeks, the Linux kernel on 1AEO's relay hosts quietly turned away roughly <strong class="highlight">1.3 billion fully-completed TCP connections</strong> at the door &mdash; connections that finished their handshake and were then dropped before Tor ever learned they existed. No Tor log line, no Tor metric, no DoS-defense counter records them. If you only watch Tor, this entire layer of the attack is invisible &mdash; and as we publish, on our hardest-hit hosts, it is still going on.</p>
+
+    <h2 id="what-is-an-accept-queue">What Is an Accept Queue? <a class="anchor" href="#what-is-an-accept-queue" aria-label="Link to this section">#</a></h2>
+    <p>When a connection arrives at any TCP service, the kernel completes the three-way handshake and then parks the finished connection in a short line &mdash; the <strong>accept queue</strong> &mdash; where it waits for the application to pick it up (a system call literally named <code>accept()</code>). The queue is small, and it only drains as fast as the application collects from it. If the application is starved for CPU, or the arrival rate is simply too high, the queue fills &mdash; and the kernel <strong>silently discards</strong> fully-established connections. The only trace is a pair of kernel counters, <code>ListenOverflows</code> and <code>ListenDrops</code>, that most monitoring never looks at. The application &mdash; here, a Tor relay &mdash; never sees the connection at all. From the connecting side, the connection appears to succeed and then die; the natural response is to retry, which adds more load.</p>
+
+    <h2 id="billion-drops">A Billion Handshakes Dropped at the Door <a class="anchor" href="#billion-drops" aria-label="Link to this section">#</a></h2>
+    <p>Before the flood, these counters were near zero on 1AEO's hosts &mdash; single digits per second at most, with occasional brief bursts. From late June they exploded: about <strong class="highlight">1.3 billion accept-queue drops</strong> between the flood's onset and July 11 &mdash; roughly <strong class="highlight">900 per second, sustained for two weeks</strong>, with fleet-wide half-hour peaks above <strong class="highlight">2,500 per second</strong>. (Our fleet-wide maintenance restart on July 11 produced its own brief burst of drops as everything reconnected &mdash; that day is marked on the chart and excluded from every number here.)</p>
+
+    <img width="2079" height="1036" src="images/circuit-building-dos-wave-june-2026-chart-listendrops.png" alt="Time-series chart, June 1 to July 14 2026, completed TCP handshakes dropped per second at the kernel accept queue, summed across 1AEO's relay hosts. Near zero through mid-June with one isolated brief burst. Sustained pressure begins June 21 to 24, before the dashed circuit-flood onset line at June 25 23:00 UTC, then climbs through the flood to an oscillating plateau of roughly 700 to 1,600 per second in early July, spiking during a shaded band marked as 1AEO's own maintenance restart on July 11, then settling to a couple hundred per second that continue to the end of the chart.">
+
+    <p>Two details in that curve matter beyond its size. First, <strong>the connection flood arrived before the circuit flood.</strong> Sustained drops begin on our hosts on <strong class="highlight">June 24</strong> &mdash; one to two days ahead of the June 25 23:00 UTC circuit onset that anchors the <a href="circuit-building-dos-anatomy-june-2026.html">anatomy post</a> &mdash; and the first clear pressure appears even earlier, on <strong class="highlight">June 21</strong> (the anatomy post had already noted a 12-hour circuit "probe" on June 22). At <strong>June 24, 20:00 UTC</strong> the fleet's inbound connection rate spiked to <strong class="highlight">~6x its normal level</strong>. We checked the obvious alternative explanation: these were not our own restarts &mdash; our deployment logs show that, aside from a single routine deploy, no relay processes restarted on the hosts we monitor that week. Second, <strong>it hasn't stopped.</strong> The circuit flood has eased from its peak, but 1AEO's hardest-hit hosts are still shedding a couple hundred connections per second at the kernel as we publish.</p>
+
+    <h2 id="kernel-shed-the-excess">What Tor Accepted Barely Moved &mdash; Because the Kernel Shed the Excess <a class="anchor" href="#kernel-shed-the-excess" aria-label="Link to this section">#</a></h2>
+    <p>The <a href="circuit-building-dos-fleet-cost-june-2026.html">cost post</a> reported that our established-connection counts and new-connection rate "barely moved" through the flood &mdash; that is how we knew the circuits were arriving over existing connections. The kernel counters complete that picture: the connection rate Tor <em>saw</em> stayed nearly flat (about <strong class="highlight">1.05x</strong> its pre-flood level) because <strong>the kernel was discarding the growth before Tor could see it</strong>: new connections were completing their TCP handshake and piling into each relay's accept queue faster than its overloaded main thread could pull them off, so the kernel dropped the overflow. Adding accepted and dropped together, the load actually <em>offered</em> to our hosts roughly doubled. On the hardest-hit hosts, <strong class="highlight">35&ndash;46% of all inbound completed handshakes</strong> were dropped at the accept queue over the whole flood &mdash; in the worst half-hours, <strong class="highlight">over 70%</strong>.</p>
+
+    <img width="2079" height="1036" src="images/circuit-building-dos-wave-june-2026-chart-offered-accepted.png" alt="Stacked area chart, June 1 to July 14 2026, inbound completed TCP handshakes across 1AEO's relay hosts, shown as multiples of the pre-flood accepted rate. A green band shows connections accepted, nearly flat around 1x throughout apart from a brief spike on June 24. A red band stacked on top shows connections dropped at the kernel accept queue, near zero before the flood and rising until the total offered load runs at roughly twice the accepted level through late June and July, while the accepted rate stays flat. A dashed line marks the circuit-flood onset and a shaded band marks 1AEO's July 11 maintenance restart.">
+
+    <p>One consequence reaches beyond our own fleet: a dropped connection looks, to the source, like a connection that mysteriously died &mdash; so sources retry. SYN retransmissions &mdash; the automatic retries a connecting machine sends when its handshake goes unanswered &mdash; ran toward our hardest-hit hosts at <strong class="highlight">six to seven and a half times</strong> their pre-flood rate through the flood. Whatever fraction of those sources are legitimate, they experienced our saturated hosts as flaky &mdash; the same underlying mechanism that made loaded relays fail the directory authorities' reachability probes in the <a href="tor-network-dos-wave-june-2026.html">network post</a>: a machine too busy to answer the door.</p>
+
+    <h2 id="what-it-is-and-isnt">What It Is &mdash; and Isn't <a class="anchor" href="#what-it-is-and-isnt" aria-label="Link to this section">#</a></h2>
+    <ul>
+      <li><strong>Not a SYN flood.</strong> A SYN flood spams half-open handshakes and never completes them; the kernel's countermeasure (SYN cookies) fired <strong>exactly zero times</strong> on every host we monitor, throughout. These connections <em>completed</em> their handshake and were dropped afterwards, at the accept queue &mdash; on our hosts <code>ListenOverflows</code> and <code>ListenDrops</code> agree to better than 98.7%, which is precisely the full-accept-queue signature.</li>
+      <li><strong>Not connection-tracking exhaustion.</strong> Most of our relay hosts run <em>no</em> connection tracking at all &mdash; with no stateful firewall or NAT to pull in the kernel's conntrack subsystem, a relay's connections are never entered into a tracking table, so there is no table to fill. Where a host does run conntrack &mdash; for an unrelated networking reason &mdash; it sat far below a raised, multi-million-entry ceiling, nowhere near exhaustion.</li>
+      <li><strong>Not something Tor mis-counting.</strong> The drops live in kernel counters, upstream of Tor; Tor's own accounting is consistent &mdash; it faithfully reports the connections it was given.</li>
+      <li><strong>It tracks CPU saturation &mdash; and here is exactly why, measured directly.</strong> Accepting a new connection is the job of each relay's <em>single</em> main thread &mdash; the same event loop that also has to keep pace with the flood of circuit cells &mdash; while the expensive ntor handshakes run on <em>separate</em> CPU worker threads (confirmed in Tor's source: <code>accept()</code> is on the main loop; the handshake is dispatched to a worker pool). Under the flood those workers pinned every core, leaving far more busy threads than cores, so a loaded relay's main thread had to wait its turn to run &mdash; and the effect is <em>per relay</em>, not per host. We can still watch it happen: on a host that is <em>still</em> shedding connections, a single high-traffic relay's accept queue sits pinned <strong class="highlight">completely full at its backlog limit</strong> while that relay's process spends roughly <strong class="highlight">a sixth of every second just waiting for a CPU</strong> &mdash; and the many lighter relays sharing the same host keep their queues empty. A main thread that starved can't call <code>accept()</code> fast enough to drain the queue as connections arrive, so the kernel drops the overflow. The pattern holds fleet-wide: every host that kept CPU headroom shed <strong class="success">effectively zero</strong> connections through the same flood, and a given host began dropping only once its CPUs saturated &mdash; not before. So CPU saturation is what tips a host from draining its accept queue to overflowing it &mdash; but what then overflows is set by how hard the flood is pushing, not by CPU alone. When the connection flood eased after our July 11 maintenance restart, a host that stayed <em>just as</em> CPU-pinned went from dropping <strong class="highlight">over half</strong> its offered connections to <strong class="success">essentially none</strong> &mdash; and when the flood surged back days later, the drops returned at the same CPU load. The accept queue overflows when arrivals outrun a saturated main loop: ease the arrivals and the same host keeps up.</li>
+    </ul>
+
+    <h2 id="why-defenses-cant-see-it">Why Tor's Defenses Can't See This <a class="anchor" href="#why-defenses-cant-see-it" aria-label="Link to this section">#</a></h2>
+    <p>Here is the uncomfortable part. Tor <em>does</em> have connection-level DoS defenses, and on our fleet they <strong>did</strong> fire &mdash; the per-source concurrent-connection cap alone rejected some <strong class="highlight">27.6 million</strong> connections over the flood &mdash; the cumulative total behind the rejection rates charted in the <a href="circuit-building-dos-anatomy-june-2026.html">anatomy post</a>. It didn't matter: the kernel dropped roughly <strong class="highlight">40 times more</strong> connections than every Tor connection defense combined rejected. Those defenses run <em>inside</em> Tor, so they can only ever act on connections that survive the accept queue &mdash; and they act per source address, so a flood spread across enough sources stays under every per-source threshold while its aggregate saturates the host. A distributed connection flood is invisible to Tor twice over: most of it is dropped before Tor exists as far as the connection is concerned, and the rest doesn't concentrate enough per source to trip a limit. Today, the only real absorber is CPU capacity &mdash; which is an arms race an operator can only lose. That gap is a big part of why our <a href="defending-against-circuit-dos-june-2026.html">asks to the Tor Project</a> focus on limits that compose into an aggregate ceiling.</p>
+
+    <h2 id="check-your-relays">Check Your Own Relays <a class="anchor" href="#check-your-relays" aria-label="Link to this section">#</a></h2>
+    <p>Every operator can read these counters &mdash; they are standard Linux kernel statistics, and they are cumulative since boot, so sample them as deltas to see the burst windows:</p>
+    <pre><code># is the accept queue dropping completed connections right now?
+watch -n5 "nstat -z 2>/dev/null | grep -E 'ListenOverflows|ListenDrops'"
+
+# log a UTC-timestamped series (every 30s) — useful for cross-operator comparison
+while :; do echo "$(date -u +%FT%TZ) $(nstat -z 2>/dev/null | awk '/ListenDrops/{print $2}')"; sleep 30; done
+
+# differential: a SYN flood would show syncookies; this attack shows none
+nstat -az | grep -Ei 'Listen|Syncookie'</code></pre>
+    <p>If your relays show elevated <code>ListenDrops</code> with zero syncookies &mdash; concentrated on your busiest machines &mdash; you are seeing the same layer of this attack. Public operator reports of <a href="https://forum.torproject.org/t/tor-relays-abnormal-firewall-states-since-0-4-9-10/21820">abnormal firewall-state growth</a> during the same weeks are consistent with this connection-layer flood. We would gladly compare UTC-timestamped burst windows across operators and networks &mdash; synchronized bursts across unrelated infrastructures are the cleanest way to separate a coordinated external flood from any one operator's local load. <a href="/#contact">Get in touch.</a></p>
+
+    <h2 id="how-we-measured">How We Measured <a class="anchor" href="#how-we-measured" aria-label="Link to this section">#</a></h2>
+    <p>Host-level kernel TCP counters (<code>node_exporter</code>: <code>ListenDrops</code>, <code>ListenOverflows</code>, <code>PassiveOpens</code>, syncookies, established counts) alongside Tor's MetricsPort, on hosts that run only Tor relays &mdash; all aggregate counters, as always: no packet captures, and nothing recorded about sources. Numbers here exclude our July 11 maintenance window, and we verified the onset against our own deployment logs so we would not mistake our restarts for an attack. One caveat: these kernel counters are host-wide, not per-port. But our relay hosts run nothing but Tor as a public-facing service &mdash; the only thing accepting inbound connections at any volume is the relays themselves &mdash; so effectively every inbound connection the host receives is a Tor connection, and the host-wide counters are Tor's.</p>
+
+    <p style="text-align: center;"><a href="/#get-involved" class="btn">Join the Mission</a></p>
+
+    <div class="footer">
+      <p>© 2026 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p>
+    </div>
+  </div>
+</body>
+</html>

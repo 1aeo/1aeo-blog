@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Onion-Service Directory Lost Over a Third of Its Capacity — and Has Only Partly Got It Back | 1st Amendment Encrypted Openness</title>
+  <meta name="description" content="Public Tor data shows how onion-service directory capacity fell during the 2026 circuit flood and how much has since recovered.">
+  <link rel="canonical" href="https://1aeo.com/blog/onion-service-directory-capacity-june-2026.html">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; background-color: #121212; color: #ffffff; }
+    .nav { background-color: #1e1e1e; padding: 10px 0; box-shadow: 0 2px 10px rgba(0, 255, 127, 0.2); position: sticky; top: 0; z-index: 1000; }
+    .nav-toggle { display: none; background: none; border: none; font-size: 24px; color: #00ff7f; position: absolute; top: 10px; right: 20px; cursor: pointer; }
+    .nav-links { display: flex; justify-content: center; flex-wrap: wrap; }
+    .nav-links a { color: #00ff7f; text-decoration: none; margin: 0 15px; font-size: 18px; }
+    .nav-links a:hover { text-decoration: underline; }
+    @media (max-width: 600px) { .nav-links { display: none; flex-direction: column; margin-top: 40px; } .nav-links.show { display: flex; } .nav-toggle { display: block; } }
+    .container { max-width: 800px; margin: 50px auto; padding: 20px; background: #1e1e1e; box-shadow: 0px 0px 15px rgba(0, 255, 127, 0.6); border-radius: 10px; text-align: left; }
+    h1, h2, h3 { color: #00ff7f; }
+    h1 { text-align: center; font-size: 26px; }
+    p { font-size: 18px; color: #cccccc; line-height: 1.6; margin-bottom: 1em; }
+    .meta { font-size: 14px; color: #888; margin-bottom: 20px; text-align: center; }
+    ul, ol { color: #cccccc; margin-bottom: 1em; }
+    li { font-size: 18px; margin-bottom: 8px; line-height: 1.6; }
+    code { background-color: #2d2d2d; padding: 2px 6px; border-radius: 3px; font-family: monospace; color: #00ff7f; }
+    pre { background-color: #2d2d2d; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 14px; }
+    pre code { background: none; padding: 0; color: #ffffff; }
+    a { color: #00ff7f; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container img { display: block; margin: 20px auto; max-width: 100%; height: auto; border-radius: 5px; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #444; }
+    th { background-color: #2d2d2d; color: #00ff7f; }
+    td { color: #cccccc; }
+    tr:hover { background-color: #252525; }
+    .warning { background-color: #2d2d2d; border-left: 4px solid #ff6b6b; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .callout { background-color: #2d2d2d; border-left: 4px solid #00ff7f; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; font-size: 14px; color: #777; text-align: center; }
+    .btn { display: inline-block; margin-top: 20px; padding: 12px 24px; font-size: 18px; color: #121212; background-color: #00ff7f; text-decoration: none; font-weight: bold; border-radius: 5px; transition: background 0.3s; }
+    .btn:hover { background-color: #00cc66; text-decoration: none; }
+    .highlight { color: #ff6b6b; font-weight: bold; }
+    .success { color: #00ff7f; font-weight: bold; }
+    .series { font-size: 15px; color: #aaa; background-color: #181818; border-left: 4px solid #00ff7f; padding: 12px 16px; margin: 0 0 24px; border-radius: 0 5px 5px 0; line-height: 1.5; }
+    .series a { color: #00ff7f; }
+    h2, h3 { scroll-margin-top: 70px; }
+    .anchor { color: #3f3f3f; text-decoration: none; margin-left: 8px; font-size: 0.85em; font-weight: normal; }
+    h2:hover .anchor, h3:hover .anchor { color: #00ff7f; }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')">&#9776;</button>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/blog/">Blog</a>
+      <a href="https://metrics.1aeo.com">Metrics</a>
+      <a href="https://aroivalidator.1aeo.com">AROI Validator</a>
+      <a href="https://routefluxmap.1aeo.com">RouteFluxMap</a>
+      <a href="/#contact">Contact</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1>The Onion-Service Directory Lost Over a Third of Its Capacity &mdash; and Has Only Partly Got It Back</h1>
+    <p class="meta"><em>By 1AEO Team • July 29, 2026 • HSDir relays in every hourly network consensus • Public CollecTor data, Jun 14 &ndash; Jul 27</em></p>
+
+    <p>Every <code>.onion</code> address depends on a set of relays most people have never heard of: the <strong>HSDirs</strong> (onion-service directories). They hold the descriptors that must be fetched before any connection to an onion service can be made &mdash; no HSDir lookup, no connection. The flag has a demanding entry requirement: roughly <strong class="highlight">96 hours of continuous, stable uptime</strong>. That makes the HSDir population the first thing the network loses when relays get unstable, and the slowest to come back. During the ongoing DoS wave it has been among the hardest-hit pieces of shared infrastructure visible in public data.</p>
+
+    <h2 id="three-steps-down">Three Steps Down, Then a Cliff <a class="anchor" href="#three-steps-down" aria-label="Link to this section">#</a></h2>
+
+    <img width="2080" height="1120" src="images/onion-service-directory-chart-hsdir-population.png" alt="Time-series chart of relays holding the HSDir flag in each hourly Tor network consensus, June 14 to July 27 2026, from public CollecTor data. A pre-attack plateau of 5,609 to 5,892 relays through June 21, then a fall after the June 25 23:00 UTC flood-onset line to a wave-1 trough of 3,075 on June 30, then a depressed plateau of roughly 3,500 to 3,700, then a crash to 1,780 on July 12 and a deeper collapse to 945 on July 22 with an hourly minimum of 917 at 09:00 UTC, the lowest reading in the May 1 to July 27 window parsed. From July 23 the count recovers unevenly, dipping to about 2,550 on July 24 and 25 before reaching 3,749 on July 26 and 3,640 on July 27, still about 37 percent below the plateau. Annotations mark 728 non-1AEO relays that lost the flag without restarting, 1AEO's planned July 11 maintenance restart, excluded from attack attribution, and the July 20 change in the number of voting directory authorities from seven to nine.">
+
+    <p>Before the flood, the HSDir count sat on a plateau of <strong class="success">5,609&ndash;5,892 relays</strong> (Jun 15&ndash;21). Wave 1 knocked it to <strong class="highlight">3,075</strong> on June 30; between the waves it settled around <strong class="highlight">3,500&ndash;3,700</strong> and never climbed back; the crash of July 9&ndash;13 drove the hourly count to <strong class="highlight">1,780</strong> (Jul 12, 20:00 UTC &mdash; an hourly minimum; that day's 12:00 UTC consensus read 1,942). That was not the floor. July 20&ndash;22 went lower still &mdash; 1,662 on July 20, 1,688 on July 21, then <strong class="highlight">945 on July 22</strong>, each below the 1,942 the same 12:00 UTC series showed at the July 12 trough. July 22's hourly minimum was <strong class="highlight">917</strong> (09:00 UTC): the lowest reading anywhere in the three months of consensuses we parsed, and roughly one HSDir left for every six the network had in June. One caveat on comparing the two troughs: they were measured under different numbers of voting directory authorities (see <a href="#how-we-measured">How We Measured</a>).</p>
+
+    <p>Part of the July 11&ndash;14 depth is ours, not the attack's: our planned maintenance restart that day zeroed 1AEO's HSDirs for about four days while they re-earned the 96-hour requirement, and we exclude it from attribution.</p>
+
+    <h2 id="recovery">Then It Came Back &mdash; Most of the Way <a class="anchor" href="#recovery" aria-label="Link to this section">#</a></h2>
+
+    <p>On July 23 the directory refilled about as fast as it had emptied: in the 05:00 UTC consensus the count jumped from 2,038 to 3,490 &mdash; <strong class="success">1,478 relays gained the flag in a single hour</strong>, and two-thirds of them had held it four days earlier, so this was mass re-flagging of relays the authorities had stripped, not fresh qualification. It has stayed in that range since, unevenly &mdash; <strong class="success">3,502</strong> (Jul 23), a dip to 2,548 and 2,612, then <strong class="success">3,749</strong> (Jul 26) and <strong class="success">3,640</strong> (Jul 27). The last full day was not flat: the count slid from 3,806 at 08:00 UTC to 3,416 at 23:00 UTC. That is back to roughly its July 16 level and <strong class="success">62.9%</strong> of the pre-attack plateau (3,640 against the 5,787 mean of the seven Jun 15&ndash;21 readings): the deep-erosion phase is over, and the directory is still <strong class="highlight">about 37% smaller than it was in June</strong>.</p>
+
+    <p>The turn began on July 22, while the July 19&ndash;24 directory-write surge was at its peak &mdash; the timing rules out the surge's end as the trigger, and we have not identified the mechanism. 1AEO's own HSDir count moved in step with the network's &mdash; 116 relays on July 22, 711 on July 23, 516 on July 27, and 340 to 707 across that same 05:00 UTC hour with no restart of ours 96 hours earlier &mdash; which rules out a 1AEO-side artifact in either direction: collapse and recovery were both network-wide.</p>
+
+    <h2 id="stripped-without-restarting">728 Relays Stripped Without Restarting <a class="anchor" href="#stripped-without-restarting" aria-label="Link to this section">#</a></h2>
+
+    <p>The cleanest fingerprint in the consensus data: during the July 9&ndash;13 crash, <strong class="highlight">728 non-1AEO relays lost the HSDir flag without restarting</strong> &mdash; their median uptime was 15.5 days when the flag disappeared. These relays did not go down. They stayed up under load, flapped in and out of the directory authorities' reachability probes, and the authorities stripped the flag from machines too busy to answer the door. It is not a voting artifact either &mdash; the number of directory authorities voting stayed constant at seven through the July 9&ndash;13 crash.</p>
+
+    <h2 id="what-it-means">What It Means for Onion Services <a class="anchor" href="#what-it-means" aria-label="Link to this section">#</a></h2>
+
+    <p>The descriptor keyspace doesn't shrink when HSDirs disappear &mdash; it just gets divided among fewer relays. The chart below tracks that on one convention throughout: non-1AEO directories on both sides of the ratio, so none of our own restarts can move the line. From the flood's onset the load climbed to a sustained <strong class="highlight">~1.7x</strong> that never recovered between waves; at the July 12 trough each surviving directory carried <strong class="highlight">2.85x</strong> its normal share of the keyspace; and on July 22 it peaked at <strong class="highlight">6.3x</strong> (an hourly extreme, 09:00 UTC; 6.1x in that day's 12:00 UTC consensus). As of the July 27 12:00 UTC consensus it is back to about <strong class="success">1.6x</strong>, and 1.7x by that day's last hour. That concentration lands on machines already under the same flood; we saw the receiving end first-hand, with our own relays' descriptor caches hitting their limits by late June (see the <a href="circuit-building-dos-anatomy-june-2026.html#wave-1-introduce2">anatomy post's HSDir-cache section</a>).</p>
+
+    <img width="2080" height="1120" src="images/onion-service-directory-chart-hsdir-load.png" alt="Time-series chart, June 17 to July 27, 2026, showing the load on each surviving onion-service directory relative to its pre-attack keyspace share, computed as non-1AEO count over non-1AEO count with a baseline of 5,066, the median non-1AEO HSDir count for June 17 to 24, so 1AEO's own restarts do not affect the line. Flat at 1x before the June 25 flood onset, a sustained plateau around 1.7x through early July, 2.85x at the July 12 trough, a peak of 6.3x at the hourly extreme of 09:00 UTC on July 22, and easing to about 1.6x at the July 27 12:00 UTC consensus, 1.7x by that day's last hour.">
+
+    <p>As of July 29 the population is still short of its pre-attack plateau, and the flood's original circuit-rejection mode is still running. The 96-hour rule that makes the flag meaningful also makes recovery slow: every burst of instability resets the clock.</p>
+
+    <h2 id="how-we-measured">How We Measured <a class="anchor" href="#how-we-measured" aria-label="Link to this section">#</a></h2>
+
+    <p>All of it is public and reproducible: Tor's hourly network consensuses from <a href="https://collector.torproject.org/">CollecTor</a>, counting the relays holding the HSDir flag in each consensus, June 14 &ndash; July 27. Daily figures are the 12:00 UTC consensus; where a number is an hourly extreme we say so. The "three months" comparison covers May 1 &ndash; July 27 (May's hourly minimum was 3,977). The 728-relay figure compares consecutive consensuses and relay-reported uptimes to find non-1AEO relays that lost the flag without a restart. The load line uses a single convention: the pre-attack median non-1AEO count (June 17&ndash;24, <strong>5,066</strong>) divided by the non-1AEO count in each hourly consensus &mdash; a broader baseline (the non-1AEO June 1&ndash;24 median, 4,475) is equally defensible and would scale every multiple by 0.88x. The 62.9% is baseline-sensitive in the same way: measured against the wider June 1&ndash;24 hourly median (5,028 relays) the July 27 count is about 28% short rather than 37%.</p>
+
+    <p>One caveat on comparing the two troughs: the number of directory authorities voting was seven from July 9 to July 20 16:00 UTC (with two single-hour dips to six), and eight or nine from July 20 17:00 UTC onward as two authorities rejoined &mdash; nine from 20:00 UTC that day. The HSDir flag needs a majority of the authorities voting, so the July 22 reading was taken under a stricter threshold than the July 12 one, and part of the gap between them is that change rather than the flood. The hour-by-hour moves do not line up with the rejoin hours, so this is a comparability limit, not evidence that the second collapse was an artifact.</p>
+
+    <p>Caveats: because the flag requires ~96 hours of continuous uptime, the count lags &mdash; it understates instability as it happens and recovers days after conditions improve. Two 1AEO restarts have to be handled, and neither is attack damage: the July 11 maintenance restart excluded above, and a fleet-wide service restart on July 28 that reset the uptime clock and has zeroed our HSDir flag since &mdash; our Running-relay count stayed flat across it and no relays dropped out, which is the discriminator. Both charts end at July 27 23:00 UTC, the last complete day in the archive.</p>
+
+    <p class="series"><strong>Related reading:</strong> <a href="tor-network-dos-wave-june-2026.html">The Tor Network Is Under a Circuit-Building DoS Wave</a> &mdash; the network-wide view from Tor's public data. &nbsp;<a href="circuit-building-dos-anatomy-june-2026.html#wave-1-introduce2">Anatomy of the Attack</a> &mdash; including our first-party view of HSDir descriptor caches being pruned at their limits.</p>
+
+    <p style="text-align: center;"><a href="/#get-involved" class="btn">Join the Mission</a></p>
+
+    <div class="footer">
+      <p>© 2026 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p>
+    </div>
+  </div>
+</body>
+</html>

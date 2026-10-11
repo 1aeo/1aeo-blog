@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tor Vanity Onion Address Time: The 32× Rule | 1AEO</title>
+  <meta name="description" content="Why every additional Tor vanity onion prefix character takes 32 times more search work, and why average search time is not a deadline.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://1aeo.com/blog/how-long-tor-vanity-onion-address.html">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How Long Does a Tor Vanity Onion Address Take?">
+  <meta property="og:description" content="The 32× rule, random search, and the right way to read a completion estimate.">
+  <meta property="og:url" content="https://1aeo.com/blog/how-long-tor-vanity-onion-address.html">
+  <meta property="og:site_name" content="1AEO">
+  <meta name="twitter:card" content="summary">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; background-color: #121212; color: #ffffff; }
+    .nav { background-color: #1e1e1e; padding: 10px 0; box-shadow: 0 2px 10px rgba(0, 255, 127, 0.2); position: sticky; top: 0; z-index: 1000; }
+    .nav-toggle { display: none; background: none; border: none; font-size: 24px; color: #00ff7f; position: absolute; top: 10px; right: 20px; cursor: pointer; }
+    .nav-links { display: flex; justify-content: center; flex-wrap: wrap; }
+    .nav-links a { color: #00ff7f; text-decoration: none; margin: 0 15px; font-size: 18px; }
+    .nav-links a:hover { text-decoration: underline; }
+    @media (max-width: 600px) {
+      .nav-links { display: none; flex-direction: column; margin-top: 40px; }
+      .nav-links.show { display: flex; }
+      .nav-toggle { display: block; }
+    }
+    .container { max-width: 900px; margin: 50px auto; padding: 28px; background: #1e1e1e; box-shadow: 0 0 15px rgba(0, 255, 127, 0.6); border-radius: 10px; text-align: left; }
+    h1, h2, h3 { color: #00ff7f; }
+    h1 { text-align: center; font-size: 34px; margin-bottom: 12px; }
+    h2 { margin-top: 34px; }
+    p { font-size: 18px; color: #cccccc; line-height: 1.6; margin-bottom: 1em; }
+    strong { color: #ffffff; }
+    .meta { font-size: 14px; color: #888888; margin-bottom: 24px; text-align: center; }
+    a { color: #00ff7f; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code { background-color: #2d2d2d; padding: 2px 6px; border-radius: 3px; font-family: monospace; color: #00ff7f; }
+    ul { color: #cccccc; padding-left: 28px; }
+    li { font-size: 18px; line-height: 1.5; margin-bottom: 10px; }
+    .callout { background-color: #181818; border-left: 4px solid #00ff7f; padding: 14px 18px; margin: 22px 0; border-radius: 0 5px 5px 0; }
+    .callout p { margin: 0; }
+    figure { margin: 28px 0; }
+    figure img { display: block; width: 100%; height: auto; border-radius: 5px; background: #1e1e1e; }
+    figcaption { color: #929292; font-size: 14px; line-height: 1.5; margin-top: 8px; }
+    .btn { display: inline-block; margin-top: 8px; padding: 12px 24px; font-size: 18px; color: #121212; background-color: #00ff7f; text-decoration: none; font-weight: bold; border-radius: 5px; }
+    .btn:hover { background-color: #00cc66; text-decoration: none; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #333333; font-size: 14px; color: #777777; text-align: center; }
+    .footer p { font-size: 14px; color: #777777; }
+    @media (max-width: 600px) {
+      body { overflow-x: hidden; }
+      .container { width: calc(100vw - 20px); max-width: calc(100vw - 20px); min-width: 0; margin: 24px 10px; padding: 18px; overflow: hidden; }
+      h1 { font-size: 27px; }
+      p, li { font-size: 17px; }
+      figure { width: 100%; max-width: 100%; min-width: 0; overflow-x: auto; contain: inline-size; }
+      figure img { width: 720px; max-width: none; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "How Long Does a Tor Vanity Onion Address Take? The 32× Rule and Random Search",
+    "datePublished": "2026-07-28",
+    "dateModified": "2026-07-28",
+    "author": {"@type": "Organization", "name": "1AEO"},
+    "publisher": {"@type": "Organization", "name": "1AEO"},
+    "mainEntityOfPage": "https://1aeo.com/blog/how-long-tor-vanity-onion-address.html",
+    "description": "Why every additional Tor vanity onion prefix character takes 32 times more search work, and why average search time is not a deadline."
+  }
+  </script>
+</head>
+<body>
+  <div class="nav">
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')" aria-label="Toggle navigation">&#9776;</button>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/onionvanity/">Onion Vanity</a>
+      <a href="/blog/">Blog</a>
+      <a href="https://metrics.1aeo.com">Metrics</a>
+      <a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
+      <a href="https://aroivalidator.1aeo.com">AROI Validator</a>
+      <a href="https://routefluxmap.1aeo.com">RouteFluxMap</a>
+      <a href="/#contact">Contact</a>
+    </div>
+  </div>
+
+  <main class="container">
+    <article>
+      <h1>How Long Does a Tor Vanity Onion Address Take? The 32× Rule and Random Search</h1>
+      <p class="meta"><em>By 1AEO Team • July 28, 2026 • A practical guide to prefix length and probability</em></p>
+
+      <div class="callout">
+        <p><strong>Short answer:</strong> each additional exact prefix character requires about <strong>32 times more candidates</strong> on average. Faster search capacity shortens the clock, but no amount of speed turns a random search estimate into a deadline.</p>
+      </div>
+
+      <h2 id="what-is-a-prefix">What is a vanity prefix?</h2>
+      <p>A Tor v3 onion address contains 56 Base32 characters. In <code>exampleinc…onion</code>, <code>exampleinc</code> is the requested 10-character prefix; the remaining characters come from the generated address.</p>
+      <p>Tor encodes the service’s public key, checksum, and version into that address. Base32 uses 32 possible characters at each position: lowercase <code>a–z</code> and digits <code>2–7</code>. For an exact prefix of <em>n</em> characters, about one candidate in <code>32ⁿ</code> matches. The average search therefore examines about <code>32ⁿ</code> candidates.</p>
+
+      <h2 id="the-32x-rule">The 32× rule</h2>
+      <p>Adding one character multiplies the work by 32. Adding two multiplies it by <code>32²</code>, or 1,024. Removing one character is also the largest practical way to shorten a search: it cuts the average work to one thirty-second.</p>
+
+      <figure>
+        <img width="2080" height="1120" src="images/tor-vanity-prefix-time-32x-linear.svg" alt="Linear chart of average Tor vanity prefix search time: 8 characters takes about 6 seconds, 9 takes 3 minutes, 10 takes 2 hours, 11 takes 3 days, and 12 takes 67 days at the current published 1AEO estimate. Each step requires 32 times more candidates.">
+        <figcaption>Shown on a linear time scale using 1AEO’s published search-capacity estimate as of July 28, 2026. These comparisons are not delivery promises.</figcaption>
+      </figure>
+
+      <h2 id="random-search">Why the average is not a deadline</h2>
+      <p>For uniformly distributed candidates in this enormous search space, each candidate is effectively another independent chance to match. A search can succeed on its first candidate or continue well beyond the average. Previous misses do not meaningfully change the chance of the next candidate.</p>
+      <p>The useful question is therefore not “when will it finish?” but “what chance of success do I want to fund?” For a large random search space:</p>
+      <ul>
+        <li><strong>50% chance</strong> after about 0.69 times the average work.</li>
+        <li><strong>63.2% chance</strong> after one average search.</li>
+        <li><strong>95% chance</strong> after about three average searches.</li>
+      </ul>
+
+      <figure>
+        <img width="2080" height="1120" src="images/tor-vanity-random-search-probability.svg" alt="Probability curve for random vanity-prefix search: 50 percent chance at 0.69 times average work, 63.2 percent at average work, and 95 percent at three times average work. Five percent remain unfinished at three times average.">
+        <figcaption>At three times the average work, about 5% of searches still have no match. The random tail has no fixed maximum.</figcaption>
+      </figure>
+
+      <h2 id="compare-estimates">How to compare search-time estimates</h2>
+      <p>A useful estimate should state three things:</p>
+      <ul>
+        <li><strong>Exact prefix length:</strong> every additional character changes the work by 32×.</li>
+        <li><strong>Sustained search capacity:</strong> compare distinct candidates searched per second, not only a device name or peak rate.</li>
+        <li><strong>Probability target:</strong> distinguish the average from a 95%-chance limit, and decide what happens if the limit is reached without a match.</li>
+      </ul>
+      <p>Software improvements and additional workers can reduce wall-clock time when they search distinct candidates, but they do not change the 32× rule or the random probability curve.</p>
+
+      <h2 id="bottom-line">Bottom line</h2>
+      <p>Choose the shortest prefix that still carries meaning. Ten characters require 32 times the average work of nine; eleven require 32 times the work of ten. Treat every time estimate as a probability-based planning number, not an appointment.</p>
+      <p>A readable prefix improves memorability, but it does not authenticate the complete onion address. Users should still verify and publish the full address, as the <a href="https://community.torproject.org/onion-services/advanced/vanity-addresses/">Tor Project’s vanity-address guidance</a> explains.</p>
+      <p>Technical basis: <a href="https://spec.torproject.org/rend-spec/encoding-onion-addresses.html">Tor’s onion-address encoding specification</a>.</p>
+      <p style="text-align: center;"><a href="/onionvanity/#calculator" class="btn">Check a prefix</a></p>
+    </article>
+
+    <div class="footer">
+      <p>© 2026 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p>
+    </div>
+  </main>
+</body>
+</html>

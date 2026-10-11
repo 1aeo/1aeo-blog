@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2080" height="1120" viewBox="0 0 2080 1120" role="img" aria-labelledby="title desc">
+  <title id="title">Probability of finding a Tor vanity onion prefix over search time</title>
+  <desc id="desc">A dark probability curve showing a 50 percent chance of success after 0.69 times the average search work, 63.2 percent at the average, and 95 percent after three times the average. Five percent of searches still have no result at three times the average.</desc>
+  <rect width="2080" height="1120" fill="#1e1e1e"/>
+
+  <text x="150" y="95" fill="#ffffff" font-family="Arial, sans-serif" font-size="52" font-weight="700">An average search time is not a deadline</text>
+  <text x="150" y="145" fill="#929292" font-family="Arial, sans-serif" font-size="28">Chance of finding at least one matching prefix as search work accumulates</text>
+
+  <rect x="1525" y="200" width="425" height="650" fill="#00ff7f" opacity="0.04"/>
+
+  <g stroke="#3a3a3a" stroke-width="2">
+    <line x1="250" y1="850" x2="1950" y2="850"/>
+    <line x1="250" y1="687.5" x2="1950" y2="687.5"/>
+    <line x1="250" y1="525" x2="1950" y2="525"/>
+    <line x1="250" y1="362.5" x2="1950" y2="362.5"/>
+    <line x1="250" y1="200" x2="1950" y2="200"/>
+  </g>
+
+  <g fill="#929292" font-family="Arial, sans-serif" font-size="27" text-anchor="end">
+    <text x="225" y="859">0%</text>
+    <text x="225" y="696">25%</text>
+    <text x="225" y="534">50%</text>
+    <text x="225" y="371">75%</text>
+    <text x="225" y="209">100%</text>
+  </g>
+
+  <g fill="#929292" font-family="Arial, sans-serif" font-size="27" text-anchor="middle">
+    <text x="250" y="905">0</text>
+    <text x="675" y="905">1×</text>
+    <text x="1100" y="905">2×</text>
+    <text x="1525" y="905">3×</text>
+    <text x="1950" y="905">4×</text>
+  </g>
+  <text x="1100" y="965" fill="#cccccc" font-family="Arial, sans-serif" font-size="30" text-anchor="middle">Search work as a multiple of the average</text>
+
+  <path d="M250 850 L356 706 L463 594 L545 525 L675 439 L888 345 L1100 288 L1313 253 L1525 233 L1738 220 L1950 212" fill="none" stroke="#4ea5ff" stroke-width="9" stroke-linejoin="round"/>
+
+  <g stroke-width="3" stroke-dasharray="10 10">
+    <line x1="545" y1="525" x2="545" y2="850" stroke="#00ff7f"/>
+    <line x1="250" y1="525" x2="545" y2="525" stroke="#00ff7f"/>
+    <line x1="675" y1="439" x2="675" y2="850" stroke="#ffbd59"/>
+    <line x1="250" y1="439" x2="675" y2="439" stroke="#ffbd59"/>
+    <line x1="1525" y1="233" x2="1525" y2="850" stroke="#ff6b6b"/>
+    <line x1="250" y1="233" x2="1525" y2="233" stroke="#ff6b6b"/>
+  </g>
+
+  <circle cx="545" cy="525" r="15" fill="#1e1e1e" stroke="#00ff7f" stroke-width="5"/>
+  <circle cx="675" cy="439" r="15" fill="#1e1e1e" stroke="#ffbd59" stroke-width="5"/>
+  <circle cx="1525" cy="233" r="15" fill="#1e1e1e" stroke="#ff6b6b" stroke-width="5"/>
+
+  <g font-family="Arial, sans-serif" font-weight="700">
+    <text x="575" y="500" fill="#00ff7f" font-size="31">50% chance at 0.69×</text>
+    <text x="705" y="414" fill="#ffbd59" font-size="31">63.2% chance at 1× average</text>
+    <text x="1495" y="290" fill="#ff6b6b" font-size="31" text-anchor="end">95% chance at 3×</text>
+  </g>
+
+  <text x="1738" y="330" fill="#cccccc" font-family="Arial, sans-serif" font-size="29" text-anchor="middle">5% of searches still</text>
+  <text x="1738" y="366" fill="#cccccc" font-family="Arial, sans-serif" font-size="29" text-anchor="middle">have no result at 3×</text>
+
+  <text x="150" y="1065" fill="#929292" font-family="Arial, sans-serif" font-size="25">The curve follows 1 − e⁻ˣ for a large random search space. More speed changes the clock, not the shape.</text>
+  <text x="1930" y="1065" fill="#929292" font-family="Arial, sans-serif" font-size="25" text-anchor="end">Produced by 1AEO</text>
+</svg>

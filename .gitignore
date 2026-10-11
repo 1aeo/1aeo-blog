@@ -1,0 +1,10 @@
+# Unpublished work never goes in this public repo
+drafts/
+# Downloaded data and build caches
+**/cache/
+__pycache__/
+.venv/
+# Editor / OS noise and server-side backups
+.DS_Store
+*.bak*
+*.swp

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Blast Radius: The 13% Snapshot Hid Nearly Half the Network | 1st Amendment Encrypted Openness</title>
+  <meta name="description" content="Tor public archive analysis shows a rotating circuit flood touched 4,559 relays—nearly half the network—over five weeks.">
+  <link rel="canonical" href="https://1aeo.com/blog/circuit-building-dos-blast-radius-june-2026.html">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; background-color: #121212; color: #ffffff; }
+    .nav { background-color: #1e1e1e; padding: 10px 0; box-shadow: 0 2px 10px rgba(0, 255, 127, 0.2); position: sticky; top: 0; z-index: 1000; }
+    .nav-toggle { display: none; background: none; border: none; font-size: 24px; color: #00ff7f; position: absolute; top: 10px; right: 20px; cursor: pointer; }
+    .nav-links { display: flex; justify-content: center; flex-wrap: wrap; }
+    .nav-links a { color: #00ff7f; text-decoration: none; margin: 0 15px; font-size: 18px; }
+    .nav-links a:hover { text-decoration: underline; }
+    @media (max-width: 600px) { .nav-links { display: none; flex-direction: column; margin-top: 40px; } .nav-links.show { display: flex; } .nav-toggle { display: block; } }
+    .container { max-width: 800px; margin: 50px auto; padding: 20px; background: #1e1e1e; box-shadow: 0px 0px 15px rgba(0, 255, 127, 0.6); border-radius: 10px; text-align: left; }
+    h1, h2, h3 { color: #00ff7f; }
+    h1 { text-align: center; font-size: 26px; }
+    p { font-size: 18px; color: #cccccc; line-height: 1.6; margin-bottom: 1em; }
+    .meta { font-size: 14px; color: #888; margin-bottom: 20px; text-align: center; }
+    ul, ol { color: #cccccc; margin-bottom: 1em; }
+    li { font-size: 18px; margin-bottom: 8px; line-height: 1.6; }
+    code { background-color: #2d2d2d; padding: 2px 6px; border-radius: 3px; font-family: monospace; color: #00ff7f; }
+    pre { background-color: #2d2d2d; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 14px; }
+    pre code { background: none; padding: 0; color: #ffffff; }
+    a { color: #00ff7f; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container img { display: block; margin: 20px auto; max-width: 100%; height: auto; border-radius: 5px; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #444; }
+    th { background-color: #2d2d2d; color: #00ff7f; }
+    td { color: #cccccc; }
+    tr:hover { background-color: #252525; }
+    .warning { background-color: #2d2d2d; border-left: 4px solid #ff6b6b; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .callout { background-color: #2d2d2d; border-left: 4px solid #00ff7f; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; font-size: 14px; color: #777; text-align: center; }
+    .btn { display: inline-block; margin-top: 20px; padding: 12px 24px; font-size: 18px; color: #121212; background-color: #00ff7f; text-decoration: none; font-weight: bold; border-radius: 5px; transition: background 0.3s; }
+    .btn:hover { background-color: #00cc66; text-decoration: none; }
+    .highlight { color: #ff6b6b; font-weight: bold; }
+    .success { color: #00ff7f; font-weight: bold; }
+    .series { font-size: 15px; color: #aaa; background-color: #181818; border-left: 4px solid #00ff7f; padding: 12px 16px; margin: 0 0 24px; border-radius: 0 5px 5px 0; line-height: 1.5; }
+    .series a { color: #00ff7f; }
+    h2, h3 { scroll-margin-top: 70px; }
+    .anchor { color: #3f3f3f; text-decoration: none; margin-left: 8px; font-size: 0.85em; font-weight: normal; }
+    h2:hover .anchor, h3:hover .anchor { color: #00ff7f; }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')">&#9776;</button>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/blog/">Blog</a>
+      <a href="https://metrics.1aeo.com">Metrics</a>
+      <a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
+      <a href="https://aroivalidator.1aeo.com">AROI Validator</a>
+      <a href="https://routefluxmap.1aeo.com">RouteFluxMap</a>
+      <a href="/#contact">Contact</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1>The Blast Radius: The 13% Snapshot Hid Nearly Half the Network</h1>
+    <p class="meta"><em>By 1AEO Team &bull; Updated July 29, 2026 &bull; Public CollecTor overload data, Jun 24 &ndash; Jul 27</em></p>
+
+    <p>The number everyone quotes about the June&ndash;July circuit-building DoS is the daily snapshot: the count of relays reporting overload on the worst day. That peak is now <strong class="highlight">1,330 relays on July 21</strong> &mdash; <strong class="highlight">12.87%</strong> of the network, the campaign's all-time high, ahead of July 12's 1,265 (12.31%). The number is real, but it measures the wrong thing. The flood rotates, and a snapshot only counts who is being hit <em>today</em>.</p>
+
+    <p>Count everyone the flood has touched instead. Over June 24 &ndash; July 27, <strong class="highlight">4,559 distinct relays</strong> reported a fresh overload trigger &mdash; <strong class="highlight">45.8%</strong> of the July 08 consensus (9,961 relays), and <strong class="highlight">57.2% of all Guard relays</strong> (2,984 of 5,213). The cumulative blast radius is <strong class="highlight">3.4x</strong> the worst snapshot. When this post first ran its window ended July 13 and the answer was a third of the network; two more weeks of the same campaign took it to nearly half.</p>
+
+    <img width="2080" height="1160" src="images/circuit-building-dos-wave-june-2026-chart-blastradius.png" alt="Chart comparing cumulative versus snapshot overload counts on the Tor network, June 24 to July 27 2026. The daily-snapshot series of relays reporting overload peaks at 1,330 relays on July 21, which is 12.87% of the network and the campaign all-time high, then falls back over the following six days to 721 relays, 7.07%, on July 27. The cumulative series of distinct relays ever freshly triggered climbs to 4,559 relays by July 27, which is 45.8% of the 9,961-relay July 08 consensus, 57.2% of all 5,213 Guards, and 3.4 times the worst single day. A shaded reference band shows that a matched 20-day pre-attack window accumulates only about 695 to 762 distinct relays, 7.0 to 7.6%, from ordinary churn.">
+
+    <p>Cumulative counts always grow, so the fair question is: how much of that is ordinary churn? We measured it on matched windows. A 20-day window before the attack accumulates roughly <strong class="success">695&ndash;762 distinct relays (7.0&ndash;7.6%)</strong> with fresh overload triggers &mdash; and that baseline is conservative, since it already contains June activity. The equivalent 20-day attack window, June 24 &ndash; July 13, reached <strong class="highlight">3,353 relays</strong>, 4.4x to 4.8x the churn baseline. Extending to July 27 adds a further 1,206 relays that had never triggered before.</p>
+
+    <h2 id="rotation">Rotation, Not Pinning <a class="anchor" href="#rotation" aria-label="Link to this section">#</a></h2>
+    <p>The gap between 13% and 46% exists because the flood moves. Across the first 20 days of the window, <strong class="highlight">53% of the relays ever hit triggered on only one of those days</strong>, and only <strong class="highlight">96</strong> triggered on 10 or more. A relay hit today has roughly a one-in-three chance of a fresh trigger the next day. The largest single day of fresh triggers in the whole window came <em>after</em> the peak &mdash; <strong class="highlight">728 relays on July 24</strong>, though only 120 of those were new to the running total. The pressure sweeps across the relay population rather than parking on a fixed set, so on any given day most of the relays it has already touched look healthy again.</p>
+
+    <h2 id="weight-independence">Big or Small, Same Odds <a class="anchor" href="#weight-independence" aria-label="Link to this section">#</a></h2>
+    <p>Who gets swept up? Essentially everyone, at the same rate. Among the <strong class="highlight">4,113 non-Exit guards</strong> of the July 08 consensus, the share hit at least once over the full June 24 &ndash; July 27 window sits roughly <strong class="highlight">between 49% and 66% in every consensus-weight decile</strong> &mdash; non-monotonic, with no size trend, across a weight span of more than four orders of magnitude. The heaviest guards in the consensus were hit at about the same rate as the lightest.</p>
+
+    <img width="2080" height="1080" src="images/circuit-building-dos-wave-june-2026-chart-weightdeciles.png" alt="Bar chart of overload hit-rates for June 24 to July 27 2026 across the ten consensus-weight deciles of the 4,113 non-Exit guards in the July 08 consensus. Every decile sits roughly between 49% and 66%, around an overall rate of 59%, the bars are non-monotonic with no upward or downward trend from the lightest to the heaviest decile, and the underlying consensus weights span more than four orders of magnitude.">
+
+    <p>This weight-independence has a direct consequence for fleet operators. A fleet built as many low-weight guards &mdash; like 1AEO's &mdash; gets swept <em>through</em> rather than concentrated on: each relay carries the same per-relay odds as a heavyweight, but no single relay absorbs a disproportionate share. It is also consistent with the rotation behavior we observed inside our own fleet in the <a href="circuit-building-dos-anatomy-june-2026.html">anatomy post</a>.</p>
+
+    <h2 id="reading-dashboards">What This Means for Reading &ldquo;Overloaded&rdquo; Dashboards <a class="anchor" href="#reading-dashboards" aria-label="Link to this section">#</a></h2>
+    <p>Any dashboard built on a daily overload count understates this attack's reach by more than a factor of three. A relay that looks fine today may have been hit last week. Snapshot metrics answer &ldquo;how bad is it right now?&rdquo; For a rotating flood, the question that matters is &ldquo;how much of the network has this touched?&rdquo; &mdash; and through July 27, the answer is nearly half the network and well over half of its Guards.</p>
+
+    <p>In the six days since the July 21 peak the snapshot has fallen by nearly half, to <strong class="success">721 relays (7.07%) on July 27</strong> &mdash; the lowest since July 17. Easing is not ending: on our own relays the original circuit-rejection mode was still running through July 28, the last complete day of our telemetry, and a cumulative count only ever goes up.</p>
+
+    <h2 id="how-we-measured">How We Measured <a class="anchor" href="#how-we-measured" aria-label="Link to this section">#</a></h2>
+    <p>All numbers in this post come from Tor's public CollecTor archives and are reproducible by anyone. We count <code>overload-general</code> lines in relay server descriptors, deduplicated by the line's internal timestamp &mdash; a trigger persists in descriptors for about 72 hours, so counting raw lines would overcount. The daily-snapshot series uses descriptors published that day, and its percentages are shares of the relays publishing a descriptor that day (about 10,200&ndash;10,300). Cumulative, churn-baseline and decile percentages are stated against the July 08 consensus (9,961 relays; 5,213 Guards; 4,113 non-Exit guards).</p>
+    <p>Two method notes. The June archive is required even for a July-only question: descriptors published in June carry internal trigger stamps from June 24&ndash;30, and omitting them under-counts the cumulative total by several hundred relays. And the most recent day of an archive is always incomplete, so the series stops at July 27. The first version of this post reported 3,320 relays (33.3%, 44.6% of Guards) for the June 24 &ndash; July 13 window; re-parsing the finalized archive gives 3,353 (33.7%, 45.0%) &mdash; about 1% of archive settling, with the method otherwise reproducing exactly.</p>
+
+    <p class="series"><strong>Related reading:</strong> <a href="tor-network-dos-wave-june-2026.html">The Tor Network Is Under a Circuit-Building DoS Wave</a> &mdash; the network-wide view from Tor's public data, including the 12.87% peak in context. <a href="circuit-building-dos-anatomy-june-2026.html">Anatomy of the Attack</a> &mdash; the waves, the rotation mechanics, and how each vector works.</p>
+
+    <p style="text-align: center;"><a href="/#get-involved" class="btn">Join the Mission</a></p>
+
+    <div class="footer">
+      <p>© 2026 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>High-Capacity Tor Relays: One Large Server or Several? | 1AEO</title>
+  <meta name="description" content="Compare one high-capacity Tor relay server with several smaller relays distributed across locations and network providers.">
+  <link rel="canonical" href="https://1aeo.com/blog/high-capacity-relays-single-vs-multiple-servers.html">
+  <link rel="stylesheet" href="/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      background-color: #121212;
+      color: #ffffff;
+    }
+    .nav {
+        background-color: #1e1e1e;
+        padding: 10px 0;
+        box-shadow: 0 2px 10px rgba(0, 255, 127, 0.2);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+    .nav-toggle {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: #00ff7f;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        cursor: pointer;
+    }
+    .nav-links {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .nav-links a {
+        color: #00ff7f;
+        text-decoration: none;
+        margin: 0 15px;
+        font-size: 18px;
+    }
+    .nav-links a:hover {
+        text-decoration: underline;
+    }
+    @media (max-width: 600px) {
+        .nav-links {
+            display: none;
+            flex-direction: column;
+            margin-top: 40px;
+        }
+        .nav-links.show {
+            display: flex;
+        }
+        .nav-toggle {
+            display: block;
+        }
+    }
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #1e1e1e;
+      box-shadow: 0px 0px 15px rgba(0, 255, 127, 0.6);
+      border-radius: 10px;
+    }
+    h1, h2, h3 {
+      color: #00ff7f;
+    }
+    p {
+      font-size: 18px;
+      color: #cccccc;
+      line-height: 1.6;
+      margin-bottom: 1em;
+    }
+    .meta {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 10px;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 24px;
+      font-size: 18px;
+      color: #121212;
+      background-color: #00ff7f;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background-color: #00cc66;
+    }
+    .footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #777;
+    }
+    ul, ol {
+      text-align: left;
+      max-width: 700px;
+      margin: 0 auto 1em auto;
+      color: #cccccc;
+    }
+    li {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+          &#9776;
+      </button>
+      <div class="nav-links">
+          <a href="/">Home</a>
+          <a href="/onionvanity/">Onion Vanity</a>
+          <a href="/blog/">Blog</a>
+          <a href="https://metrics.1aeo.com">Metrics</a>
+          <a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
+          <a href="https://aroivalidator.1aeo.com">AROI Validator</a>
+          <a href="https://routefluxmap.1aeo.com">RouteFluxMap</a>
+          <a href="/#contact">Contact</a>
+      </div>
+  </div>
+  
+  <div class="container">
+
+
+    <h1>High-Capacity Relays: Can Bigger Bandwidth Make a Bigger Difference?</h1>
+    <h3>Exploring how one operator's dilemma could inspire more efficient, scalable Tor infrastructure</h3>
+    <div class="meta">By 1AEO Team • March 31, 2025</div>
+
+    <p>
+      If you're a software developer who cares about freedom of information—or an IT ops admin with a spare rack and skills to spare—this post is for you. Let's talk about how you can use your talents to support the Tor network.
+    </p>
+
+    <p>
+      A recent discussion in the Tor Project community explored two deployment strategies for running high-capacity relays. Whether you're optimizing for efficiency, uptime, or hands-on learning, there's a lot to consider:
+    </p>
+
+    <ul>
+      <li><strong>Option A:</strong> Deploy a single server with a 40Gbps connection.</li>
+      <li><strong>Option B:</strong> Deploy four servers, each with a 10Gbps connection, ideally spread across different networks and locations.</li>
+    </ul>
+
+    <h3>Pros and Cons</h3>
+
+    <p><strong>Option A: Single 40Gbps Server</strong></p>
+    <ul>
+      <li><strong>Pros:</strong>
+        <ul>
+          <li>Simple to manage: great for those who want a quick setup and less admin overhead.</li>
+          <li>Efficient DNS performance for exit relays: one powerful local DNS resolver = better caching and privacy.</li>
+          <li>Lower electricity use: a single server can be more power efficient than multiple.</li>
+        </ul>
+      </li>
+      <li><strong>Cons:</strong>
+        <ul>
+          <li>Single point of failure: hardware or network issues could take everything offline at once.</li>
+          <li>Congestion risk: Tor's architecture doesn't scale well under heavy load—expect CPU/NIC pinning and crypto offloading headaches.</li>
+          <li>Limited geographic and jurisdictional diversity: even if you’re on a fast connection, you're still in one place, under one legal framework.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <p><strong>Option B: Four 10Gbps Servers</strong></p>
+    <ul>
+      <li><strong>Pros:</strong>
+        <ul>
+          <li>Resilience: if one server fails, 75% of your relays keep running. No total outages during patches or reboots.</li>
+          <li>Geographic diversity: makes surveillance and legal shutdowns harder. Especially valuable if servers are in different ASes and regions.</li>
+          <li>Better system efficiency: fewer relays per box means lower congestion, better performance, and less tuning required.</li>
+          <li>Learning experience: perfect for ops folks who want to sharpen their multi-host deployment skills.</li>
+          <li>Security edge for guard relays: more memory spread across systems = more DDoS headroom and harder for attackers to hit all at once.</li>
+          <li>Exit flexibility: you can tailor exit policies per datacenter based on local restrictions or requirements.</li>
+        </ul>
+      </li>
+      <li><strong>Cons:</strong>
+        <ul>
+          <li>Admin overhead: more nodes = more things to monitor, patch, and secure.</li>
+          <li>Higher cost: more servers, more contracts, more power (unless you're in a region with cheap electricity).</li>
+          <li>Relationship management: four data centers means four abuse teams to work with. It’s more work, but also more resilience.</li>
+          <li>Less efficient DNS for exit relays: multiple resolvers reduce caching efficiency—but provide DNS failover and redundancy.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3>Conclusion</h3>
+    <p>
+      Option B—deploying four 10Gbps servers—was the favored approach in this discussion, thanks to its improved redundancy, performance, and diversity. It’s an excellent model for those who want to contribute meaningfully and sustainably to the Tor network.
+    </p>
+    <p>
+      For IT admins, this is a chance to put your infrastructure skills to use while building something that defends digital freedom. For developers, it’s an opportunity to architect systems that serve privacy at scale. Whether you choose A or B, your contribution matters.
+    </p>
+
+    <p>
+      For a full breakdown and community insights, check out the original thread on the <a href="https://lists.torproject.org/mailman3/hyperkitty/list/tor-relays@lists.torproject.org/thread/RYH3SA2D7YGBPLYSP4C3KV3PSOUTPVWI/" target="_blank">Tor Project mailing list</a>.
+    </p>
+
+    <a href="/#get-involved" class="btn">Join the Mission</a>
+
+    <div class="footer">
+      <p>© 2025 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p>
+    </div>
+  </div>
+</body>
+</html>
