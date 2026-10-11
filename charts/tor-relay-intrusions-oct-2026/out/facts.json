@@ -1,0 +1,46 @@
+{
+  "data": {
+    "source": "Tor CollecTor hourly network-status consensuses",
+    "first_consensus_utc": "2026-08-01 00:00",
+    "last_consensus_utc": "2026-10-10 03:00",
+    "consensuses": 1683,
+    "hours_without_a_consensus": [
+      "2026-10-01 19:00"
+    ]
+  },
+  "policies": {
+    "policy_A": "reject 25,110,135,137-139,143,445,465,587,993,995,3389",
+    "policy_B": "reject 25,119,135-139,445,465,563,587,993,995,1214,4661-4666,6346-6429,6699,6881-6999",
+    "policy_A_first_utc": "2026-10-01 15:00",
+    "policy_B_first_utc": "2026-10-02 10:00"
+  },
+  "exit_policies_chart": {
+    "peak_relays": 353,
+    "peak_utc": "2026-10-04 04:00",
+    "first_nonzero_utc": "2026-10-01 15:00",
+    "last_nonzero_utc": "2026-10-05 16:00",
+    "first_zero_after_utc": "2026-10-05 17:00",
+    "nonzero_outside_first_to_last": 0
+  },
+  "ssh_openings_chart": {
+    "opening_rule": {
+      "min_streak_hours": 72,
+      "streak_gap_hours": 6,
+      "max_gap_hours": 72
+    },
+    "days": 67,
+    "first_day": "2026-08-04",
+    "last_day": "2026-10-09",
+    "baseline_days": 58,
+    "baseline_openings": 32,
+    "baseline_openings_on_policies": 0,
+    "oct1_4_openings": 340,
+    "oct1_4_openings_on_policies": 340,
+    "oct2_openings": 293,
+    "oct5_9_openings": 0,
+    "busiest_hour_utc": "2026-10-02 10:00",
+    "busiest_hour_openings": 285,
+    "first_badexit_on_policies_utc": "2026-10-04 21:00",
+    "hours_from_policy_B_to_first_badexit": 59
+  }
+}

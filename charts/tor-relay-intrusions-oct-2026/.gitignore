@@ -1,0 +1,6 @@
+# CollecTor downloads (about 64 MB); recreate with: python3 fetch.py
+cache/
+# chart images; recreate with the chart-*.py scripts (published copies ship with the posts)
+png/
+__pycache__/
+*.part

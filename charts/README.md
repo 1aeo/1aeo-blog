@@ -18,6 +18,10 @@ DoS wave. Script directories are named after the post they reproduce:
 | 3 | [What a Circuit-Building DoS Actually Costs: How 1AEO's Guard Fleet Held](https://1aeo.com/blog/circuit-building-dos-fleet-cost-june-2026.html) | **`circuit-building-dos-fleet-cost-june-2026/`** — the post's public-data charts (its first-party charts are not reproducible) |
 | 4 | [Defending Against Circuit-Building DoS: Better Metrics, and What Tor Could Fix](https://1aeo.com/blog/defending-against-circuit-dos-june-2026.html) | none — no charts |
 
+## Tor relay intrusions, October 2026
+
+[`tor-relay-intrusions-oct-2026/`](tor-relay-intrusions-oct-2026/) rebuilds the hero chart of [Securing a Fresh Ubuntu VM for a Tor Relay: A Beginner's Checklist](https://1aeo.com/blog/securing-fresh-ubuntu-vm-tor-relay-checklist.html): relays per hourly consensus on the two exit policies the intruders wrote, from CollecTor consensus archives. Its README has the definitions and run instructions.
+
 ## Charts in the network-view post ("The Tor Network Is Under a Circuit-Building DoS Wave")
 
 | script | chart | data source | runtime |
