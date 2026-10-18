@@ -26,7 +26,7 @@ L = []
 a = L.append
 
 a(h2("why-now", "Why Now"))
-a(f"""<p>Between October 1 and 4, 2026, <strong class="highlight">377 relays run by 59 operators</strong> switched to one of two exit policies that open SSH (<a href="https://lists.torproject.org/mailman3/hyperkitty/list/tor-relays@lists.torproject.org/message/Z2B6XYKJZBBQADU77MSNL6FJP7MHZHIV/">our analysis</a>). On October 5 the Tor Project <a href="https://forum.torproject.org/t/tor-relays-security-incident-affecting-some-relay-operators/22231">warned</a> that attackers were breaking into Linux relay hosts and editing <code>torrc</code> so the relays would intercept SSH logins made through Tor, and <a href="https://forum.torproject.org/t/tor-relays-re-ebury-1-8-3-on-two-quetzalcoatl-relay-servers-timeline-lessons-open-questions/22243">one victim's</a> captured credentials were then used to log in to his server. The directory authorities removed the relays.</p>
+a(f"""<p>Between October 1 and 4, 2026, <strong class="highlight">377 relays run by 59 operators</strong> switched to one of two exit policies that open SSH (<a href="https://lists.torproject.org/mailman3/hyperkitty/list/tor-relays@lists.torproject.org/message/Z2B6XYKJZBBQADU77MSNL6FJP7MHZHIV/">our analysis</a>). On October 5 the Tor Project <a href="https://forum.torproject.org/t/tor-relays-security-incident-affecting-some-relay-operators/22231">warned</a> that attackers were breaking into Linux relay hosts and editing <code>torrc</code> so the relays would intercept SSH logins made through Tor. An <a href="https://forum.torproject.org/t/tor-relays-re-ebury-1-8-3-on-two-quetzalcoatl-relay-servers-timeline-lessons-open-questions/22243/2">investigator observed</a> captured credentials being reused to log in to his honeypot. The directory authorities removed the relays.</p>
 <img width="2080" height="1120" src="{CHART}" alt="{html.escape(ALT)}">
 <p>The one break-in documented in detail (<a href="https://forum.torproject.org/t/tor-relays-ebury-1-8-3-on-two-quetzalcoatl-relay-servers-timeline-lessons-open-questions/22238">post-mortem</a>) began with <strong class="highlight">one password reused</strong> for SSH, sudo and backups, with SSH password logins on. The attacker then installed <strong>Ebury 1.8.3</strong>, an OpenSSH backdoor that records every password typed into <code>sshd</code> and hides from the host. 81 of the other operators' 100 affected relays were at <a href="https://metrics.1aeo.com/as/AS53667/">FranTech Solutions (BuyVM), AS53667</a>; whether the provider itself was breached is unconfirmed.</p>
 """)
@@ -131,14 +131,14 @@ a("""<div class="table-wrap">
 </div>
 <p>Every month, and whenever <a href="https://lists.torproject.org/mailman3/postorius/lists/tor-relays.lists.torproject.org/">tor-relays</a> reports an incident:</p>
 <ul>
-  <li><strong>Rerun the last row.</strong> It's the one check an intruder can't fake, and the way this incident was caught. Sign up for <a href="https://weather.torproject.org/">Tor Weather</a> to be emailed if the relay goes offline.</li>
-  <li><strong>Run the quick Ebury check</strong> below. Log in with your key and type no password. It runs the checks in a fresh shell that current Ebury builds don't hide from. A clean result is no guarantee; """ + ('<a href="' + ADV + '#ebury">Part 2</a> goes deeper' if PART2_LIVE else 'Part 2 (coming soon) goes deeper') + """.</li>
+  <li><strong>Rerun the last row from your own computer.</strong> This checks the published policy independently of the host, the way this incident was caught. Sign up for <a href="https://weather.torproject.org/">Tor Weather</a> to be emailed if the relay goes offline.</li>
+  <li><strong>Run the quick Ebury check</strong> below. Log in with your key and type no password. Its environment settings match <a href="https://github.com/eset/malware-research/blob/master/ebury/detect_ebury.sh">ESET's detector</a> as of October 17, 2026; they bypass hiding in known builds, not every possible rootkit. A clean result is no guarantee; """ + ('<a href="' + ADV + '#detect">Part 2</a> goes deeper' if PART2_LIVE else 'Part 2 (coming soon) goes deeper') + """.</li>
 </ul>
 """)
 a(pre("""
 H=1 I=1 LD_PRELOAD=":" LD_DEBUG=":" bash -c '
-find /usr/lib -name "libkeyutils*" -perm -4000 2>/dev/null   # must print nothing
-grep -E "@event-|@/dev/(event|stats)-" /proc/net/unix         # must print nothing
+find /usr/lib -name "libkeyutils*" -perm -4000 2>/dev/null   # investigate any matches
+grep -E "@event-|@/dev/(event|stats)-" /proc/net/unix         # investigate any matches
 grep -rniE "^\\s*(%include|ExitRelay|ExitPolicy)" /etc/tor/     # only "ExitRelay 0"
 '
 """))
@@ -188,7 +188,7 @@ page = f"""<!DOCTYPE html>
     "@type": "Article",
     "headline": "{TITLE}",
     "datePublished": "2026-10-10",
-    "dateModified": "2026-10-10",
+    "dateModified": "2026-10-17",
     "author": {{"@type": "Organization", "name": "1AEO"}},
     "publisher": {{"@type": "Organization", "name": "1AEO"}},
     "image": "https://1aeo.com/blog/{CHART}",
@@ -202,7 +202,7 @@ page = f"""<!DOCTYPE html>
   <div class="container">
     <!--email_off-->
     <h1>{TITLE}</h1>
-    <p class="meta"><em>By 1AEO Team &bull; Published October 10, 2026 &bull; A non-exit relay on Ubuntu 24.04 or 26.04 LTS</em></p>
+    <p class="meta"><em>By 1AEO Team &bull; Published October 10, 2026 &bull; Updated October 17, 2026 &bull; A non-exit relay on Ubuntu 24.04 or 26.04 LTS</em></p>
 
     <p class="series"><strong>Part 1 of a two-part series</strong> on securing Tor relay hosts after the October 2026 intrusions. &nbsp;1.&nbsp;<strong>Securing a Fresh Ubuntu VM for a Tor Relay</strong> (you are here) &mdash; one non-exit relay. &nbsp;2.&nbsp;{PART2_HTML} &mdash; several relays, offline keys, monitoring, incident response.</p>
 

@@ -3,7 +3,8 @@
   <url><loc>https://1aeo.com/</loc><lastmod>2026-08-08</lastmod></url>
   <url><loc>https://1aeo.com/onionvanity/</loc><lastmod>2026-07-30</lastmod></url>
   <url><loc>https://1aeo.com/onionvanity/marketplace/</loc><lastmod>2026-10-03</lastmod></url>
-  <url><loc>https://1aeo.com/blog/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://1aeo.com/blog/</loc><lastmod>2026-10-17</lastmod></url>
+  <url><loc>https://1aeo.com/blog/ai-comes-to-tor-security.html</loc><lastmod>2026-10-16</lastmod></url>
   <url><loc>https://1aeo.com/blog/bgp-configs-for-tor-relay-servers.html</loc></url>
   <url><loc>https://1aeo.com/blog/circuit-building-dos-anatomy-june-2026.html</loc></url>
   <url><loc>https://1aeo.com/blog/circuit-building-dos-below-tor-june-2026.html</loc></url>
@@ -21,10 +22,11 @@
   <url><loc>https://1aeo.com/blog/navigating-tor-relay-trackers-measure-compare.html</loc></url>
   <url><loc>https://1aeo.com/blog/onion-service-directory-capacity-june-2026.html</loc></url>
   <url><loc>https://1aeo.com/blog/periodic-restarts-workaround-guard-memory.html</loc></url>
-  <url><loc>https://1aeo.com/blog/securing-fresh-ubuntu-vm-tor-relay-checklist.html</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://1aeo.com/blog/securing-fresh-ubuntu-vm-tor-relay-checklist.html</loc><lastmod>2026-10-17</lastmod></url>
   <url><loc>https://1aeo.com/blog/surviving-circuit-dos-allocator-swap-june-2026.html</loc></url>
   <url><loc>https://1aeo.com/blog/tor-dos-year-under-flood-2025-2026.html</loc></url>
   <url><loc>https://1aeo.com/blog/tor-memory-defense-blindspot-june-2026.html</loc></url>
   <url><loc>https://1aeo.com/blog/tor-memory-optizations-what-actually-works.html</loc></url>
   <url><loc>https://1aeo.com/blog/tor-network-dos-wave-june-2026.html</loc></url>
+  <url><loc>https://1aeo.com/blog/tor-traffic-paths-denial-of-service.html</loc><lastmod>2026-10-17</lastmod></url>
 </urlset>
