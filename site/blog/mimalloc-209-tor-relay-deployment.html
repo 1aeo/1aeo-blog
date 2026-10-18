@@ -57,7 +57,7 @@
 
   <div class="container">
     <h1>mimalloc 2.0.9: 5-Way Allocator Test and 200-Relay Deployment</h1>
-    <p class="meta"><em>By 1AEO Team • January 2026</em></p>
+    <p class="meta"><em>By 1AEO Team • January 2026 &bull; Allocator comparisons and production deployment</em></p>
     <p class="meta"><em>Experiment: 100 relays (5 groups × 20) on Debian 13.2 with Tor 0.4.8.x</em></p>
 
     <p>We tested 5 memory allocators with Debian 13.2 on 100 Tor relays to find the best option for long-running Guard relays. The result: <strong class="success">mimalloc 2.0.9</strong> used 7.4× less memory than mimalloc 3.0.1. We then migrated all 200 relays on the server to the winner.</p>

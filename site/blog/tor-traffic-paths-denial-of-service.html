@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://1aeo.com/blog/tor-traffic-paths-denial-of-service.html">
+  <title>Tor Under Attack: Mapping the Pressure Points | 1AEO</title>
+  <meta name="description" content="A diagram-led guide to Tor's directory, circuit, introduction, rendezvous and exit paths, and the distinct resources denial-of-service attacks can exhaust.">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; background-color: #121212; color: #ffffff; }
+    .nav { background-color: #1e1e1e; padding: 10px 0; box-shadow: 0 2px 10px rgba(0, 255, 127, 0.2); position: sticky; top: 0; z-index: 1000; }
+    .nav-toggle { display: none; background: none; border: none; font-size: 24px; color: #00ff7f; position: absolute; top: 10px; right: 20px; cursor: pointer; }
+    .nav-links { display: flex; justify-content: center; flex-wrap: wrap; }
+    .nav-links a { color: #00ff7f; text-decoration: none; margin: 0 15px; font-size: 18px; }
+    .nav-links a:hover { text-decoration: underline; }
+    @media (max-width: 600px) { .nav-links { display: none; flex-direction: column; margin-top: 40px; } .nav-links.show { display: flex; } .nav-toggle { display: block; } }
+    .container { max-width: 800px; margin: 50px auto; padding: 20px; background: #1e1e1e; box-shadow: 0px 0px 15px rgba(0, 255, 127, 0.6); border-radius: 10px; text-align: left; }
+    h1, h2, h3 { color: #00ff7f; }
+    h1 { text-align: center; font-size: 26px; }
+    p { font-size: 18px; color: #cccccc; line-height: 1.6; margin-bottom: 1em; }
+    .meta { font-size: 14px; color: #888; margin-bottom: 20px; text-align: center; }
+    ul, ol { color: #cccccc; margin-bottom: 1em; }
+    li { font-size: 18px; margin-bottom: 8px; line-height: 1.6; }
+    code { background-color: #2d2d2d; padding: 2px 6px; border-radius: 3px; font-family: monospace; color: #00ff7f; }
+    pre { background-color: #2d2d2d; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 14px; }
+    pre code { background: none; padding: 0; color: #ffffff; }
+    a { color: #00ff7f; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container img { display: block; margin: 20px auto; max-width: 100%; height: auto; border-radius: 5px; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #444; }
+    th { background-color: #2d2d2d; color: #00ff7f; }
+    td { color: #cccccc; }
+    tr:hover { background-color: #252525; }
+    .warning { background-color: #2d2d2d; border-left: 4px solid #ff6b6b; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .callout { background-color: #2d2d2d; border-left: 4px solid #00ff7f; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; font-size: 14px; color: #777; text-align: center; }
+    .btn { display: inline-block; margin-top: 20px; padding: 12px 24px; font-size: 18px; color: #121212; background-color: #00ff7f; text-decoration: none; font-weight: bold; border-radius: 5px; transition: background 0.3s; }
+    .btn:hover { background-color: #00cc66; text-decoration: none; }
+    .highlight { color: #ff6b6b; font-weight: bold; }
+    .success { color: #00ff7f; font-weight: bold; }
+    .series { font-size: 15px; color: #aaa; background-color: #181818; border-left: 4px solid #00ff7f; padding: 12px 16px; margin: 0 0 24px; border-radius: 0 5px 5px 0; line-height: 1.5; }
+    .series a { color: #00ff7f; }
+    h2, h3 { scroll-margin-top: 70px; }
+    .anchor { color: #3f3f3f; text-decoration: none; margin-left: 8px; font-size: 0.85em; font-weight: normal; }
+    h2:hover .anchor, h3:hover .anchor { color: #00ff7f; }
+  
+    figure { margin: 24px 0; }
+    figcaption { color: #aaa; font-size: 14px; line-height: 1.6; }
+    .callout { color: #ccc; font-size: 18px; line-height: 1.6; }
+    .path-shared { color: #9a9a9a; }
+    .path-exit { color: #ffb454; }
+    .path-onion { color: #b48cff; }
+    .attack-current { color: #ff6b6b; }
+    .attack-historical { color: #ffb454; }
+    .table-scroll { overflow-x: auto; }
+    table { min-width: 500px; line-height: 1.6; }
+    th:first-child { width: 29%; }
+    code { overflow-wrap: anywhere; }
+    @media (max-width: 600px) { .nav { min-height: 30px; } .container { margin: 24px 12px; padding: 18px; } h1 { font-size: 25px; } }
+  </style>
+</head>
+<body>
+  <div class="nav">
+      <button aria-label="Toggle navigation" class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+          &#9776;
+      </button>
+      <div class="nav-links">
+          <a href="https://1aeo.com/">Home</a>
+          <a href="https://1aeo.com/onionvanity/">Onion Vanity</a>
+          <a href="https://1aeo.com/blog/">Blog</a>
+          <a href="https://metrics.1aeo.com">Metrics</a>
+          <a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
+          <a href="https://aroivalidator.1aeo.com">AROI Validator</a>
+          <a href="https://routefluxmap.1aeo.com">RouteFluxMap</a>
+          <a href="https://1aeo.com/#contact">Contact</a>
+      </div>
+  </div>
+  <article class="container">
+
+    <h1>Tor Under Attack: Mapping the Pressure Points</h1>
+    <p class="meta"><em>By 1AEO Team &bull; October 17, 2026 &bull; Tor traffic paths and DoS pressure points</em></p>
+
+    <p>An attacker can exhaust a Tor relay while many of its metrics still look normal. These diagrams map the pressure points documented in our <a href="https://1aeo.com/blog/circuit-building-dos-anatomy-june-2026.html">June&ndash;July denial-of-service (DoS) reporting</a> and other relay operators&rsquo; accounts.</p>
+
+    <div class="callout"><strong>Setup work can exhaust a relay's CPU or memory even when application bandwidth barely changes.</strong></div>
+
+    <figure>
+      <a href="images/tor-traffic-paths-v4.png" target="_blank" rel="noopener"><img width="3072" height="2043" src="images/tor-traffic-paths-v4.png" alt="Tor traffic paths: network-directory lookup at stage 1; Internet traffic through an exit at E2; onion-service descriptor lookup at O2, rendezvous preparation at O3, introduction at O4 and rendezvous completion at O5. Separate client and service circuits meet at the rendezvous point. Orange dashed lines mark setup, blue lines application traffic and gray lines shared transit."></a>
+      <figcaption><a href="images/tor-traffic-paths-v4.png" target="_blank" rel="noopener">Open the full-size diagram.</a> Orange dashed: setup. Blue: application traffic. Gray: both. Boxes show roles on separate circuits; cached information and existing circuits can shorten setup.</figcaption>
+    </figure>
+
+    <h2 id="read-the-paths">Read the Paths <a class="anchor" href="#read-the-paths" aria-label="Link to this section">#</a></h2>
+    <ul>
+      <li><strong><span class="path-shared">1</span> &mdash; Learn the network.</strong> The client fetches consensus and relay information from a directory cache through the illustrated one-hop <a href="https://spec.torproject.org/tor-spec/opening-streams.html"><code>BEGIN_DIR</code> stream</a>.</li>
+      <li><strong><span class="path-exit">E2</span> &mdash; Reach the Internet.</strong> A guard&ndash;middle&ndash;exit circuit reaches the Internet. <code>BEGIN</code> requests a TCP connection; the exit resolves hostnames when needed. <code>DATA</code> carries stream bytes; <a href="https://spec.torproject.org/tor-spec/remote-hostname-lookup.html"><code>RESOLVE</code></a> requests a standalone DNS lookup.</li>
+      <li><strong><span class="path-onion">O2&ndash;O5</span> &mdash; Reach an onion service.</strong> The service has already established introduction points on existing Tor relays and uploaded its descriptor to HSDir relays. The client anonymously fetches that descriptor (O2), prepares a rendezvous point (O3), and sends <code>INTRODUCE1</code> to an introduction point, which forwards <code>INTRODUCE2</code> to the service (O4). The service joins through its own circuit (O5). The rendezvous relay joins the circuits and forwards handshake material for the client to verify. Application streams then reach the backend. <a href="https://spec.torproject.org/rend-spec/protocol-overview.html">This path uses no Internet exit.</a></li>
+    </ul>
+    <p>These command names refer to Tor messages. External applications exchange ordinary TCP bytes; resolvers receive DNS queries. HSDirs store descriptors, introduction points forward introductions, and rendezvous points join circuits. One relay can perform several roles.</p>
+
+    <h2 id="pressure-points">Where DoS and Overload Have Been Reported <a class="anchor" href="#pressure-points" aria-label="Link to this section">#</a></h2>
+    <p>Red markers cover reports within <strong>April 16&ndash;October 16, 2026</strong>; amber markers show older exit examples. They identify reported pressure. Cause and intent are not established in every case.</p>
+
+    <figure>
+      <a href="images/tor-traffic-paths-dos-history-v2.png" target="_blank" rel="noopener"><img width="3072" height="2043" src="images/tor-traffic-paths-dos-history-v2.png" alt="Tor traffic paths with numbered pressure markers. Red 1: TCP listener queues; 2: circuit handshakes and retained state; 3: circuit protocol-error handling; 4: HSDir descriptor cache; 5: introduction requests; 6: outbound directory bytes; 7: incoming BEGIN_DIR setup activity, with opposite arrows at the shared directory boundary. The specific directory role, document and HTTP method were not identified. Amber H1 marks historical 2022 exit TCP pressure; H2 marks suspected 2022 resolver flooding. Numbers correspond to the linked bullets below."></a>
+      <figcaption><a href="images/tor-traffic-paths-dos-history-v2.png" target="_blank" rel="noopener">Open the marked diagram.</a> Numbers match the bullets below. Markers 1&ndash;3 show relay internals, not another hop. Directory markers distinguish outbound bytes (6) from incoming stream setup (7); the specific directory role and HTTP request remain unidentified.</figcaption>
+    </figure>
+
+    <ul class="attack-history">
+      <li><strong><span class="attack-current">1</span> &mdash; TCP listener queues, June&ndash;July 2026.</strong> Kernel counters showed listener pressure before Tor could accept connections. <a href="https://1aeo.com/blog/circuit-building-dos-below-tor-june-2026.html#billion-drops">The Flood Below Tor</a>.</li>
+      <li><strong><span class="attack-current">2</span> &mdash; Circuit work + state, June&ndash;July 2026.</strong> Circuit-handshake assignments and retained state surged, taxing CPU and memory while bandwidth barely changed. <a href="https://1aeo.com/blog/circuit-building-dos-anatomy-june-2026.html#wave-2-circuit-creation">Circuit-creation wave</a>.</li>
+      <li><strong><span class="attack-current">3</span> &mdash; Protocol errors, July 2026.</strong> Protocol-error close events surged on our relays; the counter does not identify one command, circuit role or set of unique circuits. <a href="https://1aeo.com/blog/circuit-building-dos-anatomy-june-2026.html#wave-3-malformed">Malformed-circuit phase</a>.</li>
+      <li><strong><span class="attack-current">4</span> &mdash; HSDir cache pressure, late June 2026.</strong> Onion-service descriptor caches repeatedly reached their limits and were pruned. <a href="https://1aeo.com/blog/circuit-building-dos-anatomy-june-2026.html#wave-1-introduce2">Descriptor-cache pressure</a>.</li>
+      <li><strong><span class="attack-current">5</span> &mdash; Introductions, June&ndash;July 2026.</strong> Introduction points rejected excess requests before forwarding them to services as <code>INTRODUCE2</code>. <a href="https://1aeo.com/blog/circuit-building-dos-anatomy-june-2026.html#wave-1-introduce2">Introduction-request wave</a>.</li>
+      <li><strong><span class="attack-current">6</span> &mdash; Response-byte surge, July 19&ndash;24, 2026.</strong> Outbound directory bytes surged. Abusive fetching and concentrated demand remained competing explanations. <a href="https://1aeo.com/blog/circuit-building-dos-anatomy-june-2026.html#wave-4-directory-write">Directory surge</a>.</li>
+      <li><strong><span class="attack-current">7</span> &mdash; BEGIN_DIR setups, September&ndash;October 2026.</strong> Operators reported surges in <code>BEGIN_DIR</code> setup activity, including about 700 counter events per second on one exit. These events precede HTTP processing; their cause remained unresolved. <a href="https://lists.torproject.org/mailman3/hyperkitty/list/tor-relays@lists.torproject.org/thread/U5FTEYNST44IGM2MHSA6VEYD5THOIEOY/">Tor-relays reports</a>.</li>
+      <li><strong><span class="attack-historical">H1</span> &mdash; Exit TCP, October 2022.</strong> Artikel10 reported hundreds of thousands of connections per exit server to one destination while normal traffic fell sharply. <a href="https://forum.torproject.org/t/tor-relays-performance-issues-dos-from-outgoing-exit-connections/5262">Historical operator report</a>.</li>
+      <li><strong><span class="attack-historical">H2</span> &mdash; Exit DNS, March 2022.</strong> Tor Network Health found almost 80 exits with DNS failures and investigated suspected Unbound flooding; whether it was intentional was unresolved. <a href="https://lists.torproject.org/mailman3/hyperkitty/list/tor-relays@lists.torproject.org/thread/3QM56BXSTJPSVOZA5YWLHGNPGVY2KESX/">Historical Network Health report</a>.</li>
+    </ul>
+    <p>Our <a href="https://1aeo.com/blog/tor-dos-year-under-flood-2025-2026.html#network-view">year-long review</a> also records April 18 and June 15 overload peaks, plus <a href="https://1aeo.com/blog/tor-dos-year-under-flood-2025-2026.html#streak">July 27 queue pressure</a>. These observations do not locate additional attack paths.</p>
+
+    <h2 id="measure-the-layer">Measure the Layer That Is Failing <a class="anchor" href="#measure-the-layer" aria-label="Link to this section">#</a></h2>
+    <p>A failed page load alone cannot identify the bottleneck. Compare host TCP counters, circuit activity, memory, directory work and introduction rejections alongside bandwidth. Tor's <a href="https://spec.torproject.org/param-spec.html">defenses act at different stages</a>. Aggregate measurements help locate pressure without recording users' destinations or traffic contents.</p>
+
+    <p class="series"><strong>Related reading:</strong> <a href="https://1aeo.com/blog/onion-service-directory-capacity-june-2026.html">The HSDir Population Decline</a> &bull; <a href="https://1aeo.com/blog/defending-against-circuit-dos-june-2026.html">Defending Against Circuit-Building DoS</a></p>
+    <p style="text-align: center;"><a href="https://1aeo.com/#get-involved" class="btn">Join the Mission</a></p>
+    <div class="footer"><p>&copy; 2026 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p></div>
+  </article>
+</body>
+</html>

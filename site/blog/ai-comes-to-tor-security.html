@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <title>AI Helps Secure Tor: Obsolete Relay Average Hits a Ten-Year High | 1AEO</title>
+  <meta name="description" content="AI-assisted reports drive Tor security fixes as the average obsolete-relay count reaches a ten-year high in our 2017–2026 comparison. Update guides included.">
+  <link rel="canonical" href="https://1aeo.com/blog/ai-comes-to-tor-security.html">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="AI Helps Secure Tor: Obsolete Relay Average Hits a Ten-Year High">
+  <meta property="og:description" content="AI-assisted reports drive Tor security fixes as the average obsolete-relay count reaches a ten-year high in our 2017–2026 comparison. Update guides included.">
+  <meta property="og:url" content="https://1aeo.com/blog/ai-comes-to-tor-security.html">
+  <meta property="og:image" content="https://1aeo.com/blog/images/ai-tor-security-yearly-version-status-2017-2026.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="4200">
+  <meta property="og:image:height" content="3150">
+  <meta property="og:image:alt" content="Tor relay version-status shares, 2017–2026; obsolete share is 15.0% in 2026 year-to-date, with the partial period and data coverage shown.">
+  <meta property="og:site_name" content="1AEO">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AI Helps Secure Tor: Obsolete Relay Average Hits a Ten-Year High">
+  <meta name="twitter:description" content="AI-assisted reports drive Tor security fixes as the average obsolete-relay count reaches a ten-year high in our 2017–2026 comparison. Update guides included.">
+  <meta name="twitter:image" content="https://1aeo.com/blog/images/ai-tor-security-yearly-version-status-2017-2026.png">
+  <meta name="twitter:image:alt" content="Tor relay version-status shares, 2017–2026; obsolete share is 15.0% in 2026 year-to-date, with the partial period and data coverage shown.">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; background-color: #121212; color: #ffffff; }
+    .nav { background-color: #1e1e1e; padding: 10px 0; box-shadow: 0 2px 10px rgba(0, 255, 127, 0.2); position: sticky; top: 0; z-index: 1000; }
+    .nav-toggle { display: none; background: none; border: none; font-size: 24px; color: #00ff7f; position: absolute; top: 10px; right: 20px; cursor: pointer; }
+    .nav-links { display: flex; justify-content: center; flex-wrap: wrap; }
+    .nav-links a { color: #00ff7f; text-decoration: none; margin: 0 15px; font-size: 18px; }
+    .nav-links a:hover { text-decoration: underline; }
+    @media (max-width: 600px) { .nav-links { display: none; flex-direction: column; margin-top: 40px; } .nav-links.show { display: flex; } .nav-toggle { display: block; } }
+    .container { max-width: 800px; margin: 50px auto; padding: 20px; background: #1e1e1e; box-shadow: 0px 0px 15px rgba(0, 255, 127, 0.6); border-radius: 10px; text-align: left; }
+    h1, h2, h3 { color: #00ff7f; }
+    h1 { text-align: center; font-size: 26px; }
+    p { font-size: 18px; color: #cccccc; line-height: 1.6; margin-bottom: 1em; }
+    .meta { font-size: 14px; color: #888; margin-bottom: 20px; text-align: center; }
+    ul, ol { color: #cccccc; margin-bottom: 1em; }
+    li { font-size: 18px; margin-bottom: 8px; line-height: 1.6; }
+    code { background-color: #2d2d2d; padding: 2px 6px; border-radius: 3px; font-family: monospace; color: #00ff7f; }
+    pre { background-color: #2d2d2d; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 14px; }
+    pre code { background: none; padding: 0; color: #ffffff; }
+    a { color: #00ff7f; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container img { display: block; margin: 20px auto; max-width: 100%; height: auto; border-radius: 5px; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #444; }
+    th { background-color: #2d2d2d; color: #00ff7f; }
+    td { color: #cccccc; }
+    tr:hover { background-color: #252525; }
+    .warning { background-color: #2d2d2d; border-left: 4px solid #ff6b6b; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .callout { background-color: #2d2d2d; border-left: 4px solid #00ff7f; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; font-size: 14px; color: #777; text-align: center; }
+    .btn { display: inline-block; margin-top: 20px; padding: 12px 24px; font-size: 18px; color: #121212; background-color: #00ff7f; text-decoration: none; font-weight: bold; border-radius: 5px; transition: background 0.3s; }
+    .btn:hover { background-color: #00cc66; text-decoration: none; }
+    .highlight { color: #ff6b6b; font-weight: bold; }
+    .success { color: #00ff7f; font-weight: bold; }
+    .series { font-size: 15px; color: #aaa; background-color: #181818; border-left: 4px solid #00ff7f; padding: 12px 16px; margin: 0 0 24px; border-radius: 0 5px 5px 0; line-height: 1.5; }
+    .series a { color: #00ff7f; }
+    h2, h3 { scroll-margin-top: 70px; }
+    .anchor { color: #3f3f3f; text-decoration: none; margin-left: 8px; font-size: 0.85em; font-weight: normal; }
+    h2:hover .anchor, h3:hover .anchor { color: #00ff7f; }
+  
+    figure { margin: 24px 0; }
+    figcaption { color: #aaa; font-size: 14px; line-height: 1.6; }
+    .callout { color: #ccc; font-size: 18px; line-height: 1.6; }
+    .table-scroll { overflow-x: auto; }
+    table { min-width: 500px; line-height: 1.6; }
+    th:first-child { width: 29%; }
+    code { overflow-wrap: anywhere; }
+    @media (max-width: 600px) { .nav { min-height: 30px; } .container { margin: 24px 12px; padding: 18px; } h1 { font-size: 25px; } }
+  
+    .container figure img { margin: 16px auto 10px; }
+    .dek { text-align: center; font-size: 18px; color: #cccccc; margin: 12px 0 16px; }
+    q { quotes: "“" "”" "‘" "’"; }
+  </style>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "AI Helps Secure Tor: Obsolete Relay Average Hits a Ten-Year High",
+  "description": "AI-assisted reports drive Tor security fixes as the average obsolete-relay count reaches a ten-year high in our 2017–2026 comparison. Update guides included.",
+  "datePublished": "2026-10-16",
+  "dateModified": "2026-10-16",
+  "inLanguage": "en",
+  "author": {
+    "@type": "Organization",
+    "name": "1AEO Team"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "1AEO",
+    "url": "https://1aeo.com/"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://1aeo.com/blog/ai-comes-to-tor-security.html"
+  },
+  "image": [
+    "https://1aeo.com/blog/images/ai-tor-security-yearly-version-status-2017-2026.png",
+    "https://1aeo.com/blog/images/ai-tor-security-monthly-version-status-2026.png"
+  ]
+}
+  </script>
+</head>
+<body>
+  <div class="nav">
+      <button aria-label="Toggle navigation" class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+          &#9776;
+      </button>
+      <div class="nav-links">
+          <a href="https://1aeo.com/">Home</a>
+          <a href="https://1aeo.com/onionvanity/">Onion Vanity</a>
+          <a href="https://1aeo.com/blog/">Blog</a>
+          <a href="https://metrics.1aeo.com">Metrics</a>
+          <a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
+          <a href="https://aroivalidator.1aeo.com">AROI Validator</a>
+          <a href="https://routefluxmap.1aeo.com">RouteFluxMap</a>
+          <a href="https://1aeo.com/#contact">Contact</a>
+      </div>
+  </div>
+  <article class="container">
+    <h1>AI Helps Secure Tor: Obsolete Relay Average Hits a Ten-Year High</h1>
+    <p class="dek">Tor’s <a href="https://gitlab.torproject.org/tpo/core/tor/-/blob/tor-0.4.9.14/ChangeLog#L134">0.4.9.13 changelog</a> credits security fixes to the <q>LLM report firehose</q>.</p>
+    <p class="meta"><em>By 1AEO Team &bull; October 16, 2026 &bull; AI security reports and relay version trends</em></p>
+    <p>As AI helps uncover Tor security flaws, the network faces a <strong class="highlight">ten-year high in its average obsolete-relay count</strong>. Our <a href="https://collector.torproject.org/archive/relay-descriptors/consensuses/">2017–2026 reconstruction</a> puts 2026 YTD at <strong>1,465 running relays on obsolete versions</strong>—nearly three times 2025—and <strong>15.0% of observed Running relay-hours</strong>, above the previous full-year high of <strong>9.9% in 2018</strong>.</p>
+    <figure>
+      <a href="images/ai-tor-security-yearly-version-status-2017-2026.png" target="_blank" rel="noopener"><img src="images/ai-tor-security-yearly-version-status-2017-2026.png" width="4200" height="3150" alt="Ten-year 100% stacked chart of reconstructed Tor relay version-status shares, 2017–2026. Obsolete versions represent 15.0% of observed Running relay-hours in 2026 year-to-date, versus 5.8% in 2025 and a previous full-year high of 9.9% in 2018. The 2026 period is partial and has 91.3% hourly coverage. Chart attributed to 1aeo.com."></a>
+      <figcaption>Shares of observed relay-hours; 2026 YTD through October 16, 22:00 UTC. Coverage: 2017–2025, 98.3–100%; 2026, 91.3%. <a href="images/ai-tor-security-yearly-version-status-2017-2026.png">Full-size PNG</a> &bull; <a href="data/ai-tor-security-yearly-status-2017-2026.csv">Data CSV</a>.</figcaption>
+    </figure>
+    <p>The <a href="https://gitlab.torproject.org/tpo/core/tor/-/blob/tor-0.4.9.14/ChangeLog#L134">official changelog</a> for 0.4.9.12 and 0.4.9.13 attributes high-severity security fixes to large language model (LLM) reports. Tor announced a <a href="https://forum.torproject.org/t/security-release-0-4-9-12/22096">roughly two-week security-release cadence</a>, subject to change; versions 0.4.9.12, 0.4.9.13 and 0.4.9.14 arrived on September 8, September 23 and October 7.</p>
+    <p>Our <a href="https://collector.torproject.org/archive/relay-descriptors/consensuses/">CollecTor</a> reconstruction shows the obsolete relay share rising from <strong class="highlight">6.9% in August to 29.0% in September</strong>, with October at 24.2% through the 16th. On September 10, the consensus’s recommended relay versions narrowed to 0.4.9.12, reclassifying older versions and pushing the obsolete count from <strong>3 to 6,707 in one hour</strong>.</p>
+    <figure>
+      <a href="images/ai-tor-security-monthly-version-status-2026.png" target="_blank" rel="noopener"><img src="images/ai-tor-security-monthly-version-status-2026.png" width="4200" height="3300" alt="Monthly 100% stacked chart of Running Tor relay version-status shares in 2026. The obsolete share rises from 6.9% in August to 29.0% in September, then stands at 24.2% for October through the 16th. April has only 36% hourly coverage. August and September have complete coverage. Chart attributed to 1aeo.com."></a>
+      <figcaption>Shares of observed relay-hours; October is month-to-date through October 16, 22:00 UTC. April has 36% coverage; August and September have 100%. <a href="images/ai-tor-security-monthly-version-status-2026.png">Full-size PNG</a> &bull; <a href="data/ai-tor-security-monthly-status-2026.csv">Data CSV</a>.</figcaption>
+    </figure>
+    <p><a href="https://metrics.torproject.org/onionoo.html#details_relay_version_status">“Obsolete”</a> means older than every recommended version. It is not a count of compromised relays or every relay missing the newest security fixes.</p>
+    <div class="callout"><p><strong>Keep your relay current:</strong> use <a href="https://support.torproject.org/little-t-tor/getting-started/installing/">Tor’s official packages</a> and enable <a href="https://community.torproject.org/relay/setup/guard/debian-ubuntu/updates/">automatic updates on Debian or Ubuntu</a>. Verify the running version after upgrades.</p></div>
+    <div class="footer"><p>&copy; 2026 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p></div>
+  </article>
+</body>
+</html>

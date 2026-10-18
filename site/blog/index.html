@@ -130,6 +130,24 @@
     <p>Updates, insights, and community posts from 1st Amendment Encrypted Openness.</p>
 
     <div class="post-preview">
+      <h2><a href="/blog/tor-traffic-paths-denial-of-service.html">Tor Under Attack: Mapping the Pressure Points</a></h2>
+      <div class="meta">By 1AEO Team &bull; October 17, 2026 &bull; Tor traffic paths and DoS pressure points</div>
+      <p>
+        Two diagrams trace Tor's traffic paths and map reported pressure on TCP queues, circuits, directories, introductions and exits. Follow the numbered markers to the 2026 reports and historical exit examples.
+        <a href="/blog/tor-traffic-paths-denial-of-service.html">Read more</a>
+      </p>
+    </div>
+
+    <div class="post-preview">
+      <h2><a href="/blog/ai-comes-to-tor-security.html">AI Helps Secure Tor: Obsolete Relay Average Hits a Ten-Year High</a></h2>
+      <div class="meta">By 1AEO Team &bull; October 16, 2026 &bull; AI security reports and relay version trends</div>
+      <p>
+        AI-assisted reports are driving Tor security fixes. Our 2017&ndash;2026 reconstruction finds a 2026 YTD average of 1,465 Running relays on obsolete versions, with two reproducible charts and official guidance for updates and automation.
+        <a href="/blog/ai-comes-to-tor-security.html">Read more</a>
+      </p>
+    </div>
+
+    <div class="post-preview">
       <h2><a href="/blog/securing-fresh-ubuntu-vm-tor-relay-checklist.html">Securing a Fresh Ubuntu VM for a Tor Relay: A Beginner's Checklist</a></h2>
       <div class="meta">By 1AEO Team • Oct 10, 2026 • Relay security series, Part 1 of 2</div>
       <p>
@@ -239,7 +257,7 @@
 
     <div class="post-preview">
       <h2><a href="/blog/mimalloc-209-tor-relay-deployment.html">5-Way Allocator Test and 200-Relay Deployment</a></h2>
-      <div class="meta">By 1AEO Team • Jan 10, 2026</div>
+      <div class="meta">By 1AEO Team • Jan 10, 2026 &bull; Allocator comparisons and production deployment</div>
       <p>
         5-Way Deployment Blog: Testing 5 allocators on 100 relays (20 per group) with Debian 13.2 for 6-10 days showed mimalloc 2.0.9 (1.41 GB) used 7.4× less memory than 3.0.1 (10.44 GB), so we migrated all 200 production relays to 2.0.9.
         <a href="/blog/mimalloc-209-tor-relay-deployment.html">Read more</a>
@@ -248,7 +266,7 @@
 
     <div class="post-preview">
       <h2><a href="/blog/tor-memory-optizations-what-actually-works.html">Tor Memory Optimization: What Actually Works</a></h2>
-      <div class="meta">By 1AEO Team • Jan 5, 2026</div>
+      <div class="meta">By 1AEO Team • Jan 5, 2026 &bull; Guard relay memory experiments and findings</div>
       <p>
         After testing allocators, config tweaks, and restarts across 100+ relays, we found that switching to mimalloc or jemalloc is the only fix that actually stops Tor guard memory from ballooning to 5+ GB.
         <a href="/blog/tor-memory-optizations-what-actually-works.html">Read more</a>
@@ -257,7 +275,7 @@
 
     <div class="post-preview">
       <h2><a href="/blog/memory-allocators-tor-relay-fragmentation-with-custom-allocators.html">Solving Tor Memory Fragmentation with Custom Allocators</a></h2>
-      <div class="meta">By 1AEO Team • Jan 5, 2026</div>
+      <div class="meta">By 1AEO Team • Jan 5, 2026 &bull; Comparing memory allocators for Tor relays</div>
       <p>
         Our 90-relay experiment on Ubuntu 24.04 proves that swapping glibc for mimalloc (79% reduction) or jemalloc (71% reduction) keeps Tor guards under 2 GB without recompiling or losing Guard status.
         <a href="/blog/memory-allocators-tor-relay-fragmentation-with-custom-allocators.html">Read more</a>
@@ -266,7 +284,7 @@
 
     <div class="post-preview">
       <h2><a href="/blog/dircache-memory-trade-off-tor-guard-relays.html">The DirCache Dilemma: The Fix We Can't Reduce Guard Memory With</a></h2>
-      <div class="meta">By 1AEO Team • Jan 5, 2026</div>
+      <div class="meta">By 1AEO Team • Jan 5, 2026 &bull; Directory caching and guard relay memory</div>
       <p>
         Disabling DirCache cuts memory by 94%, but it also removes your Guard flag—making it a diagnostic proof point rather than a viable solution for production Guard relays.
         <a href="/blog/dircache-memory-trade-off-tor-guard-relays.html">Read more</a>
@@ -275,7 +293,7 @@
 
     <div class="post-preview">
       <h2><a href="/blog/maxmeminqueues-myth-for-guard-memory.html">The MaxMemInQueues Myth For Guard Memory</a></h2>
-      <div class="meta">By 1AEO Team • Jan 5, 2026</div>
+      <div class="meta">By 1AEO Team • Jan 5, 2026 &bull; Testing queue memory limits on guard relays</div>
       <p>
         Despite its promising name, MaxMemInQueues only limits circuit buffers—not the directory cache fragmentation that actually causes Tor relays to bloat to 5 GB.
         <a href="/blog/maxmeminqueues-myth-for-guard-memory.html">Read more</a>
@@ -284,7 +302,7 @@
 
     <div class="post-preview">
       <h2><a href="/blog/periodic-restarts-workaround-guard-memory.html">Periodic Restarts: A Brute-Force Workaround for Guard Memory</a></h2>
-      <div class="meta">By 1AEO Team • Jan 5, 2026</div>
+      <div class="meta">By 1AEO Team • Jan 5, 2026 &bull; Restart intervals and guard relay memory</div>
       <p>
         Scheduled restarts can reduce memory by up to 19%, but they disrupt circuits and still leave you at 4.5 GB—use them only as a stopgap while migrating to a better allocator.
         <a href="/blog/periodic-restarts-workaround-guard-memory.html">Read more</a>
@@ -293,7 +311,7 @@
 
     <div class="post-preview">
       <h2><a href="/blog/maxconsensusagefordiffs-limiting-for-guard-memory.html">MaxConsensusAgeForDiffs: Why Limiting Consensus Cache Doesn't Help Guard Memory</a></h2>
-      <div class="meta">By 1AEO Team • Jan 5, 2026</div>
+      <div class="meta">By 1AEO Team • Jan 5, 2026 &bull; Consensus diff retention and guard relay memory</div>
       <p>
         Limiting how long Tor keeps consensus diffs had zero impact on memory—all test groups ended at 5.6–5.8 GB, proving the fragmentation problem lies in glibc, not cache retention.
         <a href="/blog/maxconsensusagefordiffs-limiting-for-guard-memory.html">Read more</a>
@@ -302,7 +320,7 @@
 
     <div class="post-preview">
       <h2><a href="/blog/navigating-tor-relay-trackers-measure-compare.html">Navigating Top Relay Trackers: Measure and Compare Tor Nodes</a></h2>
-      <div class="meta">By 1AEO Team • May 26, 2025</div>
+      <div class="meta">By 1AEO Team • May 26, 2025 &bull; Comparing Tor relay monitoring tools and dashboards</div>
       <p>
         A straightforward guide to the leading Tor relay dashboards—compare their bandwidth stats, update frequency, map views, and detailed features to monitor your nodes and network with ease.
         <a href="/blog/navigating-tor-relay-trackers-measure-compare.html">Read more</a>
@@ -311,7 +329,7 @@
 
     <div class="post-preview">
       <h2><a href="/blog/bgp-configs-for-tor-relay-servers.html">BGP Configuration Files for Tor Relay Servers</a></h2>
-      <div class="meta">By 1AEO Team • May 1, 2025</div>
+      <div class="meta">By 1AEO Team • May 1, 2025 &bull; BGP configuration examples for Tor relay operators</div>
       <p>
         Supercharge your Tor relay deployments with turnkey BGP configs that take you from zero to announced in minutes.
         <a href="/blog/bgp-configs-for-tor-relay-servers.html">Read more</a>
@@ -320,7 +338,7 @@
 
     <div class="post-preview">
       <h2><a href="/blog/full-throttle-tor-real-world-10-gbps-performance.html">Full-Throttle Tor: Real-World 10 Gbps Performance</a></h2>
-      <div class="meta">By 1AEO Team • April 30, 2025</div>
+      <div class="meta">By 1AEO Team • April 30, 2025 &bull; Relay bandwidth observations across locations and providers</div>
       <p>
         Running a 10 Gbps Tor relay at maximum capacity reveals lessons every operator should know before scaling up.
         <a href="/blog/full-throttle-tor-real-world-10-gbps-performance.html">Read more</a>
@@ -329,7 +347,7 @@
 
     <div class="post-preview">
       <h2><a href="/blog/high-capacity-relays-single-vs-multiple-servers.html">High-Capacity Relays: Can Bigger Bandwidth Make a Bigger Difference?</a></h2>
-      <div class="meta">By 1AEO Team • March 31, 2025</div>
+      <div class="meta">By 1AEO Team • March 31, 2025 &bull; Comparing centralized and distributed relay deployments</div>
       <p>
         A recent thread on the Tor-relays list raises a fundamental question for operators: is it better to deploy a single high-capacity server, or several smaller ones distributed across locations and providers?
         <a href="/blog/high-capacity-relays-single-vs-multiple-servers.html">Read more</a>
