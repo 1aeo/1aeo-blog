@@ -26,6 +26,10 @@ DoS wave. Script directories are named after the post they reproduce:
 
 [`tor-connection-gauge-drift/`](tor-connection-gauge-drift/) contains the standalone synthetic C accounting model (`gauge-accounting-model.c`) used in [The Metric That Drifts to Zero: An Accounting Bug in Tor's Connection Gauge](https://1aeo.com/blog/tor-connection-gauge-drift.html).
 
+## Tor relay version-status trends (`2017–2026`)
+
+[`ai-comes-to-tor-security/`](ai-comes-to-tor-security/) rebuilds the annual (`2017–2026 YTD`) and `2026` monthly 100%-stacked version-status charts in [AI Helps Secure Tor: Obsolete Relay Average Hits a Ten-Year High](https://1aeo.com/blog/ai-comes-to-tor-security.html) from CollecTor hourly consensus archives and Onionoo's `TorVersion` classification rules. Its README documents definitions, unit tests, and CollecTor recomputation.
+
 ## Shared chart helpers and October–November 2026 telemetry posts
 
 [`shared/`](shared/) contains the reusable public chart styling (`blog_chart_style.py`) and number-formatting (`blog_display_numbers.py`) helpers. Posts built from first-party relay telemetry (`tor-begin-dir-surges`, the four-part directory-flood series, `tor-metricsport-zstd-dictionary`, `freebsd-jemalloc-vs-mimalloc-tor-relay-study`, and `tor-begindir-hsdir-mitigation-pressure`) publish their complete summary tables and rendered SVG/PNG figures directly in `site/blog/` without raw relay telemetry exports.

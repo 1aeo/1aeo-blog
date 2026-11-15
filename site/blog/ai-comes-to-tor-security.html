@@ -11,17 +11,17 @@
   <meta property="og:title" content="AI Helps Secure Tor: Obsolete Relay Average Hits a Ten-Year High">
   <meta property="og:description" content="AI-assisted reports drive Tor security fixes as the average obsolete-relay count reaches a ten-year high in our 2017–2026 comparison. Update guides included.">
   <meta property="og:url" content="https://1aeo.com/blog/ai-comes-to-tor-security.html">
-  <meta property="og:image" content="https://1aeo.com/blog/images/ai-tor-security-yearly-version-status-2017-2026.png">
+  <meta property="og:image" content="https://1aeo.com/blog/images/ai-tor-security-yearly-version-status-2017-2026.png?v=c9ad905564cc">
   <meta property="og:image:type" content="image/png">
-  <meta property="og:image:width" content="4200">
-  <meta property="og:image:height" content="3150">
-  <meta property="og:image:alt" content="Tor relay version-status shares, 2017–2026; obsolete share is 15.0% in 2026 year-to-date, with the partial period and data coverage shown.">
+  <meta property="og:image:width" content="2400">
+  <meta property="og:image:height" content="1620">
+  <meta property="og:image:alt" content="Tor relay version-status shares, 2017–2026; obsolete share is 15% in 2026 year-to-date, with the partial period and data coverage shown.">
   <meta property="og:site_name" content="1AEO">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="AI Helps Secure Tor: Obsolete Relay Average Hits a Ten-Year High">
   <meta name="twitter:description" content="AI-assisted reports drive Tor security fixes as the average obsolete-relay count reaches a ten-year high in our 2017–2026 comparison. Update guides included.">
-  <meta name="twitter:image" content="https://1aeo.com/blog/images/ai-tor-security-yearly-version-status-2017-2026.png">
-  <meta name="twitter:image:alt" content="Tor relay version-status shares, 2017–2026; obsolete share is 15.0% in 2026 year-to-date, with the partial period and data coverage shown.">
+  <meta name="twitter:image" content="https://1aeo.com/blog/images/ai-tor-security-yearly-version-status-2017-2026.png?v=c9ad905564cc">
+  <meta name="twitter:image:alt" content="Tor relay version-status shares, 2017–2026; obsolete share is 15% in 2026 year-to-date, with the partial period and data coverage shown.">
   <style>
     body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; background-color: #121212; color: #ffffff; }
     .nav { background-color: #1e1e1e; padding: 10px 0; box-shadow: 0 2px 10px rgba(0, 255, 127, 0.2); position: sticky; top: 0; z-index: 1000; }
@@ -37,42 +37,38 @@
     .meta { font-size: 14px; color: #888; margin-bottom: 20px; text-align: center; }
     ul, ol { color: #cccccc; margin-bottom: 1em; }
     li { font-size: 18px; margin-bottom: 8px; line-height: 1.6; }
-    code { background-color: #2d2d2d; padding: 2px 6px; border-radius: 3px; font-family: monospace; color: #00ff7f; }
+    code { background-color: #2d2d2d; padding: 2px 6px; border-radius: 3px; font-family: monospace; color: #00ff7f; overflow-wrap: anywhere; }
     pre { background-color: #2d2d2d; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 14px; }
     pre code { background: none; padding: 0; color: #ffffff; }
     a { color: #00ff7f; text-decoration: none; }
     a:hover { text-decoration: underline; }
-    .container img { display: block; margin: 20px auto; max-width: 100%; height: auto; border-radius: 5px; }
-    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #444; }
-    th { background-color: #2d2d2d; color: #00ff7f; }
-    td { color: #cccccc; }
-    tr:hover { background-color: #252525; }
-    .warning { background-color: #2d2d2d; border-left: 4px solid #ff6b6b; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
-    .callout { background-color: #2d2d2d; border-left: 4px solid #00ff7f; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .callout { background-color: #2d2d2d; border-left: 4px solid #00ff7f; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; color: #ccc; font-size: 18px; line-height: 1.6; }
     .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; font-size: 14px; color: #777; text-align: center; }
-    .btn { display: inline-block; margin-top: 20px; padding: 12px 24px; font-size: 18px; color: #121212; background-color: #00ff7f; text-decoration: none; font-weight: bold; border-radius: 5px; transition: background 0.3s; }
-    .btn:hover { background-color: #00cc66; text-decoration: none; }
     .highlight { color: #ff6b6b; font-weight: bold; }
-    .success { color: #00ff7f; font-weight: bold; }
-    .series { font-size: 15px; color: #aaa; background-color: #181818; border-left: 4px solid #00ff7f; padding: 12px 16px; margin: 0 0 24px; border-radius: 0 5px 5px 0; line-height: 1.5; }
-    .series a { color: #00ff7f; }
     h2, h3 { scroll-margin-top: 70px; }
     .anchor { color: #3f3f3f; text-decoration: none; margin-left: 8px; font-size: 0.85em; font-weight: normal; }
     h2:hover .anchor, h3:hover .anchor { color: #00ff7f; }
-  
     figure { margin: 24px 0; }
-    figcaption { color: #aaa; font-size: 14px; line-height: 1.6; }
-    .callout { color: #ccc; font-size: 18px; line-height: 1.6; }
-    .table-scroll { overflow-x: auto; }
-    table { min-width: 500px; line-height: 1.6; }
-    th:first-child { width: 29%; }
-    code { overflow-wrap: anywhere; }
-    @media (max-width: 600px) { .nav { min-height: 30px; } .container { margin: 24px 12px; padding: 18px; } h1 { font-size: 25px; } }
-  
-    .container figure img { margin: 16px auto 10px; }
+    figure > a, figure picture { display: block; }
+    .container figure img { display: block; width: 100%; height: auto; margin: 16px auto 0; border-radius: 5px; }
+    figcaption { color: #cccccc; font-size: 16px; line-height: 1.6; margin-top: 10px; }
+    .table-scroll { max-width: 100%; overflow-x: auto; margin: 16px 0 28px; }
+    .table-scroll:focus-visible, .nav-toggle:focus-visible, a:focus-visible { outline: 2px solid #00ff7f; outline-offset: 3px; }
+    .data-table { width: 100%; min-width: 680px; border-collapse: collapse; margin: 0; font-size: 14px; line-height: 1.45; }
+    .data-table caption { text-align: left; color: #cccccc; font-size: 15px; line-height: 1.5; padding-bottom: 8px; }
+    .data-table th, .data-table td { padding: 9px 8px; border-bottom: 1px solid #444; }
+    .data-table thead th { background-color: #2d2d2d; color: #00ff7f; text-align: right; white-space: nowrap; }
+    .data-table thead th:first-child, .data-table tbody th { text-align: left; white-space: nowrap; }
+    .data-table tbody th { background: transparent; color: #ffffff; font-weight: bold; }
+    .data-table td { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; color: #cccccc; }
+    .data-table tbody tr:hover { background-color: #252525; }
+    .data-table .partial-row th, .data-table .partial-row td { color: #e8fff3; }
+    .methods { border-top: 1px solid #444; margin-top: 32px; padding-top: 12px; }
+    .methods p { font-size: 16px; color: #cccccc; line-height: 1.6; }
     .dek { text-align: center; font-size: 18px; color: #cccccc; margin: 12px 0 16px; }
     q { quotes: "“" "”" "‘" "’"; }
+    @media (max-width: 768px) { figure > a { max-width: 360px; margin: 0 auto; } }
+    @media (max-width: 600px) { .nav { min-height: 30px; } .container { margin: 24px 12px; padding: 18px; } h1 { font-size: 25px; } }
   </style>
   <script type="application/ld+json">
 {
@@ -81,7 +77,7 @@
   "headline": "AI Helps Secure Tor: Obsolete Relay Average Hits a Ten-Year High",
   "description": "AI-assisted reports drive Tor security fixes as the average obsolete-relay count reaches a ten-year high in our 2017–2026 comparison. Update guides included.",
   "datePublished": "2026-10-16",
-  "dateModified": "2026-10-16",
+  "dateModified": "2026-11-14",
   "inLanguage": "en",
   "author": {
     "@type": "Organization",
@@ -97,8 +93,8 @@
     "@id": "https://1aeo.com/blog/ai-comes-to-tor-security.html"
   },
   "image": [
-    "https://1aeo.com/blog/images/ai-tor-security-yearly-version-status-2017-2026.png",
-    "https://1aeo.com/blog/images/ai-tor-security-monthly-version-status-2026.png"
+    "https://1aeo.com/blog/images/ai-tor-security-yearly-version-status-2017-2026.png?v=c9ad905564cc",
+    "https://1aeo.com/blog/images/ai-tor-security-monthly-version-status-2026.png?v=b5155e4b5c0d"
   ]
 }
   </script>
@@ -125,20 +121,98 @@
   <article class="container">
     <h1>AI Helps Secure Tor: Obsolete Relay Average Hits a Ten-Year High</h1>
     <p class="dek">Tor’s <a href="https://gitlab.torproject.org/tpo/core/tor/-/blob/tor-0.4.9.14/ChangeLog#L134">0.4.9.13 changelog</a> credits security fixes to the <q>LLM report firehose</q>.</p>
-    <p class="meta"><em>By 1AEO Team &bull; October 16, 2026 &bull; AI security reports and relay version trends</em></p>
+    <p class="meta"><em>By 1AEO Team &bull; October 16, 2026 &bull; Updated November 14, 2026</em></p>
       <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=securing-relays" data-blog-topic="securing-relays" rel="tag">Securing relays</a></div>
-    <p>As AI helps uncover Tor security flaws, the network faces a <strong class="highlight">ten-year high in its average obsolete-relay count</strong>. Our <a href="https://collector.torproject.org/archive/relay-descriptors/consensuses/">2017–2026 reconstruction</a> puts 2026 YTD at <strong>1,465 running relays on obsolete versions</strong>—nearly three times 2025—and <strong>15.0% of observed Running relay-hours</strong>, above the previous full-year high of <strong>9.9% in 2018</strong>.</p>
+    <p>As AI helps uncover Tor security flaws, the network faces a <strong class="highlight">ten-year high in its average obsolete-relay count</strong>. Our <a href="https://collector.torproject.org/archive/relay-descriptors/consensuses/">2017–2026 reconstruction</a> puts 2026 year-to-date (YTD) through October 16 at 22:00 Coordinated Universal Time (UTC) at <strong>1,465 Running relays on obsolete versions</strong>—nearly three times 2025’s average of 510—and <strong>15% of observed Running relay-hours</strong>, above the previous full-year high of <strong>10% in 2018</strong>.</p>
     <figure>
-      <a href="images/ai-tor-security-yearly-version-status-2017-2026.png" target="_blank" rel="noopener"><img src="images/ai-tor-security-yearly-version-status-2017-2026.png" width="4200" height="3150" alt="Ten-year 100% stacked chart of reconstructed Tor relay version-status shares, 2017–2026. Obsolete versions represent 15.0% of observed Running relay-hours in 2026 year-to-date, versus 5.8% in 2025 and a previous full-year high of 9.9% in 2018. The 2026 period is partial and has 91.3% hourly coverage. Chart attributed to 1aeo.com."></a>
-      <figcaption>Shares of observed relay-hours; 2026 YTD through October 16, 22:00 UTC. Coverage: 2017–2025, 98.3–100%; 2026, 91.3%. <a href="images/ai-tor-security-yearly-version-status-2017-2026.png">Full-size PNG</a> &bull; <a href="data/ai-tor-security-yearly-status-2017-2026.csv">Data CSV</a>.</figcaption>
+      <a href="images/ai-tor-security-yearly-version-status-2017-2026.png?v=c9ad905564cc" target="_blank" rel="noopener">
+        <picture>
+          <source media="(max-width: 768px)" srcset="images/ai-tor-security-yearly-version-status-2017-2026-mobile.svg?v=32e01aaf4e65">
+          <img src="images/ai-tor-security-yearly-version-status-2017-2026.svg?v=f22f80efbe0e" alt="100% stacked bar chart of reconstructed Running Tor relay version-status shares, 2017–2026 YTD. Obsolete versions account for 15% of observed Running relay-hours in 2026 YTD, versus 6% in 2025 and a previous full-year peak of 10% in 2018.">
+        </picture>
+      </a>
+      <figcaption><strong>Footnote:</strong> Each bar shows shares of observed Running public relay-hours classified against the contemporaneous consensus <code>server-versions</code> list; 2026 is year-to-date (YTD) through October 16, 2026, at 22:00 Coordinated Universal Time (UTC). Hourly CollecTor archive coverage is 98–100% in 2017–2025 and 91% (6,335 of 6,935 expected hours) in 2026 YTD; missing consensus hours are excluded without interpolation. See <a href="#yearly-table">annual counts and shares</a> below and <a href="#methods">Methods</a>. <a href="images/ai-tor-security-yearly-version-status-2017-2026.png?v=c9ad905564cc">Full-size PNG</a>.</figcaption>
     </figure>
-    <p>The <a href="https://gitlab.torproject.org/tpo/core/tor/-/blob/tor-0.4.9.14/ChangeLog#L134">official changelog</a> for 0.4.9.12 and 0.4.9.13 attributes high-severity security fixes to large language model (LLM) reports. Tor announced a <a href="https://forum.torproject.org/t/security-release-0-4-9-12/22096">roughly two-week security-release cadence</a>, subject to change; versions 0.4.9.12, 0.4.9.13 and 0.4.9.14 arrived on September 8, September 23 and October 7.</p>
-    <p>Our <a href="https://collector.torproject.org/archive/relay-descriptors/consensuses/">CollecTor</a> reconstruction shows the obsolete relay share rising from <strong class="highlight">6.9% in August to 29.0% in September</strong>, with October at 24.2% through the 16th. On September 10, the consensus’s recommended relay versions narrowed to 0.4.9.12, reclassifying older versions and pushing the obsolete count from <strong>3 to 6,707 in one hour</strong>.</p>
+    <div id="yearly-table" class="table-scroll" role="region" tabindex="0" aria-label="Annual Running relay version-status counts and shares, 2017–2026 YTD">
+      <table class="data-table">
+        <caption>Annual unweighted mean Running relay counts and shares of observed Running relay-hours, 2017–2026 YTD (through October 16, 2026, 22:00 UTC). Shares are rounded independently to whole percentages; <code>&lt;1%</code> marks positive shares below 1%, and <code>&gt;99%</code> marks non-total coverage rounding to 100%.</caption>
+        <thead>
+          <tr>
+            <th scope="col">Year</th>
+            <th scope="col">Mean Running</th>
+            <th scope="col">Mean obsolete</th>
+            <th scope="col">Recommended</th>
+            <th scope="col">Obsolete</th>
+            <th scope="col">Unrecommended</th>
+            <th scope="col">Experimental</th>
+            <th scope="col">New in series</th>
+            <th scope="col">Unknown</th>
+            <th scope="col">Observed hours (coverage)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">2017</th><td>6,984</td><td>355</td><td>78%</td><td>5%</td><td>16%</td><td>&lt;1%</td><td>&lt;1%</td><td>&lt;1%</td><td>8,756 / 8,760 (&gt;99%)</td></tr>
+          <tr><th scope="row">2018</th><td>6,341</td><td>625</td><td>77%</td><td>10%</td><td>13%</td><td>&lt;1%</td><td>&lt;1%</td><td>0%</td><td>8,760 / 8,760 (100%)</td></tr>
+          <tr><th scope="row">2019</th><td>6,422</td><td>432</td><td>79%</td><td>7%</td><td>14%</td><td>&lt;1%</td><td>&lt;1%</td><td>&lt;1%</td><td>8,754 / 8,760 (&gt;99%)</td></tr>
+          <tr><th scope="row">2020</th><td>6,590</td><td>418</td><td>85%</td><td>6%</td><td>8%</td><td>&lt;1%</td><td>&lt;1%</td><td>0%</td><td>8,779 / 8,784 (&gt;99%)</td></tr>
+          <tr><th scope="row">2021</th><td>6,687</td><td>83</td><td>90%</td><td>1%</td><td>8%</td><td>&lt;1%</td><td>&lt;1%</td><td>0%</td><td>8,721 / 8,760 (&gt;99%)</td></tr>
+          <tr><th scope="row">2022</th><td>6,670</td><td>66</td><td>97%</td><td>&lt;1%</td><td>&lt;1%</td><td>&lt;1%</td><td>&lt;1%</td><td>0%</td><td>8,721 / 8,760 (&gt;99%)</td></tr>
+          <tr><th scope="row">2023</th><td>7,173</td><td>103</td><td>96%</td><td>1%</td><td>&lt;1%</td><td>2%</td><td>&lt;1%</td><td>0%</td><td>8,676 / 8,760 (99%)</td></tr>
+          <tr><th scope="row">2024</th><td>7,684</td><td>198</td><td>96%</td><td>3%</td><td>&lt;1%</td><td>2%</td><td>&lt;1%</td><td>0%</td><td>8,632 / 8,784 (98%)</td></tr>
+          <tr><th scope="row">2025</th><td>8,816</td><td>510</td><td>93%</td><td>6%</td><td>&lt;1%</td><td>1%</td><td>&lt;1%</td><td>&lt;1%</td><td>8,616 / 8,760 (98%)</td></tr>
+          <tr class="partial-row"><th scope="row">2026 YTD</th><td>9,780</td><td>1,465</td><td>84%</td><td>15%</td><td>&lt;1%</td><td>&lt;1%</td><td>&lt;1%</td><td>&lt;1%</td><td>6,335 / 6,935 (91%)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The <a href="https://gitlab.torproject.org/tpo/core/tor/-/blob/tor-0.4.9.14/ChangeLog#L134">official changelog</a> for 0.4.9.12 and 0.4.9.13 attributes high-severity security fixes to large language model (LLM) reports. Tor announced a <a href="https://forum.torproject.org/t/security-release-0-4-9-12/22096">roughly two-week security-release cadence</a>, subject to change; versions 0.4.9.12, 0.4.9.13 and 0.4.9.14 arrived on September 8, September 23 and October 7, 2026.</p>
+    <p>Our <a href="https://collector.torproject.org/archive/relay-descriptors/consensuses/">CollecTor</a> reconstruction shows the obsolete relay share rising from <strong class="highlight">7% in August to 29% in September</strong>, with October month-to-date (MTD) at 24% through October 16. On September 10 (04:00 UTC), the consensus’s recommended relay versions narrowed to 0.4.9.12, reclassifying older versions and pushing the obsolete count from <strong>3 to 6,707 in one hour</strong>.</p>
     <figure>
-      <a href="images/ai-tor-security-monthly-version-status-2026.png" target="_blank" rel="noopener"><img src="images/ai-tor-security-monthly-version-status-2026.png" width="4200" height="3300" alt="Monthly 100% stacked chart of Running Tor relay version-status shares in 2026. The obsolete share rises from 6.9% in August to 29.0% in September, then stands at 24.2% for October through the 16th. April has only 36% hourly coverage. August and September have complete coverage. Chart attributed to 1aeo.com."></a>
-      <figcaption>Shares of observed relay-hours; October is month-to-date through October 16, 22:00 UTC. April has 36% coverage; August and September have 100%. <a href="images/ai-tor-security-monthly-version-status-2026.png">Full-size PNG</a> &bull; <a href="data/ai-tor-security-monthly-status-2026.csv">Data CSV</a>.</figcaption>
+      <a href="images/ai-tor-security-monthly-version-status-2026.png?v=b5155e4b5c0d" target="_blank" rel="noopener">
+        <picture>
+          <source media="(max-width: 768px)" srcset="images/ai-tor-security-monthly-version-status-2026-mobile.svg?v=ae0083e7b4eb">
+          <img src="images/ai-tor-security-monthly-version-status-2026.svg?v=6cc2cd2c20f3" alt="Monthly 100% stacked bar chart of Running Tor relay version-status shares in 2026. Obsolete share jumps from 7% in August to 29% in September, then stands at 24% in October MTD through October 16.">
+        </picture>
+      </a>
+      <figcaption><strong>Footnote:</strong> Monthly shares of observed Running public relay-hours in 2026; October is month-to-date (MTD) through October 16, 2026, at 22:00 UTC. <code>Apr*</code> marks April’s 36% CollecTor archive coverage (259 of 720 expected hours); August and September have 100% coverage. Missing hours are excluded without interpolation. See <a href="#monthly-table">monthly counts and shares</a> below and <a href="#methods">Methods</a>. <a href="images/ai-tor-security-monthly-version-status-2026.png?v=b5155e4b5c0d">Full-size PNG</a>.</figcaption>
     </figure>
+    <div id="monthly-table" class="table-scroll" role="region" tabindex="0" aria-label="Monthly Running relay version-status counts and shares in 2026">
+      <table class="data-table">
+        <caption>Monthly unweighted mean Running relay counts and shares of observed Running relay-hours, January–October 2026 MTD (through October 16, 2026, 22:00 UTC). Shares are rounded independently to whole percentages.</caption>
+        <thead>
+          <tr>
+            <th scope="col">Month</th>
+            <th scope="col">Mean Running</th>
+            <th scope="col">Mean obsolete</th>
+            <th scope="col">Recommended</th>
+            <th scope="col">Obsolete</th>
+            <th scope="col">Unrecommended</th>
+            <th scope="col">Experimental</th>
+            <th scope="col">New in series</th>
+            <th scope="col">Unknown</th>
+            <th scope="col">Observed hours (coverage)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Jan 2026</th><td>9,739</td><td>2,085</td><td>76%</td><td>21%</td><td>&lt;1%</td><td>2%</td><td>0%</td><td>0%</td><td>737 / 744 (99%)</td></tr>
+          <tr><th scope="row">Feb 2026</th><td>9,829</td><td>1,592</td><td>82%</td><td>16%</td><td>&lt;1%</td><td>&lt;1%</td><td>&lt;1%</td><td>0%</td><td>650 / 672 (97%)</td></tr>
+          <tr><th scope="row">Mar 2026</th><td>9,679</td><td>1,264</td><td>86%</td><td>13%</td><td>&lt;1%</td><td>&lt;1%</td><td>&lt;1%</td><td>0%</td><td>643 / 744 (86%)</td></tr>
+          <tr><th scope="row">Apr 2026*</th><td>10,123</td><td>979</td><td>90%</td><td>10%</td><td>&lt;1%</td><td>&lt;1%</td><td>0%</td><td>0%</td><td>259 / 720 (36%)</td></tr>
+          <tr><th scope="row">May 2026</th><td>9,993</td><td>828</td><td>90%</td><td>8%</td><td>&lt;1%</td><td>1%</td><td>0%</td><td>0%</td><td>742 / 744 (&gt;99%)</td></tr>
+          <tr><th scope="row">Jun 2026</th><td>9,736</td><td>1,361</td><td>85%</td><td>14%</td><td>&lt;1%</td><td>1%</td><td>0%</td><td>0%</td><td>715 / 720 (99%)</td></tr>
+          <tr><th scope="row">Jul 2026</th><td>9,880</td><td>963</td><td>89%</td><td>10%</td><td>0%</td><td>1%</td><td>0%</td><td>0%</td><td>743 / 744 (&gt;99%)</td></tr>
+          <tr><th scope="row">Aug 2026</th><td>10,105</td><td>696</td><td>92%</td><td>7%</td><td>0%</td><td>&lt;1%</td><td>0%</td><td>&lt;1%</td><td>744 / 744 (100%)</td></tr>
+          <tr><th scope="row">Sep 2026</th><td>9,432</td><td>2,739</td><td>70%</td><td>29%</td><td>&lt;1%</td><td>&lt;1%</td><td>0%</td><td>&lt;1%</td><td>720 / 720 (100%)</td></tr>
+          <tr class="partial-row"><th scope="row">Oct 2026 MTD</th><td>9,209</td><td>2,228</td><td>75%</td><td>24%</td><td>0%</td><td>&lt;1%</td><td>0%</td><td>0%</td><td>382 / 383 (&gt;99%)</td></tr>
+        </tbody>
+      </table>
+    </div>
     <p><a href="https://metrics.torproject.org/onionoo.html#details_relay_version_status">“Obsolete”</a> means older than every recommended version. It is not a count of compromised relays or every relay missing the newest security fixes.</p>
+    <section class="methods" aria-labelledby="methods">
+      <h2 id="methods">Methods <a class="anchor" href="#methods" aria-label="Link to this section">#</a></h2>
+      <p>The reconstruction processes 84,750 complete hourly network-status consensuses from Tor’s <a href="https://collector.torproject.org/archive/relay-descriptors/consensuses/">CollecTor</a> archive spanning January 1, 2017, at 00:00 UTC through October 16, 2026, at 22:00 UTC, counting only public relays carrying the <code>Running</code> flag (bridges and offline relays are excluded).</p>
+      <p>Within each hourly consensus, every <code>Running</code> relay’s version token after <code>Tor </code> on its <code>v</code> line is classified against that consensus’s contemporaneous <code>server-versions</code> line using <a href="https://gitlab.torproject.org/tpo/network-health/metrics/onionoo/-/blob/master/src/main/java/org/torproject/metrics/onionoo/updater/TorVersion.java">Onionoo’s <code>TorVersion</code> comparator</a>: <code>recommended</code> if listed, <code>obsolete</code> if older than every recommended version, <code>experimental</code> if newer than every recommended version, <code>new_in_series</code> if newer than all recommended versions in the same <code>major.minor.patch</code> series, <code>unrecommended</code> otherwise, and <code>unknown</code> when the version is missing or non-Tor or recommendations are absent. Pre-release tags such as <code>-alpha</code>, <code>-rc</code> and <code>-dev</code> are retained; git commit metadata is omitted.</p>
+      <p>Annual and monthly mean counts are unweighted arithmetic averages across observed consensuses in each period. Status shares divide status relay-hours by total observed Running relay-hours in the same period, which equals the ratio of those unweighted period means. Missing CollecTor consensus hours—including 461 missing hours in April 2026—are excluded rather than interpolated or treated as zero. Independent reproduction scripts and tests live in <a href="https://github.com/1aeo/1aeo-blog/tree/main/charts/ai-comes-to-tor-security"><code>charts/ai-comes-to-tor-security/</code></a>.</p>
+    </section>
     <div class="callout"><p><strong>Keep your relay current:</strong> use <a href="https://support.torproject.org/little-t-tor/getting-started/installing/">Tor’s official packages</a> and enable <a href="https://community.torproject.org/relay/setup/guard/debian-ubuntu/updates/">automatic updates on Debian or Ubuntu</a>. Verify the running version after upgrades.</p></div>
     <div class="footer"><p>&copy; <span data-copyright-year>2026</span> 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p></div>
   </article>
