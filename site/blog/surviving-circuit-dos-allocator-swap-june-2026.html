@@ -45,6 +45,8 @@
     .anchor { color: #3f3f3f; text-decoration: none; margin-left: 8px; font-size: 0.85em; font-weight: normal; }
     h2:hover .anchor, h3:hover .anchor { color: #00ff7f; }
   </style>
+  <script src="/copyright-year.js" defer></script>
+  <link rel="stylesheet" href="/blog/topics.css">
 </head>
 <body>
   <div class="nav">
@@ -52,6 +54,7 @@
     <div class="nav-links">
       <a href="/">Home</a>
       <a href="/blog/">Blog</a>
+      <a href="/onionflash/">Onion Flash</a>
       <a href="https://metrics.1aeo.com">Metrics</a>
       <a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
       <a href="https://aroivalidator.1aeo.com">AROI Validator</a>
@@ -63,6 +66,7 @@
   <div class="container">
     <h1>What Actually Saved Our Relays: An Allocator That Lets Go, and Swap Sized to Park the Rest</h1>
     <p class="meta"><em>By 1AEO Team &bull; July 29, 2026 &bull; A matched-pair allocator experiment on 1AEO's relay fleet &bull; Prometheus + kernel journals, Jun 26 &ndash; Jul 28</em></p>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=relay-memory" data-blog-topic="relay-memory" rel="tag">Relay memory</a> <a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a></div>
 
     <p>The circuit-building flood ballooned individual 1AEO relays to tens of GiB of resident memory. Some relays were repeatedly OOM-killed by the kernel; most rode the flood out untouched. Our <a href="circuit-building-dos-fleet-cost-june-2026.html">cost post</a> tallied the bill; this short companion post reports the controlled comparison behind who survived and why. The answer has two ingredients, and neither works alone &mdash; and in late July, production ran the test again for us.</p>
 
@@ -111,7 +115,7 @@
     <p style="text-align: center;"><a href="/#get-involved" class="btn">Join the Mission</a></p>
 
     <div class="footer">
-      <p>© 2026 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p>
+      <p>© <span data-copyright-year>2026</span> 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p>
     </div>
   </div>
 </body>

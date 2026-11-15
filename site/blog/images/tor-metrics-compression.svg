@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="482" viewBox="0 0 800 482" role="img" aria-labelledby="chart-title chart-desc">
+<title id="chart-title">Compressed size of reconstructed Tor scrapes</title>
+<desc id="chart-desc">Grouped horizontal bars compare zstd level 3 without a dictionary and with a raw dictionary for Relay A and Relay B. Every bar uses the same linear scale from zero to 35 MB.</desc>
+<rect width="800" height="482" fill="#191f20"/>
+<g font-family="Arial, Helvetica, sans-serif">
+<text x="24" y="36" font-size="24" fill="#f2eced" font-weight="bold" text-anchor="start">Compressed size of reconstructed Tor scrapes</text>
+<text x="24" y="67" font-size="17" fill="#bdc8c9" font-weight="normal" text-anchor="start">Level 3 (zstd default): 34–36% less output with the raw dictionary</text>
+<line x1="190" y1="130" x2="190" y2="359" stroke="#3e4b4d" stroke-width="1"/>
+<line x1="353.429" y1="130" x2="353.429" y2="359" stroke="#3e4b4d" stroke-width="1"/>
+<line x1="516.857" y1="130" x2="516.857" y2="359" stroke="#3e4b4d" stroke-width="1"/>
+<line x1="680.286" y1="130" x2="680.286" y2="359" stroke="#3e4b4d" stroke-width="1"/>
+<line x1="762" y1="130" x2="762" y2="359" stroke="#3e4b4d" stroke-width="1"/>
+<line x1="24" y1="230" x2="776" y2="230" stroke="#3e4b4d" stroke-width="1"/>
+<text x="24" y="114" font-size="18" fill="#f2eced" font-weight="bold" text-anchor="start">Relay A</text>
+<rect x="190" y="133" width="495.213151" height="26" fill="#ffb26a"/>
+<text x="24" y="151" font-size="15" fill="#f2eced" font-weight="normal" text-anchor="start">zstd default</text>
+<text x="692.213" y="151" font-size="15" fill="#ffb26a" font-weight="bold" text-anchor="start">30.3 MB</text>
+<rect x="190" y="181" width="325.374519" height="26" fill="#55dda3"/>
+<text x="24" y="191" font-size="15" fill="#f2eced" font-weight="normal" text-anchor="start">zstd default</text>
+<text x="24" y="208" font-size="15" fill="#f2eced" font-weight="normal" text-anchor="start">+ raw dictionary</text>
+<text x="522.375" y="199" font-size="15" fill="#55dda3" font-weight="bold" text-anchor="start">19.9 MB</text>
+<text x="24" y="266" font-size="18" fill="#f2eced" font-weight="bold" text-anchor="start">Relay B</text>
+<rect x="190" y="285" width="481.833581" height="26" fill="#ffb26a"/>
+<text x="24" y="303" font-size="15" fill="#f2eced" font-weight="normal" text-anchor="start">zstd default</text>
+<text x="678.834" y="303" font-size="15" fill="#ffb26a" font-weight="bold" text-anchor="start">29.5 MB</text>
+<rect x="190" y="333" width="309.700134" height="26" fill="#55dda3"/>
+<text x="24" y="343" font-size="15" fill="#f2eced" font-weight="normal" text-anchor="start">zstd default</text>
+<text x="24" y="360" font-size="15" fill="#f2eced" font-weight="normal" text-anchor="start">+ raw dictionary</text>
+<text x="506.7" y="351" font-size="15" fill="#55dda3" font-weight="bold" text-anchor="start">19.0 MB</text>
+<line x1="190" y1="382" x2="762" y2="382" stroke="#bdc8c9" stroke-width="1"/>
+<line x1="190" y1="382" x2="190" y2="387" stroke="#bdc8c9"/>
+<text x="190" y="402" font-size="13" fill="#bdc8c9" font-weight="normal" text-anchor="middle">0</text>
+<line x1="353.429" y1="382" x2="353.429" y2="387" stroke="#bdc8c9"/>
+<text x="353.429" y="402" font-size="13" fill="#bdc8c9" font-weight="normal" text-anchor="middle">10</text>
+<line x1="516.857" y1="382" x2="516.857" y2="387" stroke="#bdc8c9"/>
+<text x="516.857" y="402" font-size="13" fill="#bdc8c9" font-weight="normal" text-anchor="middle">20</text>
+<line x1="680.286" y1="382" x2="680.286" y2="387" stroke="#bdc8c9"/>
+<text x="680.286" y="402" font-size="13" fill="#bdc8c9" font-weight="normal" text-anchor="middle">30</text>
+<line x1="762" y1="382" x2="762" y2="387" stroke="#bdc8c9"/>
+<text x="762" y="402" font-size="13" fill="#bdc8c9" font-weight="normal" text-anchor="middle">35</text>
+<text x="476" y="427" font-size="14" fill="#bdc8c9" font-weight="normal" text-anchor="middle">Compressed size (MB)</text>
+<text x="24" y="463" font-size="13" fill="#bdc8c9" font-weight="normal" text-anchor="start">Source: 1aeo.com</text>
+</g></svg>

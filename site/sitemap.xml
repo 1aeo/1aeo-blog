@@ -3,7 +3,13 @@
   <url><loc>https://1aeo.com/</loc><lastmod>2026-08-08</lastmod></url>
   <url><loc>https://1aeo.com/onionvanity/</loc><lastmod>2026-07-30</lastmod></url>
   <url><loc>https://1aeo.com/onionvanity/marketplace/</loc><lastmod>2026-10-03</lastmod></url>
-  <url><loc>https://1aeo.com/blog/</loc><lastmod>2026-10-17</lastmod></url>
+  <url><loc>https://1aeo.com/blog/</loc><lastmod>2026-11-14</lastmod></url>
+  <url><loc>https://1aeo.com/blog/tor-begindir-hsdir-mitigation-pressure.html</loc><lastmod>2026-11-14</lastmod></url>
+  <url><loc>https://1aeo.com/blog/freebsd-jemalloc-vs-mimalloc-tor-relay-study.html</loc><lastmod>2026-11-05</lastmod></url>
+  <url><loc>https://1aeo.com/blog/tor-directory-flood-request-rates-bandwidth.html</loc><lastmod>2026-11-10</lastmod></url>
+  <url><loc>https://1aeo.com/blog/how-tor-relays-handle-directory-floods.html</loc><lastmod>2026-10-31</lastmod></url>
+  <url><loc>https://1aeo.com/blog/how-tor-directory-floods-reuse-circuits.html</loc><lastmod>2026-10-31</lastmod></url>
+  <url><loc>https://1aeo.com/blog/repeat-descriptor-fetches-tor-floods.html</loc><lastmod>2026-10-28</lastmod></url>
   <url><loc>https://1aeo.com/blog/ai-comes-to-tor-security.html</loc><lastmod>2026-10-16</lastmod></url>
   <url><loc>https://1aeo.com/blog/bgp-configs-for-tor-relay-servers.html</loc></url>
   <url><loc>https://1aeo.com/blog/circuit-building-dos-anatomy-june-2026.html</loc></url>
@@ -29,4 +35,7 @@
   <url><loc>https://1aeo.com/blog/tor-memory-optizations-what-actually-works.html</loc></url>
   <url><loc>https://1aeo.com/blog/tor-network-dos-wave-june-2026.html</loc></url>
   <url><loc>https://1aeo.com/blog/tor-traffic-paths-denial-of-service.html</loc><lastmod>2026-10-17</lastmod></url>
+  <url><loc>https://1aeo.com/blog/tor-begin-dir-surges.html</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://1aeo.com/blog/tor-connection-gauge-drift.html</loc><lastmod>2026-10-20</lastmod></url>
+  <url><loc>https://1aeo.com/blog/tor-metricsport-zstd-dictionary.html</loc><lastmod>2026-11-04</lastmod></url>
 </urlset>

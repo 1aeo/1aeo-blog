@@ -39,6 +39,8 @@
     .highlight { color: #ff6b6b; font-weight: bold; }
     .success { color: #00ff7f; font-weight: bold; }
   </style>
+  <script src="/copyright-year.js" defer></script>
+  <link rel="stylesheet" href="/blog/topics.css">
 </head>
 <body>
   <div class="nav">
@@ -47,6 +49,7 @@
           <a href="/">Home</a>
           <a href="/onionvanity/">Onion Vanity</a>
           <a href="/blog/">Blog</a>
+          <a href="/onionflash/">Onion Flash</a>
           <a href="https://metrics.1aeo.com">Metrics</a>
           <a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
           <a href="https://aroivalidator.1aeo.com">AROI Validator</a>
@@ -58,6 +61,7 @@
   <div class="container">
     <h1>mimalloc 2.0.9: 5-Way Allocator Test and 200-Relay Deployment</h1>
     <p class="meta"><em>By 1AEO Team • January 2026 &bull; Allocator comparisons and production deployment</em></p>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=relay-memory" data-blog-topic="relay-memory" rel="tag">Relay memory</a></div>
     <p class="meta"><em>Experiment: 100 relays (5 groups × 20) on Debian 13.2 with Tor 0.4.8.x</em></p>
 
     <p>We tested 5 memory allocators with Debian 13.2 on 100 Tor relays to find the best option for long-running Guard relays. The result: <strong class="success">mimalloc 2.0.9</strong> used 7.4× less memory than mimalloc 3.0.1. We then migrated all 200 relays on the server to the winner.</p>
@@ -152,7 +156,7 @@ sudo systemctl daemon-reload</code></pre>
     <p style="text-align: center;"><a href="/#get-involved" class="btn">Join the Mission</a></p>
 
     <div class="footer">
-      <p>© 2026 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p>
+      <p>© <span data-copyright-year>2026</span> 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p>
     </div>
   </div>
 </body>

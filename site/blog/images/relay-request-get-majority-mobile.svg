@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="288pt" height="702pt" viewBox="0 0 288 702" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>1AEO canonical request classifications</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 702 
+L 288 702 
+L 288 0 
+L 0 0 
+z
+" style="fill: #1e1e1e"/>
+  </g>
+  <g id="claim-hsdir-get-majority">
+   <g id="patch_2">
+    <path d="M 17.28 252 
+L 270.72 252 
+L 270.72 122.4 
+L 17.28 122.4 
+z
+" style="fill: #1e1e1e"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <path d="M 17.28 252 
+L 17.28 122.4 
+" clip-path="url(#p6276da8575)" style="fill: none; stroke: #353535; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_2"/>
+     <g id="text_1">
+      <text style="fill: #bbbbbb; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: start" x="17.28" y="268.498047" transform="rotate(-0 17.28 268.498047)">0%</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <path d="M 80.64 252 
+L 80.64 122.4 
+" clip-path="url(#p6276da8575)" style="fill: none; stroke: #353535; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4"/>
+     <g id="text_2">
+      <text style="fill: #bbbbbb; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: middle" x="80.64" y="268.498047" transform="rotate(-0 80.64 268.498047)">25%</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_5">
+      <path d="M 144 252 
+L 144 122.4 
+" clip-path="url(#p6276da8575)" style="fill: none; stroke: #353535; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6"/>
+     <g id="text_3">
+      <text style="fill: #bbbbbb; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: middle" x="144" y="268.498047" transform="rotate(-0 144 268.498047)">50%</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_7">
+      <path d="M 207.36 252 
+L 207.36 122.4 
+" clip-path="url(#p6276da8575)" style="fill: none; stroke: #353535; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_8"/>
+     <g id="text_4">
+      <text style="fill: #bbbbbb; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: middle" x="207.36" y="268.498047" transform="rotate(-0 207.36 268.498047)">75%</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_9">
+      <path d="M 270.72 252 
+L 270.72 122.4 
+" clip-path="url(#p6276da8575)" style="fill: none; stroke: #353535; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_10"/>
+     <g id="text_5">
+      <text style="fill: #bbbbbb; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: end" x="270.72" y="268.498047" transform="rotate(-0 270.72 268.498047)">100%</text>
+     </g>
+    </g>
+    <g id="text_6">
+     <text style="fill: #bbbbbb; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: middle" x="144" y="290.595703" transform="rotate(-0 144 290.595703)">Share of classified streams (%)</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2"/>
+   <g id="text_7">
+    <text style="fill: #ffffff; font: 700 13.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: start" x="17.28" y="136.766953" transform="rotate(-0 17.28 136.766953)">Relay O · 99.8%</text>
+   </g>
+   <g id="text_8">
+    <text style="fill: #dddddd; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: end" x="270.72" y="137.080391" transform="rotate(-0 270.72 137.080391)">about 2½ h</text>
+   </g>
+   <g id="text_9">
+    <text style="fill: #aaaaaa; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: start" x="17.28" y="154.360391" transform="rotate(-0 17.28 154.360391)">Approx. 28 Oct 21:00–23:30 UTC</text>
+   </g>
+   <g id="text_10">
+    <text style="fill: #dddddd; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: start" x="17.28" y="171.640391" transform="rotate(-0 17.28 171.640391)">14,553,958 streams</text>
+   </g>
+   <g id="hsdir-get-majority-1-fetch">
+    <path d="M 17.28 207.936 
+L 270.246031 207.936 
+L 270.246031 192.384 
+L 17.28 192.384 
+z
+" clip-path="url(#p6276da8575)" style="fill: #00d87e"/>
+   </g>
+   <g id="text_11">
+    <text style="fill: #142025; font: 700 13.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: middle" x="143.763015" y="203.885156" transform="rotate(-0 143.763015 203.885156)">99.8%</text>
+   </g>
+   <g id="hsdir-get-majority-1-upload">
+    <path d="M 270.246031 207.936 
+L 270.710126 207.936 
+L 270.710126 192.384 
+L 270.246031 192.384 
+z
+" clip-path="url(#p6276da8575)" style="fill: #8ad8ba"/>
+   </g>
+   <g id="hsdir-get-majority-1-no_request">
+    <path d="M 270.710126 207.936 
+L 270.715263 207.936 
+L 270.715263 192.384 
+L 270.710126 192.384 
+z
+" clip-path="url(#p6276da8575)" style="fill: #f2ad4b"/>
+   </g>
+   <g id="hsdir-get-majority-1-unparsed">
+    <path d="M 270.715263 207.936 
+L 270.717806 207.936 
+L 270.717806 192.384 
+L 270.715263 192.384 
+z
+" clip-path="url(#p6276da8575)" style="fill: #d590ad"/>
+   </g>
+   <g id="hsdir-get-majority-1-consensus">
+    <path d="M 270.717806 207.936 
+L 270.719112 207.936 
+L 270.719112 192.384 
+L 270.717806 192.384 
+z
+" clip-path="url(#p6276da8575)" style="fill: #7b7ddb"/>
+   </g>
+   <g id="hsdir-get-majority-1-other">
+    <path d="M 270.719112 207.936 
+L 270.719634 207.936 
+L 270.719634 192.384 
+L 270.719112 192.384 
+z
+" clip-path="url(#p6276da8575)" style="fill: #adb2ba"/>
+   </g>
+   <g id="hsdir-get-majority-1-microdescriptor">
+    <path d="M 270.719634 207.936 
+L 270.72 207.936 
+L 270.72 192.384 
+L 270.719634 192.384 
+z
+" clip-path="url(#p6276da8575)" style="fill: #82b6ed"/>
+   </g>
+  </g>
+  <g id="patch_3">
+   <path d="M 17.28 357.12 
+L 27.36 357.12 
+L 27.36 347.04 
+L 17.28 347.04 
+z
+" style="fill: #00d87e; stroke: #00d87e; stroke-linejoin: miter"/>
+  </g>
+  <g id="patch_4">
+   <path d="M 17.28 397.44 
+L 27.36 397.44 
+L 27.36 387.36 
+L 17.28 387.36 
+z
+" style="fill: #8ad8ba; stroke: #8ad8ba; stroke-linejoin: miter"/>
+  </g>
+  <g id="patch_5">
+   <path d="M 17.28 437.76 
+L 27.36 437.76 
+L 27.36 427.68 
+L 17.28 427.68 
+z
+" style="fill: #f2ad4b; stroke: #f2ad4b; stroke-linejoin: miter"/>
+  </g>
+  <g id="patch_6">
+   <path d="M 17.28 494.64 
+L 27.36 494.64 
+L 27.36 484.56 
+L 17.28 484.56 
+z
+" style="fill: #d590ad; stroke: #d590ad; stroke-linejoin: miter"/>
+  </g>
+  <g id="patch_7">
+   <path d="M 17.28 534.96 
+L 27.36 534.96 
+L 27.36 524.88 
+L 17.28 524.88 
+z
+" style="fill: #7b7ddb; stroke: #7b7ddb; stroke-linejoin: miter"/>
+  </g>
+  <g id="patch_8">
+   <path d="M 17.28 575.28 
+L 27.36 575.28 
+L 27.36 565.2 
+L 17.28 565.2 
+z
+" style="fill: #adb2ba; stroke: #adb2ba; stroke-linejoin: miter"/>
+  </g>
+  <g id="patch_9">
+   <path d="M 17.28 615.6 
+L 27.36 615.6 
+L 27.36 605.52 
+L 17.28 605.52 
+z
+" style="fill: #82b6ed; stroke: #82b6ed; stroke-linejoin: miter"/>
+  </g>
+  <g id="text_12">
+   <text style="fill: #ffffff; font: 700 15.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: start" x="17.28" y="23.297578" transform="rotate(-0 17.28 23.297578)">HSDir GET requests</text>
+  </g>
+  <g id="text_13">
+   <text style="fill: #cccccc; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif" transform="translate(17.28 77.898047)">Share of classified streams in each</text>
+   <text style="fill: #cccccc; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif" transform="translate(17.28 92.845117)">observation</text>
+  </g>
+  <g id="text_14">
+   <text style="fill: #ffffff; font: 13.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: start" x="17.28" y="327.057891" transform="rotate(-0 17.28 327.057891)">Request classifications</text>
+  </g>
+  <g id="text_15">
+   <text style="fill: #cccccc; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: start" x="33.12" y="355.098047" transform="rotate(-0 33.12 355.098047)">HSDir GET requests</text>
+  </g>
+  <g id="text_16">
+   <text style="fill: #cccccc; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: end" x="270.72" y="371.658047" transform="rotate(-0 270.72 371.658047)">99.8%</text>
+  </g>
+  <g id="text_17">
+   <text style="fill: #cccccc; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: start" x="33.12" y="395.418047" transform="rotate(-0 33.12 395.418047)">HSDir POST requests</text>
+  </g>
+  <g id="text_18">
+   <text style="fill: #cccccc; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: end" x="270.72" y="411.978047" transform="rotate(-0 270.72 411.978047)">0.183119%</text>
+  </g>
+  <g id="text_19">
+   <text style="fill: #cccccc; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif" transform="translate(33.12 435.738047)">Closed while waiting for an HTTP</text>
+   <text style="fill: #cccccc; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif" transform="translate(33.12 450.685117)">request</text>
+  </g>
+  <g id="text_20">
+   <text style="fill: #cccccc; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: end" x="270.72" y="468.858047" transform="rotate(-0 270.72 468.858047)">0.002027%</text>
+  </g>
+  <g id="text_21">
+   <text style="fill: #cccccc; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: start" x="33.12" y="492.618047" transform="rotate(-0 33.12 492.618047)">Unparsed directory streams</text>
+  </g>
+  <g id="text_22">
+   <text style="fill: #cccccc; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: end" x="270.72" y="509.178047" transform="rotate(-0 270.72 509.178047)">0.001003%</text>
+  </g>
+  <g id="text_23">
+   <text style="fill: #cccccc; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: start" x="33.12" y="532.938047" transform="rotate(-0 33.12 532.938047)">Consensus GET requests</text>
+  </g>
+  <g id="text_24">
+   <text style="fill: #cccccc; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: end" x="270.72" y="549.498047" transform="rotate(-0 270.72 549.498047)">0.000515%</text>
+  </g>
+  <g id="text_25">
+   <text style="fill: #cccccc; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: start" x="33.12" y="573.258047" transform="rotate(-0 33.12 573.258047)">Other directory routes</text>
+  </g>
+  <g id="text_26">
+   <text style="fill: #cccccc; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: end" x="270.72" y="589.818047" transform="rotate(-0 270.72 589.818047)">0.000206%</text>
+  </g>
+  <g id="text_27">
+   <text style="fill: #cccccc; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: start" x="33.12" y="613.578047" transform="rotate(-0 33.12 613.578047)">Microdescriptor GET requests</text>
+  </g>
+  <g id="text_28">
+   <text style="fill: #cccccc; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: end" x="270.72" y="630.138047" transform="rotate(-0 270.72 630.138047)">0.000144%</text>
+  </g>
+  <g id="chart-source-credit">
+   <text style="fill: #cccccc; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: start" x="17.28" y="671.898047" transform="rotate(-0 17.28 671.898047)">Source: 1aeo.com</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p6276da8575">
+   <rect x="17.28" y="122.4" width="253.44" height="129.6"/>
+  </clipPath>
+ </defs>
+</svg>

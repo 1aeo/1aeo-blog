@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="288pt" height="419.493938pt" viewBox="0 0 288 419.493938" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>1AEO aggregate chart generator</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 419.493938 
+L 288 419.493938 
+L 288 0 
+L 0 0 
+z
+" style="fill: #191f20"/>
+  </g>
+  <g id="get-majority-period-counts">
+   <g id="patch_2">
+    <path d="M 109.44 324.453937 
+L 279.36 324.453937 
+L 279.36 151.653937 
+L 109.44 151.653937 
+z
+" style="fill: #191f20"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <path d="M 109.44 324.453937 
+L 109.44 151.653937 
+" clip-path="url(#p5d24bf350b)" style="fill: none; stroke: #3e4b4d; stroke-opacity: 0.55; stroke-width: 0.65; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_2">
+      <defs>
+       <path id="mb386848b67" d="M 0 0 
+L 0 3.5 
+" style="stroke: #bdc8c9; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#mb386848b67" x="109.44" y="324.453937" style="fill: #bdc8c9; stroke: #bdc8c9; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="fill: #bdc8c9; font: 12.267px Arial, Helvetica, sans-serif; text-anchor: start" x="109.44" y="340.234426" transform="rotate(-0 109.44 340.234426)">0</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <path d="M 151.92 324.453937 
+L 151.92 151.653937 
+" clip-path="url(#p5d24bf350b)" style="fill: none; stroke: #3e4b4d; stroke-opacity: 0.55; stroke-width: 0.65; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#mb386848b67" x="151.92" y="324.453937" style="fill: #bdc8c9; stroke: #bdc8c9; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="fill: #bdc8c9; font: 12.267px Arial, Helvetica, sans-serif; text-anchor: middle" x="151.92" y="340.234426" transform="rotate(-0 151.92 340.234426)">8</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_5">
+      <path d="M 194.4 324.453937 
+L 194.4 151.653937 
+" clip-path="url(#p5d24bf350b)" style="fill: none; stroke: #3e4b4d; stroke-opacity: 0.55; stroke-width: 0.65; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6">
+      <g>
+       <use xlink:href="#mb386848b67" x="194.4" y="324.453937" style="fill: #bdc8c9; stroke: #bdc8c9; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="fill: #bdc8c9; font: 12.267px Arial, Helvetica, sans-serif; text-anchor: middle" x="194.4" y="340.234426" transform="rotate(-0 194.4 340.234426)">16</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_7">
+      <path d="M 236.88 324.453937 
+L 236.88 151.653937 
+" clip-path="url(#p5d24bf350b)" style="fill: none; stroke: #3e4b4d; stroke-opacity: 0.55; stroke-width: 0.65; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_8">
+      <g>
+       <use xlink:href="#mb386848b67" x="236.88" y="324.453937" style="fill: #bdc8c9; stroke: #bdc8c9; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="fill: #bdc8c9; font: 12.267px Arial, Helvetica, sans-serif; text-anchor: middle" x="236.88" y="340.234426" transform="rotate(-0 236.88 340.234426)">24</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_9">
+      <path d="M 279.36 324.453937 
+L 279.36 151.653937 
+" clip-path="url(#p5d24bf350b)" style="fill: none; stroke: #3e4b4d; stroke-opacity: 0.55; stroke-width: 0.65; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_10">
+      <g>
+       <use xlink:href="#mb386848b67" x="279.36" y="324.453937" style="fill: #bdc8c9; stroke: #bdc8c9; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="fill: #bdc8c9; font: 12.267px Arial, Helvetica, sans-serif; text-anchor: end" x="279.36" y="340.234426" transform="rotate(-0 279.36 340.234426)">32</text>
+     </g>
+    </g>
+    <g id="text_6">
+     <text style="fill: #e1e7e6; font: 12.267px Arial, Helvetica, sans-serif; text-anchor: middle" x="194.4" y="360.602485" transform="rotate(-0 194.4 360.602485)">Number of observed periods</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_11"/>
+     <g id="text_7">
+      <text style="fill: #bdc8c9; font: 12.267px Arial, Helvetica, sans-serif; text-anchor: end" x="105.94" y="188.444182" transform="rotate(-0 105.94 188.444182)">100%</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_12"/>
+     <g id="text_8">
+      <text style="fill: #bdc8c9; font: 12.267px Arial, Helvetica, sans-serif; text-anchor: end" x="105.94" y="242.444182" transform="rotate(-0 105.94 242.444182)">95–&lt;100%</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_13"/>
+     <g id="text_9">
+      <text style="fill: #bdc8c9; font: 12.267px Arial, Helvetica, sans-serif; text-anchor: end" x="105.94" y="296.444182" transform="rotate(-0 105.94 296.444182)">90–&lt;95%</text>
+     </g>
+    </g>
+    <g id="text_10">
+     <text style="fill: #e1e7e6; font: 12.267px Arial, Helvetica, sans-serif; text-anchor: middle" x="34.49958" y="238.053937" transform="rotate(-90 34.49958 238.053937)">Share of measured time</text>
+    </g>
+   </g>
+   <g id="patch_3">
+    <path d="M 109.44 324.453937 
+L 279.36 324.453937 
+" style="fill: none; stroke: #687171; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="get-majority-bin-100">
+    <path d="M 109.44 198.633937 
+L 226.26 198.633937 
+L 226.26 169.473937 
+L 109.44 169.473937 
+z
+" clip-path="url(#p5d24bf350b)" style="fill: #55dda3"/>
+   </g>
+   <g id="text_11">
+    <text style="fill: #e1e7e6; font: 700 12.267px Arial, Helvetica, sans-serif; text-anchor: start" x="229.977" y="187.233774" transform="rotate(-0 229.977 187.233774)">22</text>
+   </g>
+   <g id="get-majority-bin-95">
+    <path d="M 109.44 252.633937 
+L 130.68 252.633937 
+L 130.68 223.473937 
+L 109.44 223.473937 
+z
+" clip-path="url(#p5d24bf350b)" style="fill: #55dda3"/>
+   </g>
+   <g id="text_12">
+    <text style="fill: #e1e7e6; font: 700 12.267px Arial, Helvetica, sans-serif; text-anchor: start" x="134.397" y="241.233774" transform="rotate(-0 134.397 241.233774)">4</text>
+   </g>
+   <g id="get-majority-bin-90">
+    <path d="M 109.44 306.633938 
+L 141.3 306.633938 
+L 141.3 277.473937 
+L 109.44 277.473937 
+z
+" clip-path="url(#p5d24bf350b)" style="fill: #55dda3"/>
+   </g>
+   <g id="text_13">
+    <text style="fill: #e1e7e6; font: 700 12.267px Arial, Helvetica, sans-serif; text-anchor: start" x="145.017" y="295.233774" transform="rotate(-0 145.017 295.233774)">6</text>
+   </g>
+  </g>
+  <g id="chart-title">
+   <text style="fill: #e1e7e6; font: 700 16px Arial, Helvetica, sans-serif" transform="translate(17.28 23.1675)">HSDir GET requests &gt;50% of</text>
+   <text style="fill: #e1e7e6; font: 700 16px Arial, Helvetica, sans-serif" transform="translate(17.28 41.785875)">directory streams</text>
+  </g>
+  <g id="chart-subtitle">
+   <text style="fill: #bdc8c9; font: 12.8px Arial, Helvetica, sans-serif" transform="translate(17.28 62.391938)">For at least 90% of measured time · 32</text>
+   <text style="fill: #bdc8c9; font: 12.8px Arial, Helvetica, sans-serif" transform="translate(17.28 77.355938)">observed periods on 27 distinct relays</text>
+   <text style="fill: #bdc8c9; font: 12.8px Arial, Helvetica, sans-serif" transform="translate(17.28 92.469938)">≈102 relay-hours observed · ≈101 measured</text>
+   <text style="fill: #bdc8c9; font: 12.8px Arial, Helvetica, sans-serif" transform="translate(17.28 107.532638)">relay-hours</text>
+  </g>
+  <g id="chart-source-credit">
+   <text style="fill: #bdc8c9; font: 11.2px Arial, Helvetica, sans-serif; text-anchor: start" x="17.28" y="397.270688" transform="rotate(-0 17.28 397.270688)">Source: 1aeo.com</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p5d24bf350b">
+   <rect x="109.44" y="151.653937" width="169.92" height="172.8"/>
+  </clipPath>
+ </defs>
+</svg>

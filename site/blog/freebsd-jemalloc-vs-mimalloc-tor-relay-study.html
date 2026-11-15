@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FreeBSD Guard Memory: mimalloc 3.2.8 (MI_SECURE=ON) Group Wins with About 70% Lower RSS | 1AEO</title>
+<meta name="description" content="mimalloc 3.2.8 with MI_SECURE=ON had the lowest observed Guard-group memory at all 390 collections across 98 sampled dates. Production line charts and a non-Guard comparison.">
+<link rel="canonical" href="https://1aeo.com/blog/freebsd-jemalloc-vs-mimalloc-tor-relay-study.html">
+<link rel="stylesheet" href="/blog/topics.css">
+<script src="/copyright-year.js" defer></script>
+<style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; background-color: #121212; color: #ffffff; }
+    .nav { background-color: #1e1e1e; padding: 10px 0; box-shadow: 0 2px 10px rgba(0, 255, 127, 0.2); position: sticky; top: 0; z-index: 1000; }
+    .nav-toggle { display: none; background: none; border: none; font-size: 24px; color: #00ff7f; position: absolute; top: 10px; right: 20px; cursor: pointer; }
+    .nav-links { display: flex; justify-content: center; flex-wrap: wrap; }
+    .nav-links a { color: #00ff7f; text-decoration: none; margin: 0 15px; font-size: 18px; }
+    .nav-links a:hover { text-decoration: underline; }
+    @media (max-width: 600px) { .nav-links { display: none; flex-direction: column; margin-top: 40px; } .nav-links.show { display: flex; } .nav-toggle { display: block; } }
+    .container { max-width: 800px; margin: 50px auto; padding: 20px; background: #1e1e1e; box-shadow: 0px 0px 15px rgba(0, 255, 127, 0.6); border-radius: 10px; text-align: left; }
+    h1, h2, h3 { color: #00ff7f; }
+    h1 { text-align: center; font-size: 26px; }
+    p { font-size: 18px; color: #cccccc; line-height: 1.6; margin-bottom: 1em; }
+    .meta { font-size: 14px; color: #888; margin-bottom: 20px; text-align: center; }
+    ul, ol { color: #cccccc; margin-bottom: 1em; }
+    li { font-size: 18px; margin-bottom: 8px; line-height: 1.6; }
+    code { background-color: #2d2d2d; padding: 2px 6px; border-radius: 3px; font-family: monospace; color: #00ff7f; }
+    pre { background-color: #2d2d2d; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 14px; }
+    pre code { background: none; padding: 0; color: #ffffff; }
+    a { color: #00ff7f; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container img { display: block; margin: 20px auto; max-width: 100%; height: auto; border-radius: 5px; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #444; }
+    th { background-color: #2d2d2d; color: #00ff7f; }
+    td { color: #cccccc; }
+    tr:hover { background-color: #252525; }
+    .warning { background-color: #2d2d2d; border-left: 4px solid #ff6b6b; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .callout { background-color: #2d2d2d; border-left: 4px solid #00ff7f; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; font-size: 14px; color: #777; text-align: center; }
+    .btn { display: inline-block; margin-top: 20px; padding: 12px 24px; font-size: 18px; color: #121212; background-color: #00ff7f; text-decoration: none; font-weight: bold; border-radius: 5px; transition: background 0.3s; }
+    .btn:hover { background-color: #00cc66; text-decoration: none; }
+    .highlight { color: #ff6b6b; font-weight: bold; }
+    .success { color: #00ff7f; font-weight: bold; }
+    .series { font-size: 15px; color: #aaa; background-color: #181818; border-left: 4px solid #00ff7f; padding: 12px 16px; margin: 0 0 24px; border-radius: 0 5px 5px 0; line-height: 1.5; }
+    .series a { color: #00ff7f; }
+    h2, h3 { scroll-margin-top: 70px; }
+    .anchor { color: #3f3f3f; text-decoration: none; margin-left: 8px; font-size: 0.85em; font-weight: normal; }
+    h2:hover .anchor, h3:hover .anchor { color: #00ff7f; }
+  
+    figure { margin: 24px 0; }
+    figcaption { color: #aaa; font-size: 14px; line-height: 1.6; }
+    .callout { color: #ccc; font-size: 18px; line-height: 1.6; }
+    .path-shared { color: #9a9a9a; }
+    .path-exit { color: #ffb454; }
+    .path-onion { color: #b48cff; }
+    .attack-current { color: #ff6b6b; }
+    .attack-historical { color: #ffb454; }
+    .table-scroll { overflow-x: auto; }
+    table { min-width: 500px; line-height: 1.6; }
+    th:first-child { width: 29%; }
+    code { overflow-wrap: anywhere; }
+    @media (max-width: 600px) { .nav { min-height: 30px; } .container { margin: 24px 12px; padding: 18px; } h1 { font-size: 25px; } }
+  
+.version-note { border-left: 3px solid #00ff7f; background: #181818; padding: 12px 15px; font-size: 15px; }
+.full-chart { margin: 36px 0 24px; padding-top: 16px; border-top: 1px solid #444; }
+#pattern-chart { scroll-margin-top: 70px; }
+.methods { border-top: 1px solid #444; margin-top: 30px; padding-top: 12px; }
+.methods p { font-size: 14px; color: #aaa; line-height: 1.6; }
+.data-appendix { border-top: 1px solid #444; margin: 36px 0 24px; padding-top: 16px; color: #ccc; }
+.appendix-intro, .window-meta { font-size: 14px; line-height: 1.55; margin: 12px 0; color: #aaa; overflow-wrap: anywhere; }
+.window-data { border-top: 1px solid #3b3b3b; padding: 12px 0; }
+.window-data > h3 { font-size: 17px; line-height: 1.5; color: #ddd; margin: 10px 0; }
+.request-counts { min-width: 450px; width: 100%; font-size: 14px; line-height: 1.4; }
+.request-counts th, .request-counts td { padding: 9px 8px; }
+.request-counts th:first-child { width: 62%; }
+.request-counts thead th:not(:first-child), .request-counts td { text-align: right; white-space: nowrap; }
+.request-counts tbody th { color: #ccc; background: transparent; font-weight: normal; }
+.request-counts caption { text-align: left; color: #aaa; padding-bottom: 8px; }
+.request-counts .key { display: inline-block; width: 9px; height: 9px; margin-right: 6px; }
+.request-counts .total th { font-weight: bold; }
+.table-scroll { max-width: 100%; overflow-x: auto; }
+
+
+/* FreeBSD study: current article shell with visible Methods and data. */
+.key-findings { margin: 20px 0 26px; padding-left: 24px; }
+.key-findings li { margin-bottom: 12px; }
+.key-findings a { color: #00ff7f; }
+.key-findings a:hover { color: #00ff7f; }
+.methods { border-top: 1px solid #444; margin-top: 30px; padding-top: 12px; }
+.methods p { font-size: 14px; color: #aaa; line-height: 1.6; }
+.supporting-section { border-top: 1px solid #444; margin-top: 30px; padding-top: 12px; }
+figure { margin: 24px 0; }
+figcaption { color: #aaa; font-size: 14px; line-height: 1.6; }
+.table-scroll { max-width: 100%; overflow-x: auto; margin: 20px 0; }
+.table-scroll:focus-visible { outline: 2px solid #00ff7f; }
+table { min-width: 580px; margin: 0; font-size: 14px; line-height: 1.5; }
+th, td { padding: 10px 9px; }
+th:first-child { width: auto; }
+h2, h3 { scroll-margin-top: 70px; }
+.anchor { color: #555; margin-left: 8px; font-size: .85em; font-weight: normal; }
+h2:hover .anchor, h3:hover .anchor { color: #00ff7f; }
+code { overflow-wrap: anywhere; }
+pre code { overflow-wrap: normal; white-space: pre; }
+@media(max-width:600px) { .nav { min-height:30px; } .container { margin:24px 12px; padding:18px; } h1 { font-size:25px; } }
+
+/* Current article and chart template: readable footnotes outside the image. */
+.article-contents { list-style:none; padding-left:0; margin:6px 0 20px; }
+.article-contents li { display:block; margin:4px 0; font-size:16px; }
+.article-contents a { display:block; }
+.chart-figure > a { display:block; }
+.chart-figure picture { display:block; }
+.chart-figure img { width:100%; max-width:800px; height:auto; margin:16px auto 10px; }
+.chart-figure figcaption.chart-footnote { font-size:16px; line-height:1.6; color:#bdc8c9; font-style:normal; text-align:left; width:auto; max-width:none; }
+@media(max-width:768px) { .chart-figure picture { max-width:360px; margin:0 auto; } .chart-figure img { max-width:360px; } }
+
+.table-scroll tbody th { background:transparent; color:#ccc; font-weight:normal; }</style></head><body>
+<div class="nav">
+<button aria-label="Toggle navigation" class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+          ☰
+      </button>
+<div class="nav-links">
+<a href="https://1aeo.com/">Home</a>
+<a href="https://1aeo.com/onionvanity/">Onion Vanity</a>
+<a href="https://1aeo.com/blog/">Blog</a>
+<a href="https://1aeo.com/onionflash/">Onion Flash</a>
+<a href="https://metrics.1aeo.com">Metrics</a>
+<a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
+<a href="https://aroivalidator.1aeo.com">AROI Validator</a>
+<a href="https://routefluxmap.1aeo.com">RouteFluxMap</a>
+<a href="https://1aeo.com/#contact">Contact</a>
+</div>
+</div>
+
+
+<article class="container"><h1>FreeBSD Guard Memory: mimalloc 3.2.8 (MI_SECURE=ON) Group Wins with About 70% Lower RSS</h1>
+<p class="meta"><em>By 1AEO Team • October 31, 2026 • First FreeBSD memory study</em></p>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=relay-memory" data-blog-topic="relay-memory" rel="tag">Relay memory</a></div>
+
+<nav aria-label="Article contents"><p><strong>Contents</strong></p><ul class="article-contents">
+<li><a href="#guard-memory-winner">Guard memory winner</a></li>
+<li><a href="#non-guard-dircache-0">Non-Guard / DirCache 0</a></li>
+<li><a href="#methods">Methods and version details</a></li>
+<li><a href="#full-experiment-timeline">Full experiment timeline</a></li>
+<li><a href="#supporting-data">Supporting data</a></li>
+</ul></nav>
+<p class="version-note"><strong>Version and build scope.</strong> FreeBSD 15.0, later FreeBSD 15.1; base jemalloc 5.3.0 in both phases. Custom builds: mimalloc 2.1.7 with <code>MI_SECURE=OFF</code>; mimalloc 3.2.8 with <code>MI_SECURE=OFF</code> or <code>MI_SECURE=ON</code>. <code>MI_SECURE</code> is a mimalloc build option, enabled in CMake with <code>-DMI_SECURE=ON</code>.</p>
+<ul class="key-findings">
+<li><strong><a href="#guard-memory-winner">mimalloc 3.2.8 with <code>MI_SECURE=ON</code> won the production Guard comparison.</a></strong> Lowest mean resident set size (RSS) at all <strong>390 collections</strong>; in the final 30 days, <strong>1.63 GiB per relay</strong> versus <strong>5.75 GiB per relay</strong> for default jemalloc 5.3.0—a <strong>71.7% reduction</strong>.</li>
+<li><strong><a href="#non-guard-dircache-0">With <code>DirCache 0</code>, all five groups had similarly low memory use.</a></strong> Their means were about <strong>586–599 MiB</strong> per relay, only <strong>12.7 MiB apart</strong>.</li>
+</ul>
+<p>We followed 32 production relays in five allocator groups: Guard operation with default <code>DirCache 1</code>, then non-Guard <code>DirCache 0</code>, all else equal for that role comparison.</p>
+<section aria-labelledby="guard-memory-winner"><h2 id="guard-memory-winner">Guard memory winner <a aria-label="Link to Guard memory winner" class="anchor" href="#guard-memory-winner">#</a></h2>
+<figure class="chart-figure"><a href="images/freebsd-dircache-on.svg" rel="noopener" target="_blank"><picture><source height="1404" media="(max-width: 768px)" srcset="images/freebsd-dircache-on-mobile.png" width="720"/><img alt="RAM usage across five allocator configurations on FreeBSD Guard relays, February 27–June 4: mimalloc 3.2.8 with MI_SECURE=ON has the lowest mean RSS at every collection, with the final 30-day comparison highlighted." decoding="async" fetchpriority="high" height="1320" loading="eager" src="images/freebsd-dircache-on.png" width="1600"/></picture></a><figcaption class="chart-footnote"><strong>Footnote.</strong> Guard comparison with <code>DirCache 1</code> on FreeBSD 15.0: 390 collections from February 27–June 4, 2026. A/B contain 7 relays each; C/D/E contain 6 each. Lines show group-mean RSS. The shaded May 6–June 4 window has 120 readings per relay: mimalloc 3.2.8 with <code>MI_SECURE=ON</code> averaged 1.63 GiB versus 5.75 GiB for default jemalloc 5.3.0, a 71.7% reduction; D/E = 3.37× uses the same window. RSS means resident set size; GiB uses 1,048,576 KiB. Dates are host-local. <a href="images/freebsd-dircache-on.svg">Open the full-size Guard line chart</a>.</figcaption></figure>
+
+<p><strong>mimalloc 3.2.8 with <code>MI_SECURE=ON</code> was the clear observed memory winner over months of production traffic.</strong> It led at every collection and on all <strong>98 sampled calendar dates</strong>. All six relay-period averages were below every average in the other 26 relays.</p>
+<h3 id="how-large-was-the-gap">How large was the gap? <a aria-label="Link to How large was the gap?" class="anchor" href="#how-large-was-the-gap">#</a></h3>
+<p>During May 6–June 4 on the <strong>FreeBSD 15.0</strong> phase, <strong>mimalloc 3.2.8 with <code>MI_SECURE=ON</code></strong> averaged <strong>1.63 GiB</strong>. Default <strong>jemalloc 5.3.0</strong> averaged <strong>5.75 GiB</strong>; <strong>mimalloc 3.2.8 with <code>MI_SECURE=OFF</code></strong> averaged <strong>5.49 GiB</strong>, or <strong>3.37 times</strong> the mean for <strong>mimalloc 3.2.8 with <code>MI_SECURE=ON</code></strong>. Tuned <strong>jemalloc 5.3.0</strong> and <strong>mimalloc 2.1.7</strong> averaged <strong>3.41</strong> and <strong>3.97 GiB</strong>.</p>
+<div aria-label="How large was the gap?" class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">Configured allocator</th>
+<th scope="col" style="text-align:right">Relays</th>
+<th scope="col" style="text-align:right">Mean RSS, May 6–June 4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">jemalloc 5.3.0, default</th>
+<td style="text-align:right">7</td>
+<td style="text-align:right">5.75 GiB</td>
+</tr>
+<tr>
+<th scope="row">jemalloc 5.3.0, tuning requested</th>
+<td style="text-align:right">7</td>
+<td style="text-align:right">3.41 GiB</td>
+</tr>
+<tr>
+<th scope="row">mimalloc 2.1.7 with <code>MI_SECURE=OFF</code></th>
+<td style="text-align:right">6</td>
+<td style="text-align:right">3.97 GiB</td>
+</tr>
+<tr>
+<th scope="row">mimalloc 3.2.8 with <code>MI_SECURE=OFF</code></th>
+<td style="text-align:right">6</td>
+<td style="text-align:right">5.49 GiB</td>
+</tr>
+<tr>
+<th scope="row">mimalloc 3.2.8 with <code>MI_SECURE=ON</code></th>
+<td style="text-align:right">6</td>
+<td style="text-align:right">1.63 GiB</td>
+</tr>
+</tbody>
+</table></div>
+<p>Our earlier <a href="/blog/memory-allocators-tor-relay-fragmentation-with-custom-allocators.html">allocator</a> and <a href="/blog/dircache-memory-trade-off-tor-guard-relays.html">DirCache</a> studies reinforce the explanation: <strong>directory-cache allocation churn, amplified by allocator retention and fragmentation, is strongly supported as a major contributor to persistent high RSS</strong>.</p>
+</section><section aria-labelledby="non-guard-dircache-0"><h2 id="non-guard-dircache-0">Non-Guard / DirCache 0 <a aria-label="Link to Non-Guard / DirCache 0" class="anchor" href="#non-guard-dircache-0">#</a></h2>
+<figure class="chart-figure"><a href="images/freebsd-dircache-off.svg" rel="noopener" target="_blank"><picture><source height="1410" media="(max-width: 768px)" srcset="images/freebsd-dircache-off-mobile.png" width="720"/><img alt="RAM usage across five allocator configurations on FreeBSD non-Guard relays, June 12–July 11: all five groups remain at similarly low average memory, with a 12.7 MiB spread between their period means." decoding="async" height="1320" loading="lazy" src="images/freebsd-dircache-off.png" width="1600"/></picture></a><figcaption class="chart-footnote"><strong>Footnote.</strong> Non-Guard comparison with <code>DirCache 0</code> on FreeBSD 15.0, June 12–July 11, 2026: 120 six-hour readings per relay, excluding the first week after restart. The original group sizes remain 7/7/6/6/6. Lines show group-mean RSS; period means range from 585.9 to 598.6 MiB. The 12.7 MiB spread is 2.2% of the lowest mean. RSS means resident set size; MiB uses 1,024 KiB. Dates are host-local. <a href="images/freebsd-dircache-off.svg">Open the full-size non-Guard line chart</a>.</figcaption></figure>
+
+<p>With <code>DirCache 0</code>, the five groups all looked good on <strong>average memory footprint in this workload</strong>: <strong>585.9–598.6 MiB</strong>, a spread of just <strong>12.7 MiB, or 2.2%</strong> of the lowest mean. That is a small practical difference compared with the Guard-period gaps.</p>
+<div aria-label="Non-Guard / DirCache 0" class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">Configured allocator</th>
+<th scope="col" style="text-align:right">Relays</th>
+<th scope="col" style="text-align:right">Mean RSS, June 12–July 11</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">jemalloc 5.3.0, default</th>
+<td style="text-align:right">7</td>
+<td style="text-align:right">590.9 MiB</td>
+</tr>
+<tr>
+<th scope="row">jemalloc 5.3.0, tuning requested</th>
+<td style="text-align:right">7</td>
+<td style="text-align:right">585.9 MiB</td>
+</tr>
+<tr>
+<th scope="row">mimalloc 2.1.7 with <code>MI_SECURE=OFF</code></th>
+<td style="text-align:right">6</td>
+<td style="text-align:right">597.4 MiB</td>
+</tr>
+<tr>
+<th scope="row">mimalloc 3.2.8 with <code>MI_SECURE=OFF</code></th>
+<td style="text-align:right">6</td>
+<td style="text-align:right">598.6 MiB</td>
+</tr>
+<tr>
+<th scope="row">mimalloc 3.2.8 with <code>MI_SECURE=ON</code></th>
+<td style="text-align:right">6</td>
+<td style="text-align:right">591.9 MiB</td>
+</tr>
+</tbody>
+</table></div>
+<p>For non-Guard-only operation, base <strong>jemalloc 5.3.0 on FreeBSD 15.0 or 15.1</strong> keeps maintenance simple without custom allocator builds or preloads.</p>
+</section><section aria-labelledby="methods" class="methods"><h2 id="methods">Methods <a aria-label="Link to Methods" class="anchor" href="#methods">#</a></h2>
+<p>We compared the same 32 original relays, divided into groups of 7, 7, 6, 6 and 6. The headline windows are May 6–June 4 and June 12–July 11, with 120 six-hour readings per relay; the later window excludes the first seven days after restart. Groups follow recorded allocator configurations, and the ranking describes observed production RSS. Added relays remain separate.</p>
+<h3 id="versions-and-build-settings">Versions and build settings <a aria-label="Link to Versions and build settings" class="anchor" href="#versions-and-build-settings">#</a></h3>
+<div aria-label="Versions and build settings" class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">Experiment scope</th>
+<th scope="col">FreeBSD version</th>
+<th scope="col">Allocator or Tor version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">Guard and pre-upgrade non-Guard measurements</th>
+<td>15.0-RELEASE-p4</td>
+<td>Base jemalloc 5.3.0; default and tuned configurations</td>
+</tr>
+<tr>
+<th scope="row">After the October 15 upgrade</th>
+<td>15.1-RELEASE-p5</td>
+<td>Base jemalloc 5.3.0</td>
+</tr>
+<tr>
+<th scope="row">Group C</th>
+<td>15.0, then 15.1</td>
+<td>mimalloc 2.1.7 with <code>MI_SECURE=OFF</code></td>
+</tr>
+<tr>
+<th scope="row">Group D</th>
+<td>15.0, then 15.1</td>
+<td>mimalloc 3.2.8 with <code>MI_SECURE=OFF</code></td>
+</tr>
+<tr>
+<th scope="row">Group E</th>
+<td>15.0, then 15.1</td>
+<td>mimalloc 3.2.8 with <code>MI_SECURE=ON</code></td>
+</tr>
+<tr>
+<th scope="row">Tor</th>
+<td>15.0 initially; 15.1 at closeout</td>
+<td>Initial build script: 0.4.9.5; closeout: 0.4.9.14</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>MI_SECURE</code> is a mimalloc compile-time option enabled with CMake’s <code>-DMI_SECURE=ON</code>; it does not describe a relay’s overall security or privacy. After changing allocators or upgrading Tor, verify that the intended allocator is loaded in the running process.</p>
+</section><section aria-labelledby="full-experiment-timeline" class="supporting-section"><h2 id="full-experiment-timeline">Full experiment timeline <a aria-label="Link to Full experiment timeline" class="anchor" href="#full-experiment-timeline">#</a></h2>
+<figure class="chart-figure"><a href="images/freebsd-memory-timeline.svg" rel="noopener" target="_blank"><picture><source height="1444" media="(max-width: 768px)" srcset="images/freebsd-memory-timeline-mobile.png" width="720"/><img alt="Full February–October memory timeline showing the Guard period, the directory-cache change, August restarts, and October upgrade; new controls remain separate." decoding="async" height="1298" loading="lazy" src="images/freebsd-memory-timeline.png" width="1600"/></picture></a><figcaption class="chart-footnote"><strong>Footnote.</strong> Mean RSS across 982 collection times, February 27–October 31 midnight, 2026. The original 32 relays and 64 added controls remain separate. FreeBSD changed from 15.0 to 15.1 on October 15; base jemalloc was 5.3.0 in both phases. Later lines retain the original group labels; the closeout process check found no mimalloc loaded, so that period is not a five-allocator comparison. The 85.8% reduction compares May 6–June 4 with June 12–July 11, excluding the first week after restart. RSS means resident set size; GiB uses 1,048,576 KiB. Dates are host-local. <a href="images/freebsd-memory-timeline.svg">Open the full-size experiment timeline</a>.</figcaption></figure>
+
+<p>The same 32 original relays averaged 4.08 GiB in May 6–June 4 and 0.58 GiB in June 12–July 11: an <strong>85.8% reduction</strong>, excluding the first seven days after the June restart. The later 64 additions are shown separately; the October 31 expansion to 200 relays falls after this frozen timeline’s midnight endpoint.</p>
+</section><section aria-labelledby="supporting-data" class="supporting-section"><h2 id="supporting-data">Supporting data <a aria-label="Link to Supporting data" class="anchor" href="#supporting-data">#</a></h2>
+<h3 id="matched-30-day-comparison">Matched 30-day comparison <a aria-label="Link to Matched 30-day comparison" class="anchor" href="#matched-30-day-comparison">#</a></h3>
+<p>Both matched windows are in the FreeBSD 15.0 phase, with base jemalloc 5.3.0 and requested mimalloc 2.1.7 / 3.2.8 builds. Each original relay contributed 120 readings to each window. Values are mean RSS in GiB per relay. Cohort labels describe intended configuration throughout.</p>
+<div aria-label="Matched 30-day comparison" class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">Cohort / intended configuration</th>
+<th scope="col" style="text-align:right">Relays</th>
+<th scope="col" style="text-align:right">May 6–June 4</th>
+<th scope="col" style="text-align:right">June 12–July 11</th>
+<th scope="col" style="text-align:right">Reduction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">A — default jemalloc 5.3.0</th>
+<td style="text-align:right">7</td>
+<td style="text-align:right">5.751</td>
+<td style="text-align:right">0.577</td>
+<td style="text-align:right">90.0%</td>
+</tr>
+<tr>
+<th scope="row">B — jemalloc 5.3.0, tuning requested</th>
+<td style="text-align:right">7</td>
+<td style="text-align:right">3.413</td>
+<td style="text-align:right">0.572</td>
+<td style="text-align:right">83.2%</td>
+</tr>
+<tr>
+<th scope="row">C — mimalloc 2.1.7</th>
+<td style="text-align:right">6</td>
+<td style="text-align:right">3.970</td>
+<td style="text-align:right">0.583</td>
+<td style="text-align:right">85.3%</td>
+</tr>
+<tr>
+<th scope="row">D — mimalloc 3.2.8 with <code>MI_SECURE=OFF</code></th>
+<td style="text-align:right">6</td>
+<td style="text-align:right">5.488</td>
+<td style="text-align:right">0.585</td>
+<td style="text-align:right">89.3%</td>
+</tr>
+<tr>
+<th scope="row">E — mimalloc 3.2.8 with <code>MI_SECURE=ON</code></th>
+<td style="text-align:right">6</td>
+<td style="text-align:right">1.628</td>
+<td style="text-align:right">0.578</td>
+<td style="text-align:right">64.5%</td>
+</tr>
+<tr>
+<th scope="row"><strong>All original relays, weighted</strong></th>
+<td style="text-align:right"><strong>32</strong></td>
+<td style="text-align:right"><strong>4.083</strong></td>
+<td style="text-align:right"><strong>0.579</strong></td>
+<td style="text-align:right"><strong>85.8%</strong></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="earlier-window-spread-and-peaks">Earlier window: spread and peaks <a aria-label="Link to Earlier window: spread and peaks" class="anchor" href="#earlier-window-spread-and-peaks">#</a></h3>
+<p>May 6–June 4; mean, median, 95th percentile (p95), and maximum across sampled relay observations, in GiB. These are descriptive distributions, not confidence intervals or peaks between samples.</p>
+<div aria-label="Earlier window: spread and peaks" class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">Cohort</th>
+<th scope="col" style="text-align:right">Mean</th>
+<th scope="col" style="text-align:right">Median</th>
+<th scope="col" style="text-align:right">p95</th>
+<th scope="col" style="text-align:right">Sampled maximum</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">A</th>
+<td style="text-align:right">5.751</td>
+<td style="text-align:right">5.254</td>
+<td style="text-align:right">7.815</td>
+<td style="text-align:right">7.829</td>
+</tr>
+<tr>
+<th scope="row">B</th>
+<td style="text-align:right">3.413</td>
+<td style="text-align:right">3.361</td>
+<td style="text-align:right">3.602</td>
+<td style="text-align:right">4.377</td>
+</tr>
+<tr>
+<th scope="row">C</th>
+<td style="text-align:right">3.970</td>
+<td style="text-align:right">3.607</td>
+<td style="text-align:right">5.607</td>
+<td style="text-align:right">5.632</td>
+</tr>
+<tr>
+<th scope="row">D</th>
+<td style="text-align:right">5.488</td>
+<td style="text-align:right">5.208</td>
+<td style="text-align:right">6.114</td>
+<td style="text-align:right">7.871</td>
+</tr>
+<tr>
+<th scope="row">E — mimalloc 3.2.8 with <code>MI_SECURE=ON</code></th>
+<td style="text-align:right">1.628</td>
+<td style="text-align:right">1.606</td>
+<td style="text-align:right">1.857</td>
+<td style="text-align:right">2.174</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="full-pre-upgrade-low-memory-interval">Full pre-upgrade low-memory interval <a aria-label="Link to Full pre-upgrade low-memory interval" class="anchor" href="#full-pre-upgrade-low-memory-interval">#</a></h3>
+<p>Across June 5–October 15, the five configured cohorts averaged <strong>556.9–578.4 MiB</strong> per relay. This FreeBSD 15.0 interval uses base jemalloc 5.3.0 and the same requested mimalloc 2.1.7 / 3.2.8 builds. It contains 531 collection times, including startup and three August restarts; it differs from the matched 30-day comparison above. Values below are MiB.</p>
+<div aria-label="Full pre-upgrade low-memory interval" class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">Configured cohort</th>
+<th scope="col" style="text-align:right">Relays</th>
+<th scope="col" style="text-align:right">Mean RSS</th>
+<th scope="col" style="text-align:right">Highest sampled relay RSS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">A — original control</th>
+<td style="text-align:right">7</td>
+<td style="text-align:right">560.1</td>
+<td style="text-align:right">998.9</td>
+</tr>
+<tr>
+<th scope="row">B</th>
+<td style="text-align:right">7</td>
+<td style="text-align:right">556.9</td>
+<td style="text-align:right">654.1</td>
+</tr>
+<tr>
+<th scope="row">C</th>
+<td style="text-align:right">6</td>
+<td style="text-align:right">570.9</td>
+<td style="text-align:right">761.0</td>
+</tr>
+<tr>
+<th scope="row">D</th>
+<td style="text-align:right">6</td>
+<td style="text-align:right">578.4</td>
+<td style="text-align:right">1104.9</td>
+</tr>
+<tr>
+<th scope="row">E — mimalloc 3.2.8 with <code>MI_SECURE=ON</code></th>
+<td style="text-align:right">6</td>
+<td style="text-align:right">563.1</td>
+<td style="text-align:right">663.8</td>
+</tr>
+</tbody>
+</table></div>
+<p>B’s lower sampled maximum (<strong>654.1 versus A’s 998.9 MiB</strong>) does not establish that tuning caused it or impose an upper bound on future memory use. Peaks between collections were not measured, and historical allocator activation remains unverified.</p>
+<h3 id="later-windows-intended-cohorts-only">Later windows: intended cohorts only <a aria-label="Link to Later windows: intended cohorts only" class="anchor" href="#later-windows-intended-cohorts-only">#</a></h3>
+<p>These values are retained for completeness, not as a ranking of active allocators. The earlier column is the FreeBSD 15.0 / jemalloc 5.3.0 phase; the later column is FreeBSD 15.1 / jemalloc 5.3.0. C–E retain the requested mimalloc 2.1.7 / 3.2.8 labels defined above. The first window has 120 readings per relay; the second has 29, ending at October 31 midnight. Values are mean RSS in MiB per relay.</p>
+<div aria-label="Later windows: intended cohorts only" class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">Cohort</th>
+<th scope="col" style="text-align:right">Original relays</th>
+<th scope="col" style="text-align:right">September 16–October 15</th>
+<th scope="col" style="text-align:right">October 24–31 midnight</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">A — original control</th>
+<td style="text-align:right">7</td>
+<td style="text-align:right">538.9</td>
+<td style="text-align:right">544.0</td>
+</tr>
+<tr>
+<th scope="row">B</th>
+<td style="text-align:right">7</td>
+<td style="text-align:right">548.5</td>
+<td style="text-align:right">522.8</td>
+</tr>
+<tr>
+<th scope="row">C</th>
+<td style="text-align:right">6</td>
+<td style="text-align:right">562.3</td>
+<td style="text-align:right">525.4</td>
+</tr>
+<tr>
+<th scope="row">D</th>
+<td style="text-align:right">6</td>
+<td style="text-align:right">573.9</td>
+<td style="text-align:right">515.3</td>
+</tr>
+<tr>
+<th scope="row">E — mimalloc 3.2.8 with <code>MI_SECURE=ON</code></th>
+<td style="text-align:right">6</td>
+<td style="text-align:right">550.2</td>
+<td style="text-align:right">501.5</td>
+</tr>
+</tbody>
+</table></div>
+<p>The 64 October additions averaged 437.9 MiB in the second window. Including them in A would change the comparison’s population.</p>
+<h3 id="complete-original-relay-comparison">Complete original-relay comparison <a aria-label="Link to Complete original-relay comparison" class="anchor" href="#complete-original-relay-comparison">#</a></h3>
+<p>Relay A1–E6 are anonymized labels within allocator groups A–E. Each Guard-period mean uses all 390 readings from February 27–June 4; each non-Guard mean uses 120 readings from June 12–July 11. These columns have different observation periods. The phase is FreeBSD 15.0; configurations are identified explicitly in each row.</p>
+<div aria-label="Complete original-relay comparison" class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">Relay</th>
+<th scope="col">Configured allocator</th>
+<th scope="col" style="text-align:right">Guard-period mean, GiB</th>
+<th scope="col" style="text-align:right">Non-Guard mean, MiB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">Relay A1</th>
+<td>jemalloc 5.3.0, default</td>
+<td style="text-align:right">4.951</td>
+<td style="text-align:right">596.8</td>
+</tr>
+<tr>
+<th scope="row">Relay A2</th>
+<td>jemalloc 5.3.0, default</td>
+<td style="text-align:right">5.018</td>
+<td style="text-align:right">597.8</td>
+</tr>
+<tr>
+<th scope="row">Relay A3</th>
+<td>jemalloc 5.3.0, default</td>
+<td style="text-align:right">4.994</td>
+<td style="text-align:right">573.1</td>
+</tr>
+<tr>
+<th scope="row">Relay A4</th>
+<td>jemalloc 5.3.0, default</td>
+<td style="text-align:right">5.358</td>
+<td style="text-align:right">576.0</td>
+</tr>
+<tr>
+<th scope="row">Relay A5</th>
+<td>jemalloc 5.3.0, default</td>
+<td style="text-align:right">5.006</td>
+<td style="text-align:right">569.5</td>
+</tr>
+<tr>
+<th scope="row">Relay A6</th>
+<td>jemalloc 5.3.0, default</td>
+<td style="text-align:right">6.946</td>
+<td style="text-align:right">613.7</td>
+</tr>
+<tr>
+<th scope="row">Relay A7</th>
+<td>jemalloc 5.3.0, default</td>
+<td style="text-align:right">5.025</td>
+<td style="text-align:right">609.2</td>
+</tr>
+<tr>
+<th scope="row">Relay B1</th>
+<td>jemalloc 5.3.0, tuning requested</td>
+<td style="text-align:right">3.246</td>
+<td style="text-align:right">602.8</td>
+</tr>
+<tr>
+<th scope="row">Relay B2</th>
+<td>jemalloc 5.3.0, tuning requested</td>
+<td style="text-align:right">3.112</td>
+<td style="text-align:right">585.9</td>
+</tr>
+<tr>
+<th scope="row">Relay B3</th>
+<td>jemalloc 5.3.0, tuning requested</td>
+<td style="text-align:right">3.161</td>
+<td style="text-align:right">577.8</td>
+</tr>
+<tr>
+<th scope="row">Relay B4</th>
+<td>jemalloc 5.3.0, tuning requested</td>
+<td style="text-align:right">3.280</td>
+<td style="text-align:right">594.7</td>
+</tr>
+<tr>
+<th scope="row">Relay B5</th>
+<td>jemalloc 5.3.0, tuning requested</td>
+<td style="text-align:right">3.423</td>
+<td style="text-align:right">580.0</td>
+</tr>
+<tr>
+<th scope="row">Relay B6</th>
+<td>jemalloc 5.3.0, tuning requested</td>
+<td style="text-align:right">3.225</td>
+<td style="text-align:right">577.3</td>
+</tr>
+<tr>
+<th scope="row">Relay B7</th>
+<td>jemalloc 5.3.0, tuning requested</td>
+<td style="text-align:right">3.214</td>
+<td style="text-align:right">582.4</td>
+</tr>
+<tr>
+<th scope="row">Relay C1</th>
+<td>mimalloc 2.1.7 with <code>MI_SECURE=OFF</code></td>
+<td style="text-align:right">2.998</td>
+<td style="text-align:right">582.7</td>
+</tr>
+<tr>
+<th scope="row">Relay C2</th>
+<td>mimalloc 2.1.7 with <code>MI_SECURE=OFF</code></td>
+<td style="text-align:right">3.359</td>
+<td style="text-align:right">578.9</td>
+</tr>
+<tr>
+<th scope="row">Relay C3</th>
+<td>mimalloc 2.1.7 with <code>MI_SECURE=OFF</code></td>
+<td style="text-align:right">3.452</td>
+<td style="text-align:right">578.2</td>
+</tr>
+<tr>
+<th scope="row">Relay C4</th>
+<td>mimalloc 2.1.7 with <code>MI_SECURE=OFF</code></td>
+<td style="text-align:right">3.002</td>
+<td style="text-align:right">657.9</td>
+</tr>
+<tr>
+<th scope="row">Relay C5</th>
+<td>mimalloc 2.1.7 with <code>MI_SECURE=OFF</code></td>
+<td style="text-align:right">3.661</td>
+<td style="text-align:right">614.1</td>
+</tr>
+<tr>
+<th scope="row">Relay C6</th>
+<td>mimalloc 2.1.7 with <code>MI_SECURE=OFF</code></td>
+<td style="text-align:right">4.193</td>
+<td style="text-align:right">572.4</td>
+</tr>
+<tr>
+<th scope="row">Relay D1</th>
+<td>mimalloc 3.2.8 with <code>MI_SECURE=OFF</code></td>
+<td style="text-align:right">5.129</td>
+<td style="text-align:right">562.7</td>
+</tr>
+<tr>
+<th scope="row">Relay D2</th>
+<td>mimalloc 3.2.8 with <code>MI_SECURE=OFF</code></td>
+<td style="text-align:right">5.638</td>
+<td style="text-align:right">604.8</td>
+</tr>
+<tr>
+<th scope="row">Relay D3</th>
+<td>mimalloc 3.2.8 with <code>MI_SECURE=OFF</code></td>
+<td style="text-align:right">5.109</td>
+<td style="text-align:right">577.5</td>
+</tr>
+<tr>
+<th scope="row">Relay D4</th>
+<td>mimalloc 3.2.8 with <code>MI_SECURE=OFF</code></td>
+<td style="text-align:right">5.160</td>
+<td style="text-align:right">619.7</td>
+</tr>
+<tr>
+<th scope="row">Relay D5</th>
+<td>mimalloc 3.2.8 with <code>MI_SECURE=OFF</code></td>
+<td style="text-align:right">5.106</td>
+<td style="text-align:right">606.0</td>
+</tr>
+<tr>
+<th scope="row">Relay D6</th>
+<td>mimalloc 3.2.8 with <code>MI_SECURE=OFF</code></td>
+<td style="text-align:right">5.274</td>
+<td style="text-align:right">620.9</td>
+</tr>
+<tr>
+<th scope="row">Relay E1</th>
+<td>mimalloc 3.2.8 with <code>MI_SECURE=ON</code></td>
+<td style="text-align:right">1.562</td>
+<td style="text-align:right">571.5</td>
+</tr>
+<tr>
+<th scope="row">Relay E2</th>
+<td>mimalloc 3.2.8 with <code>MI_SECURE=ON</code></td>
+<td style="text-align:right">1.559</td>
+<td style="text-align:right">583.2</td>
+</tr>
+<tr>
+<th scope="row">Relay E3</th>
+<td>mimalloc 3.2.8 with <code>MI_SECURE=ON</code></td>
+<td style="text-align:right">1.558</td>
+<td style="text-align:right">603.8</td>
+</tr>
+<tr>
+<th scope="row">Relay E4</th>
+<td>mimalloc 3.2.8 with <code>MI_SECURE=ON</code></td>
+<td style="text-align:right">1.566</td>
+<td style="text-align:right">584.5</td>
+</tr>
+<tr>
+<th scope="row">Relay E5</th>
+<td>mimalloc 3.2.8 with <code>MI_SECURE=ON</code></td>
+<td style="text-align:right">1.607</td>
+<td style="text-align:right">623.2</td>
+</tr>
+<tr>
+<th scope="row">Relay E6</th>
+<td>mimalloc 3.2.8 with <code>MI_SECURE=ON</code></td>
+<td style="text-align:right">1.643</td>
+<td style="text-align:right">584.8</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="requested-settings">Requested settings <a aria-label="Link to Requested settings" class="anchor" href="#requested-settings">#</a></h3>
+<p>For base jemalloc 5.3.0 (FreeBSD 15.0), later base jemalloc 5.3.0 (FreeBSD 15.1), B requested <code>background_thread:true,dirty_decay_ms:1000,muzzy_decay_ms:1000,narenas:2</code> through <code>MALLOC_CONF</code>; background threads are unsupported in the base FreeBSD build. C requested mimalloc 2.1.7 with <code>MI_SECURE=OFF</code>. D requested mimalloc 3.2.8 with <code>MI_SECURE=OFF</code>; E requested mimalloc 3.2.8 with <code>MI_SECURE=ON</code>, and the same runtime options:</p>
+<pre><code class="language-text">MIMALLOC_PURGE_DELAY=0
+MIMALLOC_PURGE_DECOMMITS=1
+MIMALLOC_ARENA_PURGE_MULT=1
+MIMALLOC_ARENA_EAGER_COMMIT=0
+MIMALLOC_PAGE_FULL_RETAIN=1
+</code></pre>
+<h3 id="why-the-wider-memory-evidence-matters">Why the wider memory evidence matters <a aria-label="Link to Why the wider memory evidence matters" class="anchor" href="#why-the-wider-memory-evidence-matters">#</a></h3>
+<p>The sequence of interventions is more informative than any one RSS snapshot. These are overlapping reports from a small number of studies, not one independent experiment per article. Linux absolute-memory figures below use the corrected binary units described in those studies’ source analysis; the small September study is summarized by a unit-independent relative difference.</p>
+<div aria-label="Why the wider memory evidence matters" class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">Evidence</th>
+<th scope="col">Published observation</th>
+<th scope="col">What it adds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row"><a href="/blog/dircache-memory-trade-off-tor-guard-relays.html">September directory-cache and queue-limit tests</a></th>
+<td>In the 13-relay study, the DirCache-off arms ended about 94% below the control’s reported footprint; queue-limit-only arms remained much higher. The control was one relay, and the DirCache-off-only arm had sparse samples.</td>
+<td>Changing the directory-cache workload produced much greater relief than queue-limit changes.</td>
+</tr>
+<tr>
+<th scope="row"><a href="/blog/memory-allocators-tor-relay-fragmentation-with-custom-allocators.html">Ubuntu allocator substitutions</a></th>
+<td>With directory caching retained, the reported snapshot was 1.16 GiB for mimalloc 2.1.2 and 1.59 GiB for jemalloc 5.3.0, versus 5.68 GiB for glibc 2.39.</td>
+<td>Allocator behavior materially changes the footprint of the directory-serving workload.</td>
+</tr>
+<tr>
+<th scope="row"><a href="/blog/maxconsensusagefordiffs-limiting-for-guard-memory.html">Consensus-diff age limits</a></th>
+<td>At the article’s January 5 snapshot, the four-hour and eight-hour arms were at 5.76 and 5.72 GiB versus 5.64 GiB for the control.</td>
+<td>Shortening one cache-retention policy did not reproduce the DirCache-off result.</td>
+</tr>
+<tr>
+<th scope="row"><a href="/blog/periodic-restarts-workaround-guard-memory.html">Periodic restarts</a></th>
+<td>Memory grew again after restart; published endpoint improvements were much smaller than disabling directory caching or changing allocator.</td>
+<td>A restart alone did not produce the same durable low-memory state.</td>
+</tr>
+<tr>
+<th scope="row"><a href="/blog/surviving-circuit-dos-allocator-swap-june-2026.html">Allocator release under flood load</a></th>
+<td>The published paired observations show mimalloc 2.1 relays shedding substantial RSS after large peaks while glibc peers retained it; the exact mimalloc patch version is not reported.</td>
+<td>Supports allocator-dependent memory release and retention under a different high-churn workload. It does not isolate DirCache-specific churn.</td>
+</tr>
+<tr>
+<th scope="row"><a href="/blog/repeat-descriptor-fetches-tor-floods.html">Repeated directory requests</a> and <a href="/blog/how-tor-directory-floods-reuse-circuits.html">circuit reuse</a></th>
+<td>The measured workloads repeatedly open directory streams and serve responses, including over reused circuits and for cached documents.</td>
+<td>Recurring directory-serving work can continue despite document and circuit reuse; request counts are not allocation counts.</td>
+</tr>
+<tr>
+<th scope="row">This FreeBSD study</th>
+<td>Original-cohort mean RSS fell 85.8% in matched 30-day windows after the DirCache change and restart.</td>
+<td>Adds a sustained observation on another operating system; does not independently verify the configured allocator arms.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="earlier-linux-context">Earlier Linux context <a aria-label="Link to Earlier Linux context" class="anchor" href="#earlier-linux-context">#</a></h3>
+<p>Our <a href="/blog/memory-allocators-tor-relay-fragmentation-with-custom-allocators.html">Ubuntu allocator study</a> and <a href="/blog/mimalloc-209-tor-relay-deployment.html">Debian five-way study</a> concern different hosts, versions, workloads, and durations. Their numbers should not be treated as matched operating-system effects.</p>
+<div aria-label="Earlier Linux context" class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">Historical snapshot</th>
+<th scope="col" style="text-align:right">glibc</th>
+<th scope="col" style="text-align:right">jemalloc 5.3.0</th>
+<th scope="col" style="text-align:right">mimalloc 2.x</th>
+<th scope="col" style="text-align:right">mimalloc 3.0.1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">Ubuntu 24.04, January 8, 2026</th>
+<td style="text-align:right">5.68 GiB</td>
+<td style="text-align:right">1.59 GiB</td>
+<td style="text-align:right">2.1.2: 1.16 GiB</td>
+<td style="text-align:right">4.39 GiB</td>
+</tr>
+<tr>
+<th scope="row">Debian 13, January 10, 2026</th>
+<td style="text-align:right">4.15 GiB</td>
+<td style="text-align:right">2.74 GiB</td>
+<td style="text-align:right">2.0.9: 1.41; 2.1.7: 1.83 GiB</td>
+<td style="text-align:right">10.44 GiB</td>
+</tr>
+</tbody>
+</table></div>
+<p>These are single-snapshot group means. The old generators labeled binary GiB values as “GB.” Ubuntu’s 3.0.1 group later reached 6.43 GiB. Debian’s historical jemalloc/glibc membership lists overlap by three relays; the chart’s assignment order leaves 17 effective jemalloc members. Those ambiguities further limit cross-study comparisons.</p>
+</section>
+<footer class="footer"><p class="site-copyright">© <span data-copyright-year>2026</span> 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p><p><a href="/blog/?tag=relay-memory">More relay memory research</a></p></footer>
+</article></body></html>

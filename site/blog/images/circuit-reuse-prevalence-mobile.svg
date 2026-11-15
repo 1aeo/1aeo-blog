@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="278.685pt" height="394pt" viewBox="0 0 278.685 394" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>1AEO aggregate chart generator</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 394 
+L 278.685 394 
+L 278.685 0 
+L 0 0 
+z
+" style="fill: #191f20"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 95.04 321.12 
+L 262.08 321.12 
+L 262.08 177.12 
+L 95.04 177.12 
+z
+" style="fill: #191f20"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <path d="M 95.04 321.12 
+L 95.04 177.12 
+" clip-path="url(#p55a3f0f226)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.12; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_2">
+      <defs>
+       <path id="md4850e5808" d="M 0 0 
+L 0 3.5 
+" style="stroke: #cbd1d1; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#md4850e5808" x="95.04" y="321.12" style="fill: #cbd1d1; stroke: #cbd1d1; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="fill: #cbd1d1; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: middle" x="95.04" y="337.618047" transform="rotate(-0 95.04 337.618047)">0</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <path d="M 179.498427 321.12 
+L 179.498427 177.12 
+" clip-path="url(#p55a3f0f226)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.12; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#md4850e5808" x="179.498427" y="321.12" style="fill: #cbd1d1; stroke: #cbd1d1; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="fill: #cbd1d1; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: middle" x="179.498427" y="337.618047" transform="rotate(-0 179.498427 337.618047)">45</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_5">
+      <path d="M 262.08 321.12 
+L 262.08 177.12 
+" clip-path="url(#p55a3f0f226)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.12; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6">
+      <g>
+       <use xlink:href="#md4850e5808" x="262.08" y="321.12" style="fill: #cbd1d1; stroke: #cbd1d1; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="fill: #cbd1d1; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: middle" x="262.08" y="337.618047" transform="rotate(-0 262.08 337.618047)">89</text>
+     </g>
+    </g>
+    <g id="text_4">
+     <text style="fill: #d0d5d5; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: middle" x="178.56" y="358.715703" transform="rotate(-0 178.56 358.715703)">Observed periods</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_7">
+      <defs>
+       <path id="m8ae889f842" d="M 0 0 
+L -3.5 0 
+" style="stroke: #cbd1d1; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m8ae889f842" x="95.04" y="217.815652" style="fill: #cbd1d1; stroke: #cbd1d1; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="fill: #cbd1d1; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif" transform="translate(10.467734 216.515847)">Positions 2+</text>
+      <text style="fill: #cbd1d1; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif" transform="translate(36.172812 230.513113)">majority</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_8">
+      <g>
+       <use xlink:href="#m8ae889f842" x="95.04" y="280.424348" style="fill: #cbd1d1; stroke: #cbd1d1; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="fill: #cbd1d1; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif" transform="translate(27.454062 279.124543)">Position 1</text>
+      <text style="fill: #cbd1d1; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif" transform="translate(36.172812 293.121809)">majority</text>
+     </g>
+    </g>
+   </g>
+   <g id="reuse-period-count-88">
+    <path d="M 95.04 233.467826 
+L 260.203146 233.467826 
+L 260.203146 202.163478 
+L 95.04 202.163478 
+z
+" clip-path="url(#p55a3f0f226)" style="fill: #309be6"/>
+   </g>
+   <g id="reuse-period-count-1">
+    <path d="M 95.04 296.076522 
+L 96.916854 296.076522 
+L 96.916854 264.772174 
+L 95.04 264.772174 
+z
+" clip-path="url(#p55a3f0f226)" style="fill: #bed4ee"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 95.04 321.12 
+L 262.08 321.12 
+" style="fill: none; stroke: #525959; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_7">
+    <text style="fill: #e1e7e6; font: 700 14px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: end" x="258.326292" y="221.678777" transform="rotate(-0 258.326292 221.678777)">88</text>
+   </g>
+   <g id="text_8">
+    <text style="fill: #e1e7e6; font: 700 14px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: start" x="98.793708" y="284.287473" transform="rotate(-0 98.793708 284.287473)">1</text>
+   </g>
+  </g>
+  <g id="text_9">
+   <text style="fill: #e1e7e6; font: 700 15px 'DejaVu Sans', Arial, Helvetica, sans-serif" transform="translate(8.64 20.037656)">BEGIN_DIR cell positions 2+</text>
+   <text style="fill: #e1e7e6; font: 700 15px 'DejaVu Sans', Arial, Helvetica, sans-serif" transform="translate(8.64 38.391328)">held the majority in 88 of 89</text>
+   <text style="fill: #e1e7e6; font: 700 15px 'DejaVu Sans', Arial, Helvetica, sans-serif" transform="translate(8.64 56.445)">periods</text>
+  </g>
+  <g id="text_10">
+   <text style="fill: #e1e7e6; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif" transform="translate(8.64 103.818047)">88 periods · 63 relays · mean</text>
+   <text style="fill: #e1e7e6; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif" transform="translate(8.64 118.765117)">observation about 2½ h</text>
+  </g>
+  <g id="chart-source-credit">
+   <text style="fill: #d7e2e0; font: 12.5px 'DejaVu Sans', Arial, Helvetica, sans-serif; text-anchor: start" x="8.64" y="381.898047" transform="rotate(-0 8.64 381.898047)">Source: 1aeo.com</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p55a3f0f226">
+   <rect x="95.04" y="177.12" width="167.04" height="144"/>
+  </clipPath>
+ </defs>
+</svg>

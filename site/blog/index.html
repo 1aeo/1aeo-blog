@@ -107,6 +107,10 @@
       color: #777;
     }
   </style>
+<style id="mobile-readability">@media(max-width:600px){.container code{overflow-wrap:anywhere}.container pre code{overflow-wrap:normal;white-space:pre}.container table{display:block;max-width:100%;overflow-x:auto}}</style>
+  <script src="/copyright-year.js" defer></script>
+  <link rel="stylesheet" href="/blog/topics.css">
+  <script src="/blog/topics.js" defer></script>
 </head>
 <body>
     <div class="nav">
@@ -117,6 +121,7 @@
           <a href="/">Home</a>
           <a href="/onionvanity/">Onion Vanity</a>
           <a href="/blog/">Blog</a>
+          <a href="/onionflash/">Onion Flash</a>
           <a href="https://metrics.1aeo.com">Metrics</a>
           <a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
           <a href="https://aroivalidator.1aeo.com">AROI Validator</a>
@@ -129,225 +134,286 @@
     <h1>1AEO Blog</h1>
     <p>Updates, insights, and community posts from 1st Amendment Encrypted Openness.</p>
 
-    <div class="post-preview">
+    
+    <nav id="blog-topics" class="blog-topic-tabs" aria-label="Filter blog posts by theme">
+      <a href="/blog/" data-blog-topic="" data-topic-label="All" aria-current="true">All</a>
+      <a href="/blog/?tag=dos" data-blog-topic="dos" data-topic-label="DoS" aria-label="DoS">DoS</a>
+      <a href="/blog/?tag=securing-relays" data-blog-topic="securing-relays" data-topic-label="Securing relays" aria-label="Securing relays">Securing relays</a>
+      <a href="/blog/?tag=relay-memory" data-blog-topic="relay-memory" data-topic-label="Relay memory" aria-label="Relay memory">Memory</a>
+      <a href="/blog/?tag=bandwidth-capacity" data-blog-topic="bandwidth-capacity" data-topic-label="Bandwidth &amp; capacity" aria-label="Bandwidth &amp; capacity">Capacity</a>
+      <a href="/blog/?tag=bgp-routing" data-blog-topic="bgp-routing" data-topic-label="BGP &amp; routing" aria-label="BGP &amp; routing">BGP</a>
+      <a href="/blog/?tag=monitoring-metrics" data-blog-topic="monitoring-metrics" data-topic-label="Monitoring &amp; metrics" aria-label="Monitoring &amp; metrics">Monitoring</a>
+      <a href="/blog/?tag=onion-services" data-blog-topic="onion-services" data-topic-label="Onion services" aria-label="Onion services">Onion services</a>
+    </nav>
+    <p id="blog-topic-status" class="blog-topic-status" role="status" aria-live="polite">34 posts</p>
+    <noscript><p class="blog-topic-status">All posts are shown. Enable JavaScript to filter by theme.</p></noscript>
+
+    <div class="post-preview" data-topics="dos onion-services"><h2><a href="/blog/tor-begindir-hsdir-mitigation-pressure.html">After Tor 0.4.9.15: HSDir refusals and continuing BEGIN_DIR stream pressure</a></h2><div class="meta">By 1AEO Team · November 9, 2026</div>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a> <a href="/blog/?tag=onion-services" data-blog-topic="onion-services" rel="tag">Onion services</a></div><p>Tor 0.4.9.15’s HSDir request limit is enforced while BEGIN_DIR admissions remain high. Measured stream activity, CPU, bandwidth and BEGIN_DIR cell positions. <a href="/blog/tor-begindir-hsdir-mitigation-pressure.html">Read more</a></p></div>
+<div class="post-preview" data-topics="relay-memory">
+<h2><a href="/blog/freebsd-jemalloc-vs-mimalloc-tor-relay-study.html">FreeBSD Guard Memory: mimalloc 3.2.8 (MI_SECURE=ON) Group Wins with About 70% Lower RSS</a></h2>
+<p class="meta"><em>By 1AEO Team &bull; October 31, 2026</em></p>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=relay-memory" data-blog-topic="relay-memory" rel="tag">Relay memory</a></div>
+<p>The mimalloc 3.2.8 with MI_SECURE=ON group had the lowest mean Guard memory at all 390 collections across 98 sampled dates. Production line charts show the sustained gap; with DirCache 0, all five groups had similarly low average memory.</p>
+<a href="/blog/freebsd-jemalloc-vs-mimalloc-tor-relay-study.html">Read more</a>
+</div>
+
+    <div class="post-preview" data-topics="dos onion-services"><h2><a href="/blog/tor-directory-flood-request-rates-bandwidth.html">Part 4 — Tor Directory Floods: HSDir GET Requests and Written Bandwidth</a></h2><div class="meta">By 1AEO Team · November 5, 2026</div>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a> <a href="/blog/?tag=onion-services" data-blog-topic="onion-services" rel="tag">Onion services</a></div><p>HSDir GET request stages had higher written bandwidth than stages with more streams closed while waiting for an HTTP request. Three findings with all 89 supporting timelines and heatmaps. <a href="/blog/tor-directory-flood-request-rates-bandwidth.html">Read more</a></p></div>
+<div class="post-preview" data-topics="monitoring-metrics dos">
+      <h2><a href="/blog/tor-metricsport-zstd-dictionary.html">34–36% Smaller Tor MetricsPort Archives with a zstd Dictionary</a></h2>
+      <p class="meta"><em>By 1AEO Team &bull; November 4, 2026</em></p>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=monitoring-metrics" data-blog-topic="monitoring-metrics" rel="tag">Monitoring &amp; metrics</a> <a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a></div>
+      <p>Every Tor 0.4.9.15 metric family, a sanitized dictionary, and measured compression results from reconstructed scrapes for two relays. <a href="/blog/tor-metricsport-zstd-dictionary.html">Read more</a></p>
+    </div>
+
+    <div class="post-preview" data-topics="dos onion-services"><h2><a href="/blog/how-tor-relays-handle-directory-floods.html">Part 3 — How Tor Relays Handle Directory Floods</a></h2><div class="meta">By 1AEO Team · October 31, 2026</div>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a> <a href="/blog/?tag=onion-services" data-blog-topic="onion-services" rel="tag">Onion services</a></div><p>HSDir GET and HSDir POST request handling shows what happened after requests reached the relay—and why request counts do not describe response bytes. <a href="/blog/how-tor-relays-handle-directory-floods.html">Read more</a></p></div>
+<div class="post-preview" data-topics="dos onion-services"><h2><a href="/blog/how-tor-directory-floods-reuse-circuits.html">Part 2 — How Tor Directory Floods Reuse Circuits</a></h2><div class="meta">By 1AEO Team &bull; October 31, 2026</div>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a> <a href="/blog/?tag=onion-services" data-blog-topic="onion-services" rel="tag">Onion services</a></div><p>Circuit reuse patterns across 89 observed periods: shorter and longer BEGIN_DIR use on the same circuit. <a href="/blog/how-tor-directory-floods-reuse-circuits.html">Read more</a></p></div>
+<div class="post-preview" data-topics="dos onion-services">
+<h2><a href="/blog/repeat-descriptor-fetches-tor-floods.html">Part 1 — How Tor Directory Floods Fetch and Wait</a></h2>
+<p class="meta"><em>By 1AEO Team &bull; October 28, 2026 &bull; Observations: October 24–29, 2026 UTC</em></p>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a> <a href="/blog/?tag=onion-services" data-blog-topic="onion-services" rel="tag">Onion services</a></div>
+<p>Three patterns from Tor 0.4.9.14 measurements: HSDir GET requests, streams classified “Closed while waiting for an HTTP request”, and changing request mixes on one relay.</p>
+<a href="/blog/repeat-descriptor-fetches-tor-floods.html" class="btn">Read More</a>
+</div>
+
+    <div class="post-preview" data-topics="dos onion-services">
+      <h2><a href="/blog/tor-begin-dir-surges.html">BEGIN_DIR Surges on Our Tor Relays</a></h2>
+      <div class="meta">By 1AEO Team &bull; October 23, 2026 &bull; BEGIN_DIR traffic measurements</div>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a> <a href="/blog/?tag=onion-services" data-blog-topic="onion-services" rel="tag">Onion services</a></div>
+      <p>
+        We recorded 3.62 billion directory stream starts across 775 Tor relays in a 48-hour October window.
+        Our measurements show per-relay peaks, a year of traffic, and how long elevated rates lasted.
+        <a href="/blog/tor-begin-dir-surges.html">Read more</a>
+      </p>
+    </div>
+
+    <div class="post-preview" data-topics="dos onion-services">
       <h2><a href="/blog/tor-traffic-paths-denial-of-service.html">Tor Under Attack: Mapping the Pressure Points</a></h2>
       <div class="meta">By 1AEO Team &bull; October 17, 2026 &bull; Tor traffic paths and DoS pressure points</div>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a> <a href="/blog/?tag=onion-services" data-blog-topic="onion-services" rel="tag">Onion services</a></div>
       <p>
         Two diagrams trace Tor's traffic paths and map reported pressure on TCP queues, circuits, directories, introductions and exits. Follow the numbered markers to the 2026 reports and historical exit examples.
         <a href="/blog/tor-traffic-paths-denial-of-service.html">Read more</a>
       </p>
     </div>
 
-    <div class="post-preview">
+    <div class="post-preview" data-topics="securing-relays">
       <h2><a href="/blog/ai-comes-to-tor-security.html">AI Helps Secure Tor: Obsolete Relay Average Hits a Ten-Year High</a></h2>
       <div class="meta">By 1AEO Team &bull; October 16, 2026 &bull; AI security reports and relay version trends</div>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=securing-relays" data-blog-topic="securing-relays" rel="tag">Securing relays</a></div>
       <p>
         AI-assisted reports are driving Tor security fixes. Our 2017&ndash;2026 reconstruction finds a 2026 YTD average of 1,465 Running relays on obsolete versions, with two reproducible charts and official guidance for updates and automation.
         <a href="/blog/ai-comes-to-tor-security.html">Read more</a>
       </p>
     </div>
 
-    <div class="post-preview">
+    <div class="post-preview" data-topics="securing-relays">
       <h2><a href="/blog/securing-fresh-ubuntu-vm-tor-relay-checklist.html">Securing a Fresh Ubuntu VM for a Tor Relay: A Beginner's Checklist</a></h2>
       <div class="meta">By 1AEO Team • Oct 10, 2026 • Relay security series, Part 1 of 2</div>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=securing-relays" data-blog-topic="securing-relays" rel="tag">Securing relays</a></div>
       <p>
         Two doors open, SSH for you and the ORPort for Tor, and no password that ever works over SSH. Five steps for a new Ubuntu 24.04 or 26.04 VM, about 30 minutes: prepare, lock SSH to keys, open two ports, install Tor from the Tor Project, then prove it and check monthly, with a quick Ebury check and what to do if a relay is compromised.
         <a href="/blog/securing-fresh-ubuntu-vm-tor-relay-checklist.html">Read more</a>
       </p>
     </div>
 
-    <div class="post-preview">
+    <div class="post-preview" data-topics="onion-services">
       <h2><a href="/blog/how-long-tor-vanity-onion-address.html">How Long Does a Tor Vanity Onion Address Take? The 32&times; Rule and Random Search</a></h2>
       <div class="meta">By 1AEO Team • Jul 28, 2026 • Vanity onion address timing explained</div>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=onion-services" data-blog-topic="onion-services" rel="tag">Onion services</a></div>
       <p>
         Every additional exact prefix character requires 32 times more search work on average. Learn why average time is not a deadline, what a 95% chance means, and how to compare realistic estimates.
         <a href="/blog/how-long-tor-vanity-onion-address.html">Read more</a>
       </p>
     </div>
 
-    <div class="post-preview">
-      <h2><a href="/blog/onion-service-directory-capacity-june-2026.html">The Onion-Service Directory Lost Over a Third of Its Capacity &mdash; and Has Only Partly Got It Back</a></h2>
+    <div class="post-preview" data-topics="onion-services dos">
+      <h2><a href="/blog/onion-service-directory-capacity-june-2026.html">The HSDir Population Was Still About 37% Below Its June Plateau on July 27</a></h2>
       <div class="meta">By 1AEO Team • Jul 29, 2026 • Circuit-Building DoS — new findings</div>
-      <p>
-        Every .onion address depends on the HSDir relays that store its descriptors. Under the flood their number fell from a ~5,800 plateau to just <strong>945 relays on July 22</strong> &mdash; and 728 of the losses were relays stripped of the role without ever restarting. It has since recovered most of the way, but remains about a third below where it started. Public, reproducible CollecTor data.
-        <a href="/blog/onion-service-directory-capacity-june-2026.html">Read more</a>
-      </p>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=onion-services" data-blog-topic="onion-services" rel="tag">Onion services</a> <a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a></div>
+      <p>The HSDir-flagged population fell substantially in June–July. The revised count ratio describes population changes, not actual descriptor demand or bandwidth capacity. <a href="/blog/onion-service-directory-capacity-june-2026.html">Read more</a></p>
     </div>
 
-        <div class="post-preview">
-      <h2><a href="/blog/tor-dos-year-under-flood-2025-2026.html">A Year Under Flood: Two Campaigns, Ten Episodes &mdash; and the One That Broke Our Streak</a></h2>
+        <div class="post-preview" data-topics="dos relay-memory">
+      <h2><a href="/blog/tor-dos-year-under-flood-2025-2026.html">A Year Under Flood: Ten Reported Episodes and July’s Memory Pressure</a></h2>
       <div class="meta">By 1AEO Team • Updated Jul 29, 2026 • Circuit-Building DoS — new findings</div>
-      <p>
-        The June&ndash;July flood is not an event, it is a chapter: <strong>ten distinct episodes since September 2025</strong>, forming two major campaigns. Autumn 2025 was ~22x larger by raw rate and the network absorbed it; the summer 2026 campaign accumulates state instead of rate &mdash; and its tenth episode did what no earlier wave managed, pushing 135 of our own relays into overload. Being wound down mode by mode, but not over.
-        <a href="/blog/tor-dos-year-under-flood-2025-2026.html">Read more</a>
-      </p>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a> <a href="/blog/?tag=relay-memory" data-blog-topic="relay-memory" rel="tag">Relay memory</a></div>
+      <p>Retained daily rejection counters show recurrent activity from July 2025 through July 2026, with reporting gaps visible. The revised figures distinguish defense actions, daily overload reports and late-July memory pressure. <a href="/blog/tor-dos-year-under-flood-2025-2026.html">Read more</a></p>
     </div>
 
-    <div class="post-preview">
-      <h2><a href="/blog/circuit-building-dos-blast-radius-june-2026.html">The Blast Radius: The 13% Snapshot Hid Nearly Half the Network</a></h2>
+    <div class="post-preview" data-topics="dos monitoring-metrics">
+      <h2><a href="/blog/circuit-building-dos-blast-radius-june-2026.html">The Blast Radius: Daily and Cumulative Overload Reports</a></h2>
       <div class="meta">By 1AEO Team • Updated Jul 29, 2026 • Circuit-Building DoS — new findings</div>
-      <p>
-        The worst single day showed 12.87% of relays overloaded &mdash; but the flood rotated: over five weeks it touched <strong>4,559 distinct relays</strong>, nearly half the network and 57.2% of all Guards, hitting big and small guards at the same rate. All from Tor's public archives.
-        <a href="/blog/circuit-building-dos-blast-radius-june-2026.html">Read more</a>
-      </p>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a> <a href="/blog/?tag=monitoring-metrics" data-blog-topic="monitoring-metrics" rel="tag">Monitoring &amp; metrics</a></div>
+      <p>Daily report prevalence and cumulative fixed-cohort coverage describe different populations. The reanalysis uses declared trigger and publication windows; reports do not identify confirmed attack victims. <a href="/blog/circuit-building-dos-blast-radius-june-2026.html">Read more</a></p>
     </div>
 
-    <div class="post-preview">
-      <h2><a href="/blog/tor-memory-defense-blindspot-june-2026.html">One Relay Ballooned to 94 GiB &mdash; Tor's Built-In Memory Defense Never Fired</a></h2>
+    <div class="post-preview" data-topics="relay-memory dos">
+      <h2><a href="/blog/tor-memory-defense-blindspot-june-2026.html">One Relay Ballooned to 94 GiB — Beyond Tor's Accounted-Memory Limit</a></h2>
       <div class="meta">By 1AEO Team • Jul 16, 2026 • Circuit-Building DoS — new findings</div>
-      <p>
-        MaxMemInQueues counts specific queues and caches &mdash; and this flood's memory lived outside all of them. A relay hit 11.7x the defense's ceiling without triggering it, and fleet-wide the defense freed less than 2% of what the kernel OOM-killer had to reclaim. Plus a config footgun that trips the defense with no attack at all.
-        <a href="/blog/tor-memory-defense-blindspot-june-2026.html">Read more</a>
-      </p>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=relay-memory" data-blog-topic="relay-memory" rel="tag">Relay memory</a> <a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a></div>
+      <p>A retained process trace reached about 94 GiB RSS. Tor’s accounted-memory limit is not an RSS cap; its removed-byte counters also do not count invocations or identify one memory pool. <a href="/blog/tor-memory-defense-blindspot-june-2026.html">Read more</a></p>
     </div>
 
-    <div class="post-preview">
+    <div class="post-preview" data-topics="relay-memory dos">
       <h2><a href="/blog/surviving-circuit-dos-allocator-swap-june-2026.html">What Actually Saved Our Relays: An Allocator That Lets Go, and Swap Sized to Park the Rest</a></h2>
       <div class="meta">By 1AEO Team • Jul 16, 2026 • Circuit-Building DoS — new findings</div>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=relay-memory" data-blog-topic="relay-memory" rel="tag">Relay memory</a> <a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a></div>
       <p>
         Five weight-matched relay pairs, same flood, opposite endings: every glibc relay held its memory balloon until the kernel terminated it; every mimalloc twin drained itself and survived. What the allocator decides, what swap decides, and the paging data showing swap held only idle memory &mdash; the active relays never thrashed.
         <a href="/blog/surviving-circuit-dos-allocator-swap-june-2026.html">Read more</a>
       </p>
     </div>
 
-        <div class="post-preview">
-      <h2><a href="/blog/tor-network-dos-wave-june-2026.html">The Tor Network Is Under a Circuit-Building DoS Wave</a></h2>
+        <div class="post-preview" data-topics="dos">
+      <h2><a href="/blog/tor-network-dos-wave-june-2026.html">The Tor Network’s Circuit-Building DoS Wave in June–July 2026</a></h2>
       <div class="meta">By 1AEO Team • Jul 13, 2026 • Circuit-Building DoS series, Part 1 of 5</div>
-      <p>
-        Since late June the whole Tor network has been under a circuit-building DoS wave — reconstructed here entirely from Tor's own signed public archives (CollecTor + Onionoo): two overload waves reaching ~12% of all relays, the flood landing squarely on the guard position, and the Running flag flapping network-wide. Every number is reproducible.
-        <a href="/blog/tor-network-dos-wave-june-2026.html">Read more</a>
-      </p>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a></div>
+      <p>Public descriptors and consensuses show higher overload-report prevalence among Guard-flagged groups and changes in Running membership during June–July. Flags do not identify observed circuit position. <a href="/blog/tor-network-dos-wave-june-2026.html">Read more</a></p>
     </div>
 
-    <div class="post-preview">
+    <div class="post-preview" data-topics="dos onion-services">
       <h2><a href="/blog/circuit-building-dos-anatomy-june-2026.html">Anatomy of a Circuit-Building DoS: Four Waves on a Guard Fleet</a></h2>
       <div class="meta">By 1AEO Team • Updated Jul 29, 2026 • Circuit-Building DoS series, Part 2 of 5</div>
-      <p>
-        How the attack actually works. Since Jun 25 23:00 UTC, open circuits on 1AEO's guard fleet ran ~20x peak — arriving as <strong>four waves offset in time</strong> (an onion-service INTRODUCE2 burst, the main ntor_v3 circuit flood, a malformed-circuit tail, and a late directory-write surge), each tripping a different one of Tor's built-in defenses and riding Tor's own path machinery to pick which relays it hit.
-        <a href="/blog/circuit-building-dos-anatomy-june-2026.html">Read more</a>
-      </p>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a> <a href="/blog/?tag=onion-services" data-blog-topic="onion-services" rel="tag">Onion services</a></div>
+      <p>Four observed signals in the June–July telemetry: introduction rejections, circuit-handshake activity and retained circuits, protocol violations, and outbound traffic. Their timing does not establish a common actor or target-selection mechanism. <a href="/blog/circuit-building-dos-anatomy-june-2026.html">Read more</a></p>
     </div>
 
-    <div class="post-preview">
+    <div class="post-preview" data-topics="dos relay-memory">
       <h2><a href="/blog/circuit-building-dos-fleet-cost-june-2026.html">What a Circuit-Building DoS Actually Costs: How 1AEO's Guard Fleet Held</a></h2>
       <div class="meta">By 1AEO Team • Jul 13, 2026 • Circuit-Building DoS series, Part 3 of 5</div>
-      <p>
-        What absorbing the flood costs an operator — and how 1AEO ranked. The circuits are cheap to send; soaking them up pegged host CPU at 90–99% and drove memory to OOM, while the relays never stopped relaying. From Tor's public data, 1AEO held at 0.3% of guards overloaded — the most guards at the lowest overload of any major operator.
-        <a href="/blog/circuit-building-dos-fleet-cost-june-2026.html">Read more</a>
-      </p>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a> <a href="/blog/?tag=relay-memory" data-blog-topic="relay-memory" rel="tag">Relay memory</a></div>
+      <p>The historical reanalysis records CPU and memory pressure, a higher circuit inventory, and queue drops concentrated on one monitored host. The rebuilt public comparison uses matching flag cohorts and includes maintenance explicitly. <a href="/blog/circuit-building-dos-fleet-cost-june-2026.html">Read more</a></p>
     </div>
 
-    <div class="post-preview">
-      <h2><a href="/blog/circuit-building-dos-below-tor-june-2026.html">The Flood Below Tor: A Billion Handshakes the Relays Never Saw</a></h2>
+    <div class="post-preview" data-topics="dos monitoring-metrics">
+      <h2><a href="/blog/circuit-building-dos-below-tor-june-2026.html">The Flood Below Tor: TCP Listener Pressure During the DoS</a></h2>
       <div class="meta">By 1AEO Team • Jul 14, 2026 • Circuit-Building DoS series, Part 4 of 5</div>
-      <p>
-        Underneath the circuit flood ran a second flood no Tor counter records: the Linux kernel on 1AEO's relay hosts silently dropped ~1.3 billion fully-completed TCP connections at the accept queue — roughly 900 per second for two weeks, beginning 1–2 days before the circuit flood. Tor's per-IP defenses fired 27 million times and it didn't matter: the kernel dropped ~40x more, upstream of them all.
-        <a href="/blog/circuit-building-dos-below-tor-june-2026.html">Read more</a>
-      </p>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a> <a href="/blog/?tag=monitoring-metrics" data-blog-topic="monitoring-metrics" rel="tag">Monitoring &amp; metrics</a></div>
+      <p>Historical metrics show about 1.28 billion estimated TCP listener-drop events over June 26–July 11. These events are not unique completed connections, and the kernel and Tor counters do not form a connection-loss fraction. <a href="/blog/circuit-building-dos-below-tor-june-2026.html">Read more</a></p>
     </div>
 
-    <div class="post-preview">
+    <div class="post-preview" data-topics="dos monitoring-metrics">
       <h2><a href="/blog/defending-against-circuit-dos-june-2026.html">Defending Against Circuit-Building DoS: Better Metrics, and What Tor Could Fix</a></h2>
       <div class="meta">By 1AEO Team • Jul 13, 2026 • Circuit-Building DoS series, Part 5 of 5</div>
-      <p>
-        Better metrics and what Tor could fix. How to see an attack like this without logging anything about the traffic or its sources, the two measurement traps that nearly fooled us, and the protocol-level changes we're asking the Tor Project to weigh — per-source limits that compose into a per-relay cap, proof-of-work for circuit creation, and RSS-aware OOM handling.
-        <a href="/blog/defending-against-circuit-dos-june-2026.html">Read more</a>
-      </p>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a> <a href="/blog/?tag=monitoring-metrics" data-blog-topic="monitoring-metrics" rel="tag">Monitoring &amp; metrics</a></div>
+      <p>Monitoring lessons and proposals grounded in counter scope: introduction limits, queue drops, channel classification and memory accounting. Proposed relay-circuit PoW is separate from existing onion-service PoW. <a href="/blog/defending-against-circuit-dos-june-2026.html">Read more</a></p>
     </div>
 
-    <div class="post-preview">
+    <div class="post-preview" data-topics="monitoring-metrics dos">
+      <h2><a href="/blog/tor-connection-gauge-drift.html">The Metric That Drifts to Zero: An Accounting Bug in Tor's Connection Gauge</a></h2>
+      <div class="meta">By 1AEO Team • Jul 10, 2026 (clarified Oct 20, 2026) • Tor 0.4.8.x MetricsPort</div>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=monitoring-metrics" data-blog-topic="monitoring-metrics" rel="tag">Monitoring &amp; metrics</a> <a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a></div>
+      <p>In Tor 0.4.8.16, an early inbound accept-path failure can decrement the stored connection gauge before its matching open increment, letting the exported gauge drift toward zero between restarts. Historical comparison, isolated accounting model, and cross-check limits. <a href="/blog/tor-connection-gauge-drift.html">Read more</a></p>
+    </div>
+
+    <div class="post-preview" data-topics="relay-memory">
       <h2><a href="/blog/mimalloc-209-tor-relay-deployment.html">5-Way Allocator Test and 200-Relay Deployment</a></h2>
       <div class="meta">By 1AEO Team • Jan 10, 2026 &bull; Allocator comparisons and production deployment</div>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=relay-memory" data-blog-topic="relay-memory" rel="tag">Relay memory</a></div>
       <p>
         5-Way Deployment Blog: Testing 5 allocators on 100 relays (20 per group) with Debian 13.2 for 6-10 days showed mimalloc 2.0.9 (1.41 GB) used 7.4× less memory than 3.0.1 (10.44 GB), so we migrated all 200 production relays to 2.0.9.
         <a href="/blog/mimalloc-209-tor-relay-deployment.html">Read more</a>
       </p>
     </div>
 
-    <div class="post-preview">
+    <div class="post-preview" data-topics="relay-memory">
       <h2><a href="/blog/tor-memory-optizations-what-actually-works.html">Tor Memory Optimization: What Actually Works</a></h2>
       <div class="meta">By 1AEO Team • Jan 5, 2026 &bull; Guard relay memory experiments and findings</div>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=relay-memory" data-blog-topic="relay-memory" rel="tag">Relay memory</a></div>
       <p>
-        After testing allocators, config tweaks, and restarts across 100+ relays, we found that switching to mimalloc or jemalloc is the only fix that actually stops Tor guard memory from ballooning to 5+ GB.
+        Earlier tests across 100+ relays compared allocators, configuration changes and restarts. Allocator changes reduced RSS in that workload; they do not impose a general memory cap.
         <a href="/blog/tor-memory-optizations-what-actually-works.html">Read more</a>
       </p>
     </div>
 
-    <div class="post-preview">
+    <div class="post-preview" data-topics="relay-memory">
       <h2><a href="/blog/memory-allocators-tor-relay-fragmentation-with-custom-allocators.html">Solving Tor Memory Fragmentation with Custom Allocators</a></h2>
       <div class="meta">By 1AEO Team • Jan 5, 2026 &bull; Comparing memory allocators for Tor relays</div>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=relay-memory" data-blog-topic="relay-memory" rel="tag">Relay memory</a></div>
       <p>
-        Our 90-relay experiment on Ubuntu 24.04 proves that swapping glibc for mimalloc (79% reduction) or jemalloc (71% reduction) keeps Tor guards under 2 GB without recompiling or losing Guard status.
+        In an earlier 90-relay Ubuntu 24.04 experiment, mimalloc and jemalloc reduced observed memory use by 79% and 71%. Those workload-specific results do not guarantee a peak RSS limit.
         <a href="/blog/memory-allocators-tor-relay-fragmentation-with-custom-allocators.html">Read more</a>
       </p>
     </div>
 
-    <div class="post-preview">
+    <div class="post-preview" data-topics="relay-memory">
       <h2><a href="/blog/dircache-memory-trade-off-tor-guard-relays.html">The DirCache Dilemma: The Fix We Can't Reduce Guard Memory With</a></h2>
       <div class="meta">By 1AEO Team • Jan 5, 2026 &bull; Directory caching and guard relay memory</div>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=relay-memory" data-blog-topic="relay-memory" rel="tag">Relay memory</a></div>
       <p>
         Disabling DirCache cuts memory by 94%, but it also removes your Guard flag—making it a diagnostic proof point rather than a viable solution for production Guard relays.
         <a href="/blog/dircache-memory-trade-off-tor-guard-relays.html">Read more</a>
       </p>
     </div>
 
-    <div class="post-preview">
+    <div class="post-preview" data-topics="relay-memory">
       <h2><a href="/blog/maxmeminqueues-myth-for-guard-memory.html">The MaxMemInQueues Myth For Guard Memory</a></h2>
       <div class="meta">By 1AEO Team • Jan 5, 2026 &bull; Testing queue memory limits on guard relays</div>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=relay-memory" data-blog-topic="relay-memory" rel="tag">Relay memory</a></div>
       <p>
-        Despite its promising name, MaxMemInQueues only limits circuit buffers—not the directory cache fragmentation that actually causes Tor relays to bloat to 5 GB.
+        MaxMemInQueues limits selected accounted allocations, not total process RSS. In this earlier experiment, lowering it did not prevent the observed memory growth.
         <a href="/blog/maxmeminqueues-myth-for-guard-memory.html">Read more</a>
       </p>
     </div>
 
-    <div class="post-preview">
+    <div class="post-preview" data-topics="relay-memory">
       <h2><a href="/blog/periodic-restarts-workaround-guard-memory.html">Periodic Restarts: A Brute-Force Workaround for Guard Memory</a></h2>
       <div class="meta">By 1AEO Team • Jan 5, 2026 &bull; Restart intervals and guard relay memory</div>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=relay-memory" data-blog-topic="relay-memory" rel="tag">Relay memory</a></div>
       <p>
         Scheduled restarts can reduce memory by up to 19%, but they disrupt circuits and still leave you at 4.5 GB—use them only as a stopgap while migrating to a better allocator.
         <a href="/blog/periodic-restarts-workaround-guard-memory.html">Read more</a>
       </p>
     </div>
 
-    <div class="post-preview">
+    <div class="post-preview" data-topics="relay-memory">
       <h2><a href="/blog/maxconsensusagefordiffs-limiting-for-guard-memory.html">MaxConsensusAgeForDiffs: Why Limiting Consensus Cache Doesn't Help Guard Memory</a></h2>
       <div class="meta">By 1AEO Team • Jan 5, 2026 &bull; Consensus diff retention and guard relay memory</div>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=relay-memory" data-blog-topic="relay-memory" rel="tag">Relay memory</a></div>
       <p>
         Limiting how long Tor keeps consensus diffs had zero impact on memory—all test groups ended at 5.6–5.8 GB, proving the fragmentation problem lies in glibc, not cache retention.
         <a href="/blog/maxconsensusagefordiffs-limiting-for-guard-memory.html">Read more</a>
       </p>
     </div>
 
-    <div class="post-preview">
+    <div class="post-preview" data-topics="monitoring-metrics">
       <h2><a href="/blog/navigating-tor-relay-trackers-measure-compare.html">Navigating Top Relay Trackers: Measure and Compare Tor Nodes</a></h2>
       <div class="meta">By 1AEO Team • May 26, 2025 &bull; Comparing Tor relay monitoring tools and dashboards</div>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=monitoring-metrics" data-blog-topic="monitoring-metrics" rel="tag">Monitoring &amp; metrics</a></div>
       <p>
         A straightforward guide to the leading Tor relay dashboards—compare their bandwidth stats, update frequency, map views, and detailed features to monitor your nodes and network with ease.
         <a href="/blog/navigating-tor-relay-trackers-measure-compare.html">Read more</a>
       </p>
     </div> 
 
-    <div class="post-preview">
+    <div class="post-preview" data-topics="bgp-routing">
       <h2><a href="/blog/bgp-configs-for-tor-relay-servers.html">BGP Configuration Files for Tor Relay Servers</a></h2>
       <div class="meta">By 1AEO Team • May 1, 2025 &bull; BGP configuration examples for Tor relay operators</div>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=bgp-routing" data-blog-topic="bgp-routing" rel="tag">BGP &amp; routing</a></div>
       <p>
         Supercharge your Tor relay deployments with turnkey BGP configs that take you from zero to announced in minutes.
         <a href="/blog/bgp-configs-for-tor-relay-servers.html">Read more</a>
       </p>
     </div>
 
-    <div class="post-preview">
+    <div class="post-preview" data-topics="bandwidth-capacity">
       <h2><a href="/blog/full-throttle-tor-real-world-10-gbps-performance.html">Full-Throttle Tor: Real-World 10 Gbps Performance</a></h2>
       <div class="meta">By 1AEO Team • April 30, 2025 &bull; Relay bandwidth observations across locations and providers</div>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=bandwidth-capacity" data-blog-topic="bandwidth-capacity" rel="tag">Bandwidth &amp; capacity</a></div>
       <p>
         Running a 10 Gbps Tor relay at maximum capacity reveals lessons every operator should know before scaling up.
         <a href="/blog/full-throttle-tor-real-world-10-gbps-performance.html">Read more</a>
       </p>
     </div>
 
-    <div class="post-preview">
+    <div class="post-preview" data-topics="bandwidth-capacity">
       <h2><a href="/blog/high-capacity-relays-single-vs-multiple-servers.html">High-Capacity Relays: Can Bigger Bandwidth Make a Bigger Difference?</a></h2>
       <div class="meta">By 1AEO Team • March 31, 2025 &bull; Comparing centralized and distributed relay deployments</div>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=bandwidth-capacity" data-blog-topic="bandwidth-capacity" rel="tag">Bandwidth &amp; capacity</a></div>
       <p>
         A recent thread on the Tor-relays list raises a fundamental question for operators: is it better to deploy a single high-capacity server, or several smaller ones distributed across locations and providers?
         <a href="/blog/high-capacity-relays-single-vs-multiple-servers.html">Read more</a>
@@ -355,7 +421,7 @@
     </div>
 
     <div class="footer">
-      <p>© 2025 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p>
+      <p>© <span data-copyright-year>2026</span> 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p>
     </div>
   </div>
 </body>

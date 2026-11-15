@@ -22,6 +22,14 @@ DoS wave. Script directories are named after the post they reproduce:
 
 [`tor-relay-intrusions-oct-2026/`](tor-relay-intrusions-oct-2026/) rebuilds the hero chart of [Securing a Fresh Ubuntu VM for a Tor Relay: A Beginner's Checklist](https://1aeo.com/blog/securing-fresh-ubuntu-vm-tor-relay-checklist.html): relays per hourly consensus on the two exit policies the intruders wrote, from CollecTor consensus archives. Its README has the definitions and run instructions.
 
+## Connection-gauge accounting model (`tor-0.4.8.16`)
+
+[`tor-connection-gauge-drift/`](tor-connection-gauge-drift/) contains the standalone synthetic C accounting model (`gauge-accounting-model.c`) used in [The Metric That Drifts to Zero: An Accounting Bug in Tor's Connection Gauge](https://1aeo.com/blog/tor-connection-gauge-drift.html).
+
+## Shared chart helpers and October–November 2026 telemetry posts
+
+[`shared/`](shared/) contains the reusable public chart styling (`blog_chart_style.py`) and number-formatting (`blog_display_numbers.py`) helpers. Posts built from first-party relay telemetry (`tor-begin-dir-surges`, the four-part directory-flood series, `tor-metricsport-zstd-dictionary`, `freebsd-jemalloc-vs-mimalloc-tor-relay-study`, and `tor-begindir-hsdir-mitigation-pressure`) publish their complete summary tables and rendered SVG/PNG figures directly in `site/blog/` without raw relay telemetry exports.
+
 ## Charts in the network-view post ("The Tor Network Is Under a Circuit-Building DoS Wave")
 
 | script | chart | data source | runtime |

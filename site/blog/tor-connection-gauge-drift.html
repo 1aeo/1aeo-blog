@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Metric That Drifts to Zero: An Accounting Bug in Tor's Connection Gauge | 1st Amendment Encrypted Openness</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; background-color: #121212; color: #ffffff; }
+    .nav { background-color: #1e1e1e; padding: 10px 0; box-shadow: 0 2px 10px rgba(0, 255, 127, 0.2); position: sticky; top: 0; z-index: 1000; }
+    .nav-toggle { display: none; background: none; border: none; font-size: 24px; color: #00ff7f; position: absolute; top: 10px; right: 20px; cursor: pointer; }
+    .nav-links { display: flex; justify-content: center; flex-wrap: wrap; }
+    .nav-links a { color: #00ff7f; text-decoration: none; margin: 0 15px; font-size: 18px; }
+    .nav-links a:hover { text-decoration: underline; }
+    @media (max-width: 600px) { .nav-links { display: none; flex-direction: column; margin-top: 40px; } .nav-links.show { display: flex; } .nav-toggle { display: block; } }
+    .container { max-width: 800px; margin: 50px auto; padding: 20px; background: #1e1e1e; box-shadow: 0px 0px 15px rgba(0, 255, 127, 0.6); border-radius: 10px; text-align: left; }
+    h1, h2, h3 { color: #00ff7f; }
+    h1 { text-align: center; font-size: 26px; }
+    p { font-size: 18px; color: #cccccc; line-height: 1.6; margin-bottom: 1em; }
+    .meta { font-size: 14px; color: #888; margin-bottom: 20px; text-align: center; }
+    ul, ol { color: #cccccc; margin-bottom: 1em; }
+    li { font-size: 18px; margin-bottom: 8px; line-height: 1.6; }
+    code { background-color: #2d2d2d; padding: 2px 6px; border-radius: 3px; font-family: monospace; color: #00ff7f; }
+    pre { background-color: #2d2d2d; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 14px; }
+    pre code { background: none; padding: 0; color: #ffffff; }
+    a { color: #00ff7f; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container img { display: block; margin: 20px auto; max-width: 100%; height: auto; border-radius: 5px; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #444; }
+    th { background-color: #2d2d2d; color: #00ff7f; }
+    td { color: #cccccc; }
+    tr:hover { background-color: #252525; }
+    .warning { background-color: #2d2d2d; border-left: 4px solid #ff6b6b; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; font-size: 14px; color: #777; text-align: center; }
+    .btn { display: inline-block; margin-top: 20px; padding: 12px 24px; font-size: 18px; color: #121212; background-color: #00ff7f; text-decoration: none; font-weight: bold; border-radius: 5px; transition: background 0.3s; }
+    .btn:hover { background-color: #00cc66; text-decoration: none; }
+    .highlight { color: #ff6b6b; font-weight: bold; }
+    .success { color: #00ff7f; font-weight: bold; }
+  </style>
+<style id="mobile-readability">@media(max-width:600px){.container code{overflow-wrap:anywhere}.container pre code{overflow-wrap:normal;white-space:pre}.container table{display:block;max-width:100%;overflow-x:auto}}</style>
+  <script src="/copyright-year.js" defer></script>
+  <link rel="stylesheet" href="/blog/topics.css">
+</head>
+<body>
+  <div class="nav">
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')">&#9776;</button>
+    <div class="nav-links">
+          <a href="/">Home</a>
+          <a href="/onionvanity/">Onion Vanity</a>
+          <a href="/blog/">Blog</a>
+          <a href="/onionflash/">Onion Flash</a>
+          <a href="https://metrics.1aeo.com">Metrics</a>
+          <a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
+          <a href="https://aroivalidator.1aeo.com">AROI Validator</a>
+      <a href="https://routefluxmap.1aeo.com">RouteFluxMap</a>
+      <a href="/#contact">Contact</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1>The Metric That Drifts to Zero: An Accounting Bug in Tor's Connection Gauge</h1>
+    <p class="meta"><em>By 1AEO Team &bull; July 10, 2026 &bull; Tor 0.4.8.x MetricsPort &bull; Follow-up to our <a href="circuit-building-dos-wave-june-2026.html">June DoS-wave post</a></em></p>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=monitoring-metrics" data-blog-topic="monitoring-metrics" rel="tag">Monitoring &amp; metrics</a> <a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a></div>
+
+    <p>While investigating the <a href="circuit-building-dos-wave-june-2026.html">circuit-building DoS wave on our Guard-flagged relays</a>, one metric kept telling a story the others contradicted. Tor's inbound connection gauge, <code>tor_relay_connections{state="opened", direction="received"}</code>, would fall steadily toward zero for a week or two, then jump back to a large value, then fall again. Our alerting could read it as a connection flood (the snap-back) or a total collapse (the decay) on the same relay in the same month.</p>
+
+    <div class="warning"><p><strong>Clarification — October 20, 2026.</strong> The source analysis below concerns <code>tor-0.4.8.16</code>. We have re-queried the historical production comparison and rerun an isolated accounting model. The kernel series is a cross-check, not an exact inbound Tor count; the model does not establish the bug's frequency in production or validate a fix.</p></div>
+    <p>The source contains a path that can make the inbound gauge undercount: an accepted connection can be marked for close before its matching open increment. The stored gauge is floored at zero and is not recounted when exported. The <a href="https://gitlab.torproject.org/tpo/core/tor/-/blob/tor-0.4.8.16/src/core/mainloop/connection.c">accept path</a> and <a href="https://gitlab.torproject.org/tpo/core/tor/-/blob/tor-0.4.8.16/src/feature/stats/rephist.c">accounting functions</a> establish this mechanism.</p>
+
+    <img width="2080" height="1280" src="images/conn-gauge-drift-production.png?v=ee144f17a212" alt="Recomputed hourly comparison from April 11 through July 10, 2026. Received and initiated Tor OR connection gauges and kernel CurrEstab are each normalized by their own median. The inbound gauge varies much more than the other series. Lower panels show changing counts of reporting Tor processes and kernel hosts. The kernel series is not an exact inbound Tor count.">
+
+    <h2>The Symptom</h2>
+    <p>The replacement chart uses hourly historical samples from April 11, 00:00 through July 10, 00:00 UTC. Tor's series sum <code>type="OR"</code> gauges over IPv4 and IPv6; <code>node_netstat_Tcp_CurrEstab</code> counts TCP connections in ESTABLISHED or CLOSE-WAIT, in both directions and across all ports in the monitored network namespace. Each series is divided by its own median. They measure different populations:</p>
+    <ul>
+      <li>The <code>direction="received"</code> gauge spans about <span class="highlight">104x</span> from minimum to maximum in this recalculation. It repeatedly falls while the kernel TCP total changes much less.</li>
+      <li>The kernel total is an independent cross-check. Its different states, directions and scope mean it cannot establish the true number of inbound Tor connections.</li>
+      <li>Reporting populations vary from 408 to 981 Tor processes and three to seven kernel hosts. The lower panels show that coverage; dips and jumps cannot automatically be attributed to restarts or traffic changes.</li>
+      <li>The <code>direction="initiated"</code> gauge varies less relative to its own median. This is consistent with different accounting paths, but does not measure how often the inbound failure path ran.</li>
+    </ul>
+
+    <h2>The Gauge Is an Accumulator, Not a Live Count</h2>
+    <p>In <code>src/feature/relay/relay_metrics.c</code>, the fill function for this metric does not walk the list of live connections. It reads a stored counter:</p>
+    <pre><code>// relay_metrics.c : fill_conn_gauge_values()
+fill_single_connection_value(sentry, i, "received", "opened", AF_INET,
+                             rep_hist_get_conn_opened(true, i, AF_INET));</code></pre>
+    <p>A stored gauge can be accurate when its updates balance. Here, a specific failure path can subtract without the matching addition.</p>
+
+    <h2>The Accounting Asymmetry</h2>
+    <p>The backing counter lives in <code>src/feature/stats/rephist.c</code>. It is incremented in one function and decremented in another:</p>
+    <pre><code>// rephist.c
+void rep_hist_note_conn_opened(bool from_listener, unsigned type, int af) {
+  ...
+  conn_num_opened_v4[dir][type]++;          // OPEN: +1
+}
+void rep_hist_note_conn_closed(bool from_listener, unsigned type, int af) {
+  ...
+  if (conn_num_opened_v4[dir][type] > 0)    // the underflow floor
+    conn_num_opened_v4[dir][type]--;        // CLOSE: -1 (never below 0)
+}</code></pre>
+    <p>The bug is <em>where</em> those two calls are reached from, in <code>src/core/mainloop/connection.c</code>:</p>
+    <ul>
+      <li><code>connection_mark_for_close_internal_()</code> decrements the gauge the first time an object is marked for close, whether or not its matching increment happened. Some failure paths free the object directly instead.</li>
+      <li>The <strong>increment</strong> for an inbound connection runs only at the very end of <code>connection_handle_listener_read()</code>, <em>after</em> the connection has been added to Tor's connection list <em>and</em> its handshake has been initialized:</li>
+    </ul>
+    <pre><code>// connection.c : connection_handle_listener_read()  (inbound accept path)
+newconn = connection_new(new_type, conn->socket_family);   // object exists
+...
+newconn->from_listener = 1;
+if (connection_add(newconn) &lt; 0) { connection_free(newconn); return 0; }   // now on the list
+if (connection_init_accepted_conn(newconn, ...) &lt; 0) {
+    if (!newconn->marked_for_close)
+        connection_mark_for_close(newconn); // DECREMENT before the increment
+    return 0;                             //     ...and we return before the increment
+}
+note_connection(true /* inbound */, newconn);   // inbound increment</code></pre>
+    <p>There is a window after an inbound connection enters Tor's list but before <code>note_connection()</code> counts it. If <code>connection_init_accepted_conn()</code> fails, the close path can decrement the gauge without a matching increment. That establishes an undercount mechanism, not its frequency or the peer behavior that caused a particular failure.</p>
+
+    <p>The outbound path increments after <code>connect()</code> succeeds or reports an in-progress connection, and before adding it to the connecting list. An immediate <code>connect()</code> failure returns before the increment. That differs from the inbound path; it is not a proof that every outbound failure path balances.</p>
+
+    <div class="warning">
+      <strong>The direct DoS-rejection path is separate.</strong> In this source version, <code>rep_hist_note_conn_rejected()</code> runs before <code>connection_new()</code>: it closes the raw socket and returns. No connection object is created, so this path does not make the unmatched gauge decrement described above.
+    </div>
+
+    <h2>Why the Error Can Persist</h2>
+    <p>A normally counted connection adds one when opened and subtracts one when marked for close. An unmatched decrement can leave a persistent shortfall because the export path does not recount live connections. The zero floor prevents negative values. A process restart resets the bookkeeping, which then rebuilds as new connections are counted. Connection turnover and the floor mean the error is not necessarily permanent.</p>
+
+    <h2>Reproducing It</h2>
+    <p>For this correction, we compiled the open, close and getter functions copied from <code>tor-0.4.8.16</code> into an isolated accounting model. We counted 40,000 simulated open connections, then called the close function without corresponding opens. After 40,000 unmatched calls, the exported gauge reached zero and stayed there. The caller schedule is synthetic; it demonstrates the accounting behavior rather than a network attack or production frequency.</p>
+
+    <img width="2080" height="1120" src="images/conn-gauge-repro-drift.png?v=2a0473457cd6" alt="Isolated accounting model rerun October 20, 2026. With 40,000 simulated normally counted open connections, unmatched close calls reduce the copied Tor gauge from 40,000 to zero after 40,000 calls. Further calls leave it at zero. This is a synthetic accounting model, not a Tor-binary network experiment.">
+
+    
+
+    <h2>A Proposed Fix</h2>
+    <p>One proposed approach is to count eligible connections when exporting the gauge &mdash; walk Tor's connection array, bucket by direction, type and address family, and skip objects marked for close:</p>
+    <pre><code>// relay_metrics.c : count live connections instead of reading the accumulator
+SMARTLIST_FOREACH_BEGIN(get_connection_array(), const connection_t *, conn) {
+    if (conn->marked_for_close) continue;
+    unsigned dir = conn->from_listener ? 1 : 0;
+    ... tally[dir][conn->type][af]++ ...
+} SMARTLIST_FOREACH_END(conn);</code></pre>
+    <p>This avoids the mutable gauge accumulator, but the connection-state definition, correctness and scrape cost still need testing. The <code>created</code> and <code>rejected</code> counters use separate cumulative bookkeeping. This is a code sketch, not a validated patch or a claim that an upstream fix has been filed, accepted or released.</p>
+
+    <h2>If You Run Relays: What to Trust Instead</h2>
+    <p>For the source version examined here, cross-check the inbound gauge before using it for alerts. Other metrics have their own scope:</p>
+    <ul>
+      <li><code>tor_relay_connections_total{state="created"}</code> is cumulative creation bookkeeping. Its rate avoids the gauge's decrement drift, but does not count concurrency or every accepted socket: the early inbound failures above return before its increment. Account for process resets when calculating rates.</li>
+      <li><code>node_netstat_Tcp_CurrEstab</code> counts TCP connections in ESTABLISHED or CLOSE-WAIT, in both directions across the monitored network namespace. Match scope as closely as possible when comparing it with Tor.</li>
+      <li>Cross-check any gauge against an independent source before interpreting a change as a traffic event. Compare states, directions, scrape coverage and process restarts as well as values.</li>
+    </ul>
+
+    <p>As with the corrected <a href="circuit-building-dos-below-tor-june-2026.html">listener-drop analysis</a>, the useful question is what the metric actually measures. A kernel counter and an application gauge can disagree without either being an exact count of the population you meant to measure.</p>
+
+    <p style="text-align: center;"><a href="/#get-involved" class="btn">Join the Mission</a></p>
+
+    <div class="footer">
+      <p>© <span data-copyright-year>2026</span> 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://1aeo.com/blog/tor-metricsport-zstd-dictionary.html">
+  <title>34–36% Smaller Tor MetricsPort Archives with a zstd Dictionary | 1AEO</title>
+  <meta name="description" content="Adding a raw dictionary made reconstructed Tor MetricsPort archives 34–36% smaller than zstd at its default level 3 alone. Download the dictionary and compare the complete results.">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; background-color: #121212; color: #ffffff; }
+    .nav { background-color: #1e1e1e; padding: 10px 0; box-shadow: 0 2px 10px rgba(0, 255, 127, 0.2); position: sticky; top: 0; z-index: 1000; }
+    .nav-toggle { display: none; background: none; border: none; font-size: 24px; color: #00ff7f; position: absolute; top: 10px; right: 20px; cursor: pointer; }
+    .nav-links { display: flex; justify-content: center; flex-wrap: wrap; }
+    .nav-links a { color: #00ff7f; text-decoration: none; margin: 0 15px; font-size: 18px; }
+    .nav-links a:hover { text-decoration: underline; }
+    @media (max-width: 600px) { .nav-links { display: none; flex-direction: column; margin-top: 40px; } .nav-links.show { display: flex; } .nav-toggle { display: block; } }
+    .container { max-width: 800px; margin: 50px auto; padding: 20px; background: #1e1e1e; box-shadow: 0px 0px 15px rgba(0, 255, 127, 0.6); border-radius: 10px; text-align: left; }
+    h1, h2, h3 { color: #00ff7f; }
+    h1 { text-align: center; font-size: 26px; }
+    p { font-size: 18px; color: #cccccc; line-height: 1.6; margin-bottom: 1em; }
+    .meta { font-size: 14px; color: #888; margin-bottom: 20px; text-align: center; }
+    ul, ol { color: #cccccc; margin-bottom: 1em; }
+    li { font-size: 18px; margin-bottom: 8px; line-height: 1.6; }
+    code { background-color: #2d2d2d; padding: 2px 6px; border-radius: 3px; font-family: monospace; color: #00ff7f; }
+    pre { background-color: #2d2d2d; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 14px; }
+    pre code { background: none; padding: 0; color: #ffffff; }
+    a { color: #00ff7f; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container img { display: block; margin: 20px auto; max-width: 100%; height: auto; border-radius: 5px; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #444; vertical-align: top; }
+    th { background-color: #2d2d2d; color: #00ff7f; }
+    td { color: #cccccc; }
+    td code { display: inline-block; margin-top: 4px; white-space: pre-wrap; overflow-wrap: anywhere; }
+    tr:hover { background-color: #252525; }
+    .table-wrap { overflow-x: auto; }
+    .warning { background-color: #2d2d2d; border-left: 4px solid #ff6b6b; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .callout { background-color: #2d2d2d; border-left: 4px solid #00ff7f; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .callout p, .warning p { margin: 0 0 0.6em; }
+    .callout p:last-child, .warning p:last-child { margin-bottom: 0; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; font-size: 14px; color: #777; text-align: center; }
+    .btn { display: inline-block; margin-top: 20px; padding: 12px 24px; font-size: 18px; color: #121212; background-color: #00ff7f; text-decoration: none; font-weight: bold; border-radius: 5px; transition: background 0.3s; }
+    .btn:hover { background-color: #00cc66; text-decoration: none; }
+    .highlight { color: #ff6b6b; font-weight: bold; }
+    .success { color: #00ff7f; font-weight: bold; }
+    .series { font-size: 15px; color: #aaa; background-color: #181818; border-left: 4px solid #00ff7f; padding: 12px 16px; margin: 0 0 24px; border-radius: 0 5px 5px 0; line-height: 1.5; }
+    .series a { color: #00ff7f; }
+    .refs { font-size: 15px; color: #999; }
+    h2, h3 { scroll-margin-top: 70px; }
+    .anchor { color: #3f3f3f; text-decoration: none; margin-left: 8px; font-size: 0.85em; font-weight: normal; }
+    h2:hover .anchor, h3:hover .anchor { color: #00ff7f; }
+  </style>
+  <style>
+    .contents strong, .contents a { display: block; margin: 5px 0; }
+    .scope { font-size: 15px; }
+    figure { margin: 24px 0; }
+    figure picture, figure img { display: block; width: 100%; }
+    .container figure img { margin: 0; border-radius: 5px; }
+    figcaption { color: #cccccc; font-size: 15px; line-height: 1.6; margin-top: 12px; }
+    .container p code, .container li code { overflow-wrap: anywhere; }
+    caption { text-align: left; color: #cccccc; font-size: 15px; line-height: 1.5; margin-bottom: 8px; }
+    th, td { font-size: 15px; line-height: 1.5; }
+    tfoot th, tfoot td { font-weight: bold; border-top: 2px solid #666; background: #252b2b; }
+    .compression-results th, .compression-results td { padding: 10px 8px; }
+    @media (max-width: 600px) {
+      .container { margin: 20px 10px; padding: 16px; }
+      h1 { font-size: 25px; }
+      h2 { font-size: 22px; }
+      th, td { padding: 8px; }
+      .compression-results, .compression-results tbody { display: block; width: 100%; }
+      .compression-results thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+      .compression-results tr { display: block; border-bottom: 1px solid #555; padding: 10px 0; }
+      .compression-results td { display: flex; justify-content: space-between; gap: 16px; border: 0; padding: 5px 8px; text-align: right; }
+      .compression-results td:first-child { display: block; text-align: left; font-weight: bold; color: #f2eced; padding-bottom: 10px; }
+      .compression-results td[data-label]::before { content: attr(data-label); color: #aabbb5; text-align: left; }
+    }
+  </style>
+  <script src="/copyright-year.js" defer></script>
+  <link rel="stylesheet" href="/blog/topics.css">
+</head>
+<body>
+  <div class="nav">
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')" aria-label="Toggle navigation">&#9776;</button>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/onionvanity/">Onion Vanity</a>
+      <a href="/blog/">Blog</a>
+      <a href="/onionflash/">Onion Flash</a>
+      <a href="https://metrics.1aeo.com">Metrics</a>
+      <a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
+      <a href="https://aroivalidator.1aeo.com">AROI Validator</a>
+      <a href="https://routefluxmap.1aeo.com">RouteFluxMap</a>
+      <a href="/#contact">Contact</a>
+    </div>
+  </div>
+
+  <!--email_off-->
+  <article class="container">
+    <h1>34–36% Smaller Tor MetricsPort Archives with a zstd Dictionary</h1>
+    <p class="meta"><em>By 1AEO Team &bull; November 4, 2026</em></p>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=monitoring-metrics" data-blog-topic="monitoring-metrics" rel="tag">Monitoring &amp; metrics</a> <a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a></div>
+    <nav class="series contents" aria-label="Contents">
+      <strong>Contents</strong>
+      <a href="#question">The question from forest</a>
+      <a href="#compression">Compression results</a>
+      <a href="#complete-sample">What a complete scrape contains</a>
+      <a href="#dictionary">Download and use the dictionary</a>
+      <a href="#method">Reproduce the complete scrape</a>
+    </nav>
+
+    <p class="scope"><strong>Version scope:</strong> Tor 0.4.9.15. Verification used a build reporting 0.5.0.0-alpha-dev; the relay definitions, onion-service definition files, logging metric and connection-type names were checked against 0.4.9.15 and matched.</p>
+    <p class="scope"><strong>Compression scope:</strong> Reconstructed text from real Prometheus samples for two relays on one host, over about one week spanning an upgrade to 0.4.9.15. <strong>Relay A</strong> recorded at least 1,000 <code>BEGIN_DIR</code> streams/s for 17% of measured time and fewer for 83%. <strong>Relay B</strong> recorded zero <code>BEGIN_DIR</code> streams for 100% of measured time.</p>
+
+    <div class="callout">
+      <p><strong><a href="#compression">The raw dictionary cut level-3 (zstd default) output by 34–36%</a></strong> for two relay datasets compressed one scrape at a time.</p>
+      <p><strong><a href="#relay-lines">329 lines with no onion service and <code>OfflineMasterKey 0</code>.</a></strong> This Tor 0.4.9.15 total includes <code>HELP</code> and <code>TYPE</code> metadata.</p>
+      <p><strong><a href="#complete-sample">391 lines with onion-service and signing-certificate metrics.</a></strong> One onion service with two virtual ports, <code>OfflineMasterKey 1</code> and a loaded signing certificate covers all 37 families.</p>
+    </div>
+
+    <h2 id="question">The Question from forest <a class="anchor" href="#question" aria-label="Link to this section">#</a></h2>
+    <p>In a <a href="https://lists.torproject.org/mailman3/hyperkitty/list/tor-relays%40lists.torproject.org/message/DO6RTEEBZYMQLTN4Z3VGYLJUSSJA3IDM/">September 12 tor-relays message</a>, forest wrote: <q>I'm looking for a sample containing all possible metrics strings</q>. They were compressing scrapes with zstd to study an ongoing distributed denial-of-service (DDoS) attack, using:</p>
+    <pre><code>curl -s 127.0.0.1:9035/metrics | sed 's/ [0-9]*$//' &gt; dict</code></pre>
+
+    <h2 id="compression">The Raw Dictionary Cut Level-3 (zstd Default) Output by 34–36% <a class="anchor" href="#compression" aria-label="Link to this section">#</a></h2>
+    <p>Across about 10,000 reconstructed scrapes per relay, the raw dictionary reduced level-3 (zstd default) compressed totals from 30.3 to 19.9 MB for Relay A and 29.5 to 19.0 MB for Relay B.</p>
+    <figure>
+      <picture>
+        <source media="(max-width: 600px)" srcset="images/tor-metrics-compression-mobile.svg">
+        <img src="images/tor-metrics-compression.svg" alt="Level-3 (zstd default) compressed totals for reconstructed scrapes: Relay A, 30.3 MB without the raw dictionary and 19.9 MB with it; Relay B, 29.5 MB without and 19.0 MB with it. The reductions are 34.3% and 35.7%, respectively.">
+      </picture>
+      <figcaption><strong>Footnote:</strong> The two relay datasets were compressed one reconstructed scrape per frame, using zstd 1.5.7 at level 3 (zstd default), with checksums and decompression checks. Savings compare compressed bytes with and without the raw dictionary at the same level. MB means 1,000,000 bytes. Totals exclude dictionary storage and surrounding archive overhead. These are reconstructed samples, not captured MetricsPort response bodies; family order was fixed. Both datasets span an upgrade to Tor 0.4.9.15. See the <a href="#compression-details">complete results and methods</a>.</figcaption>
+    </figure>
+    <div class="table-wrap"><table><caption>About one week per relay; each compressed scrape has its own frame</caption>
+<thead><tr><th>Configuration</th><th>Relay A (MB)</th><th>Relay B (MB)</th></tr></thead><tbody>
+<tr><td>Reconstructed text, before compression</td><td>263.7</td><td>263.3</td></tr>
+<tr><td>Level 3 (zstd default); one scrape per frame</td><td>30.3</td><td>29.5</td></tr>
+<tr><td>Level 3 (zstd default) + raw dictionary; one scrape per frame</td><td>19.9</td><td>19.0</td></tr>
+</tbody></table></div>
+
+    <h2 id="relay-lines">329 Lines with No Onion Service and <code>OfflineMasterKey 0</code> <a class="anchor" href="#relay-lines" aria-label="Link to this section">#</a></h2>
+    <p>The <code>curl</code> and <code>sed</code> command in <a href="#question">forest’s question</a> captures those 329 lines. Tor prints a counter with value <code>0</code> when it has no recorded events, rather than omitting that line. This includes denial-of-service (DoS) counters and exit Domain Name System (DNS) counters on a non-exit relay. No traffic needs to be generated to make those counter lines appear. The only conditional relay family is the signing-certificate expiry gauge, <code>tor_relay_signing_cert_expiry_timestamp</code>.</p>
+
+    <h2 id="complete-sample">391 Lines with Onion-Service and Signing-Certificate Metrics <a class="anchor" href="#complete-sample" aria-label="Link to this section">#</a></h2>
+    <p><code>tor_hs_*</code> appears only when an onion service is configured. Each application byte counter, <code>tor_hs_app_read_bytes_total</code> and <code>tor_hs_app_write_bytes_total</code>, emits one sample per <code>HiddenServicePort</code>, labeled with its virtual port. The signing-certificate expiry gauge needs both <code>OfflineMasterKey 1</code> and a loaded certificate. Enabling both conditions in a local test produced the predicted 391 lines.</p>
+    <div class="table-wrap">
+      <table>
+        <caption>0.4.9.15 scrape totals, including one HELP and one TYPE line per family</caption>
+        <thead><tr><th>Configuration</th><th>Families</th><th>Total lines</th></tr></thead>
+        <tbody>
+          <tr><td>Relay; no onion service, <code>OfflineMasterKey 0</code></td><td>24</td><td>329</td></tr>
+          <tr><td>Same relay with <code>OfflineMasterKey 1</code> and a loaded signing certificate</td><td>25</td><td>332</td></tr>
+          <tr><td>Same + one onion service, one virtual port</td><td>37</td><td>389</td></tr>
+          <tr><td>Same + one onion service, two virtual ports</td><td>37</td><td>391</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>“Complete” means coverage of this version’s metric families and label forms. Onion addresses and port values vary by configuration; the download uses a 56-character <code>x</code> placeholder and ports 80 and 443.</p>
+
+    <h2 id="versions">0.4.9.15 Adds Three Directory DoS Counter Series <a class="anchor" href="#versions" aria-label="Link to this section">#</a></h2>
+    <p>Released October 28, 2026, 0.4.9.15 adds <code>begindir_rejected</code>, <code>begindir_rate_rejected</code> and <code>begindir_hsdir_rejected</code> under <code>tor_relay_dos_total</code>. These three <code>type</code>-label series accompany the new denial-of-service (DoS) defenses for <a href="https://gitlab.torproject.org/tpo/core/tor/-/issues/41411">BEGIN_DIR and hidden-service directory (HSDir) requests</a>. Versions 0.4.9.1-alpha through 0.4.9.14 lack them.</p>
+    <p>For background on the traffic paths, see <a href="https://1aeo.com/blog/tor-traffic-paths-denial-of-service.html">Tor Under Attack: Mapping the Pressure Points</a>.</p>
+
+    <h2 id="dictionary">Download and Use the Dictionary <a class="anchor" href="#dictionary" aria-label="Link to this section">#</a></h2>
+    <p><a href="data/tor-metrics-dict-0.4.9.15.txt">Download tor-metrics-dict-0.4.9.15.txt</a>: 391 scrape lines with sample values removed. Use it as a raw zstd dictionary:</p>
+    <pre><code>zstd -D tor-metrics-dict-0.4.9.15.txt scrape.prom -o scrape.prom.zst
+zstd -d -D tor-metrics-dict-0.4.9.15.txt scrape.prom.zst -o restored.prom</code></pre>
+    <p>Keep the exact dictionary used for compression so it is available for decompression.</p>
+
+    <h2 id="source">Where to Check in the Source <a class="anchor" href="#source" aria-label="Link to this section">#</a></h2>
+    <p>There is no single metrics definition file. Start with these three, then follow the label builders:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Source file</th><th>What it defines</th></tr></thead>
+        <tbody>
+          <tr><td><code>src/feature/relay/relay_metrics.c</code></td><td>24 relay families in <code>base_metrics[]</code>; the <code>fill_*()</code> functions add their labels. <code>fill_store()</code> calls every family’s builder.</td></tr>
+          <tr><td><code>src/feature/hs/hs_metrics_entry.c</code></td><td>12 onion-service families, histogram buckets and reason tables. Reason strings also live in <code>hs_metrics_entry.h</code>; <code>hs_metrics.c</code> attaches onion and port labels.</td></tr>
+          <tr><td><code>src/lib/log/log_sys.c</code></td><td>The remaining family: <code>tor_bug_reached_count</code>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><code>conn_type_to_string()</code> in <code>src/core/mainloop/connection.c</code> supplies the connection <code>type</code> labels: types 3 through 20, skipping 10, give 17 names. Label combinations produce 102 samples for <code>tor_relay_connections_total</code> and 68 for <code>tor_relay_connections</code>.</p>
+    <p><code>src/lib/metrics/prometheus.c</code> formats the output; <code>src/lib/metrics/metrics_store.c</code> determines iteration order. <code>src/feature/metrics/metrics.c</code> gathers the subsystem stores.</p>
+
+    <h2 id="method">Methods: Reproduce the Complete Scrape <a class="anchor" href="#method" aria-label="Link to this section">#</a></h2>
+    <p>The source was read and the expected lines counted before building Tor and running a disposable local instance. The following is the sanitized test configuration. Paths, nickname and authority identities are examples; all addresses are loopback. Use fresh, separate test directories, never an existing relay’s keys or configuration. Save this as <code>/path/to/test-torrc</code>, replacing the example paths with your test locations.</p>
+    <pre><code>DataDirectory /path/to/test-data
+SocksPort 0
+ORPort 127.0.0.1:19001
+AssumeReachable 1
+PublishServerDescriptor 0
+OfflineMasterKey 1
+Nickname metricsdump
+ContactInfo none
+ExitRelay 0
+MetricsPort 127.0.0.1:19035
+MetricsPortPolicy accept 127.0.0.1
+HiddenServiceDir /path/to/test-hs
+HiddenServicePort 80 127.0.0.1:8080
+HiddenServicePort 443 127.0.0.1:8443
+DirAuthority fakeauth orport=19002 v3ident=0000000000000000000000000000000000000001 127.0.0.1:19003 0000 0000 0000 0000 0000 0000 0000 0000 0000 0002</code></pre>
+    <p>Generate keys for this test configuration, remove only its disposable master identity secret key, then start Tor with the same configuration. The signing key and certificate remain in the test data directory. The explicit configuration arguments avoid loading your normal relay’s configuration or defaults:</p>
+    <pre><code>tor --defaults-torrc /dev/null -f /path/to/test-torrc --keygen --no-passphrase
+rm /path/to/test-data/keys/ed25519_master_id_secret_key
+tor --defaults-torrc /dev/null -f /path/to/test-torrc</code></pre>
+    <p><strong>The gotcha:</strong> <code>DisableNetwork 1</code> also closes MetricsPort, because it disables non-control network connections. This test used the fake loopback <code>DirAuthority</code> above instead; the observed traffic stayed on localhost. That configuration is a test setup, not a general network sandbox.</p>
+    <p>With the test instance running, capture its MetricsPort output from another terminal. The extraction command below also handles signed integer sample values and preserves metadata:</p>
+    <pre><code>curl -fsS 127.0.0.1:19035/metrics &gt; scrape.prom
+wc -l &lt; scrape.prom
+# 391
+sed -E '/^[^#]/s/ -?[0-9]+$//' scrape.prom &gt; dict</code></pre>
+    <p>The result was 37 families and 391 lines: 317 samples plus 74 metadata lines.</p>
+
+    <h3 id="practical-checks">Practical Checks <a class="anchor" href="#practical-checks" aria-label="Link to this section">#</a></h3>
+    <ul>
+      <li><strong>Count lines, including metadata.</strong> For a Tor 0.4.9.15 relay with no onion service and <code>OfflineMasterKey 0</code>, <code>curl -fsS 127.0.0.1:9035/metrics | wc -l</code> should return 329. Use your configured MetricsPort.</li>
+      <li><strong>Do not compare by line position.</strong> Families within each metrics store follow a SipHash-backed hash-table order that may change after a restart. Samples within a family retain insertion order. A raw zstd dictionary can match content anywhere in the dictionary, so that reordering does not invalidate it.</li>
+      <li><strong>DNS record-type labels remain disabled in Tor 0.4.9.15.</strong> The <code>record</code> label, with values <code>A</code>, <code>PTR</code> and <code>AAAA</code>, is behind <code>#if 0</code>. Tor fixed the reporting bug in the closed <a href="https://gitlab.torproject.org/tpo/core/tor/-/issues/40490">tor#40490</a> by counting DNS errors without a record-type breakdown. The <a href="https://github.com/libevent/libevent/pull/1220">upstream libevent fix</a> has since been merged, but these Tor labels remain disabled. Leave them out of this dictionary.</li>
+      <li><strong>Keep versions separate.</strong> Compared with 0.4.8.25, 0.4.9.x adds <code>tor_relay_dos_total{type="stream_rejected"}</code>, <code>tor_relay_destroy_cell_total</code>, <code>tor_relay_drop_cell_total</code>, <code>tor_relay_circ_proto_violation_total</code> and <code>tor_bug_reached_count</code>. The 0.4.9.15 ChangeLog also says 0.4.8 and earlier will no longer work on the network.</li>
+    </ul>
+
+    <h2 id="compression-details">Compression Methods and Complete Results <a class="anchor" href="#compression-details" aria-label="Link to this section">#</a></h2>
+    <p>Samples collected at a nominal one-minute cadence were exported from Prometheus, with a few missing scrapes. Reconstruction used a Tor output template for names, labels, <code>HELP</code> and <code>TYPE</code> text, removed collector-added target labels, and preserved the recorded integer values. It included only series present at each timestamp: both datasets changed from 278 to 281 samples per scrape across the upgrade to 0.4.9.15. Original response bodies and historical family order were not captured. Live Tor’s order may change on restart; this reconstruction used one fixed order.</p>
+    <p>The activity percentages use interval-average rates from <code>tor_relay_streams_total{type="BEGIN_DIR"}</code>, weighted by elapsed time between scrapes. The comparison cutoff is 1,000 streams/s. Intervals crossing a counter reset, the version transition or a gap longer than 90 seconds are excluded; gaps are not counted as zero activity.</p>
+    <p>The experiment used zstd 1.5.7 through python-zstandard. Individual-scrape and five-scrape frames included checksums and were all round-trip checked. A final batch could contain fewer than five scrapes. The trained-dictionary test used the other relay’s reconstructed samples from the same period, with a 32 KiB training target; it was not a test on a later, held-out period. The trained dictionaries and relay samples remain private.</p>
+    <p>At level 19, the raw dictionary reduced compressed bytes by 52.3% for Relay A and 52.6% for Relay B. At level 3 (zstd default), training on the other relay improved the input/output ratios to 18.6× and 19.6×. Five-scrape frames without a dictionary averaged 747 and 683 bytes per input scrape, compared with 1,976 and 1,880 bytes for separate frames with the raw dictionary; adding the dictionary to those batches reduced size further. These are comparisons among the tested configurations, not universal bounds.</p>
+    <p><strong>Table units:</strong> MB means 1,000,000 bytes; KiB means 1,024 bytes. Input/output ratio is reconstructed input bytes divided by output bytes. Mean bytes per scrape divides the total output by the number of reconstructed input scrapes, including for batched frames. <strong>Dictionary savings</strong> is the reduction in compressed bytes compared with no dictionary at the same compression level and frame grouping; a dash marks rows without a dictionary. Dictionary storage and collector/archive overhead are excluded. Rows use the same configuration order for both relays.</p>
+    <h3>Relay A</h3><div class="table-wrap"><table class="compression-results"><thead><tr><th>Configuration</th><th>Total (MB)</th><th>Input/output ratio</th><th>Mean bytes per scrape</th><th>Dictionary savings</th></tr></thead><tbody>
+<tr><td>Reconstructed text, before compression</td><td data-label="Total (MB)">263.7</td><td data-label="Input/output ratio">1.0×</td><td data-label="Mean bytes per scrape">26,168</td><td data-label="Dictionary savings">—</td></tr>
+<tr><td>Level 3 (zstd default); one scrape per frame</td><td data-label="Total (MB)">30.3</td><td data-label="Input/output ratio">8.7×</td><td data-label="Mean bytes per scrape">3,007</td><td data-label="Dictionary savings">—</td></tr>
+<tr><td>Level 3 (zstd default) + raw dictionary; one scrape per frame</td><td data-label="Total (MB)">19.9</td><td data-label="Input/output ratio">13.2×</td><td data-label="Mean bytes per scrape">1,976</td><td data-label="Dictionary savings">34.3%</td></tr>
+<tr><td>Level 19; one scrape per frame</td><td data-label="Total (MB)">24.6</td><td data-label="Input/output ratio">10.7×</td><td data-label="Mean bytes per scrape">2,446</td><td data-label="Dictionary savings">—</td></tr>
+<tr><td>Level 19 + raw dictionary; one scrape per frame</td><td data-label="Total (MB)">11.8</td><td data-label="Input/output ratio">22.4×</td><td data-label="Mean bytes per scrape">1,166</td><td data-label="Dictionary savings">52.3%</td></tr>
+<tr><td>Level 3 (zstd default) + dictionary trained on the other relay; one scrape per frame</td><td data-label="Total (MB)">14.2</td><td data-label="Input/output ratio">18.6×</td><td data-label="Mean bytes per scrape">1,406</td><td data-label="Dictionary savings">53.2%</td></tr>
+<tr><td>Level 3 (zstd default); up to five scrapes per frame</td><td data-label="Total (MB)">7.5</td><td data-label="Input/output ratio">35.0×</td><td data-label="Mean bytes per scrape">747</td><td data-label="Dictionary savings">—</td></tr>
+<tr><td>Level 3 (zstd default) + raw dictionary; up to five scrapes per frame</td><td data-label="Total (MB)">5.3</td><td data-label="Input/output ratio">50.0×</td><td data-label="Mean bytes per scrape">524</td><td data-label="Dictionary savings">29.9%</td></tr>
+<tr><td>Level 19 + long-distance matching; all collected scrapes in one frame*</td><td data-label="Total (MB)">1.4</td><td data-label="Input/output ratio">194.3×</td><td data-label="Mean bytes per scrape">135</td><td data-label="Dictionary savings">—</td></tr>
+</tbody></table></div>
+<h3>Relay B</h3><div class="table-wrap"><table class="compression-results"><thead><tr><th>Configuration</th><th>Total (MB)</th><th>Input/output ratio</th><th>Mean bytes per scrape</th><th>Dictionary savings</th></tr></thead><tbody>
+<tr><td>Reconstructed text, before compression</td><td data-label="Total (MB)">263.3</td><td data-label="Input/output ratio">1.0×</td><td data-label="Mean bytes per scrape">26,125</td><td data-label="Dictionary savings">—</td></tr>
+<tr><td>Level 3 (zstd default); one scrape per frame</td><td data-label="Total (MB)">29.5</td><td data-label="Input/output ratio">8.9×</td><td data-label="Mean bytes per scrape">2,925</td><td data-label="Dictionary savings">—</td></tr>
+<tr><td>Level 3 (zstd default) + raw dictionary; one scrape per frame</td><td data-label="Total (MB)">19.0</td><td data-label="Input/output ratio">13.9×</td><td data-label="Mean bytes per scrape">1,880</td><td data-label="Dictionary savings">35.7%</td></tr>
+<tr><td>Level 19; one scrape per frame</td><td data-label="Total (MB)">23.9</td><td data-label="Input/output ratio">11.0×</td><td data-label="Mean bytes per scrape">2,371</td><td data-label="Dictionary savings">—</td></tr>
+<tr><td>Level 19 + raw dictionary; one scrape per frame</td><td data-label="Total (MB)">11.3</td><td data-label="Input/output ratio">23.3×</td><td data-label="Mean bytes per scrape">1,123</td><td data-label="Dictionary savings">52.6%</td></tr>
+<tr><td>Level 3 (zstd default) + dictionary trained on the other relay; one scrape per frame</td><td data-label="Total (MB)">13.4</td><td data-label="Input/output ratio">19.6×</td><td data-label="Mean bytes per scrape">1,330</td><td data-label="Dictionary savings">54.5%</td></tr>
+<tr><td>Level 3 (zstd default); up to five scrapes per frame</td><td data-label="Total (MB)">6.9</td><td data-label="Input/output ratio">38.2×</td><td data-label="Mean bytes per scrape">683</td><td data-label="Dictionary savings">—</td></tr>
+<tr><td>Level 3 (zstd default) + raw dictionary; up to five scrapes per frame</td><td data-label="Total (MB)">4.7</td><td data-label="Input/output ratio">56.6×</td><td data-label="Mean bytes per scrape">461</td><td data-label="Dictionary savings">32.5%</td></tr>
+<tr><td>Level 19 + long-distance matching; all collected scrapes in one frame*</td><td data-label="Total (MB)">1.1</td><td data-label="Input/output ratio">242.9×</td><td data-label="Mean bytes per scrape">108</td><td data-label="Dictionary savings">—</td></tr>
+</tbody></table></div>
+    <p class="refs"><strong>* Separate whole-period experiment:</strong> All collected scrapes were concatenated and compressed in one call, at level 19 with long-distance matching and a 128 MiB window. This path did not enable frame checksums and did not perform a round-trip check, so it is not equivalent to the independently verified per-scrape cases. Its input/output ratios were 194.3× for Relay A and 242.9× for Relay B. MiB means 1,048,576 bytes. It does not test a live streaming collector or short data-retention policy.</p>
+    <p class="refs"><strong>Scope:</strong> Two relays, one shared host, and about one week of reconstructed text. The comparisons measure compressed size.</p>
+
+    <h2 id="family-counts">Complete Family Counts <a class="anchor" href="#family-counts" aria-label="Link to this section">#</a></h2>
+    <p>Counts below use the two-port test configuration, including the signing certificate. In this one-service configuration, each family contributes two metadata lines in addition to its samples. The 329-line baseline contains 23 relay families and the logging family; the conditional signing family brings the relay definition total to 24. Rows are ranked by sample count within each group.</p>
+    <h3>Relay</h3><div class="table-wrap"><table class="family-counts"><thead><tr><th>Family</th><th>Samples</th><th>All lines</th></tr></thead><tbody>
+<tr><td><code>tor_relay_connections_total</code></td><td>102</td><td>104</td></tr>
+<tr><td><code>tor_relay_connections</code></td><td>68</td><td>70</td></tr>
+<tr><td><code>tor_relay_congestion_control</code></td><td>17</td><td>19</td></tr>
+<tr><td><code>tor_relay_dos_total</code></td><td>13</td><td>15</td></tr>
+<tr><td><code>tor_relay_exit_dns_error_total</code></td><td>12</td><td>14</td></tr>
+<tr><td><code>tor_relay_congestion_control_total</code></td><td>10</td><td>12</td></tr>
+<tr><td><code>tor_relay_flag</code></td><td>9</td><td>11</td></tr>
+<tr><td><code>tor_relay_load_onionskins_total</code></td><td>8</td><td>10</td></tr>
+<tr><td><code>tor_relay_intro1_total</code></td><td>7</td><td>9</td></tr>
+<tr><td><code>tor_relay_est_rend_total</code></td><td>6</td><td>8</td></tr>
+<tr><td><code>tor_relay_rend1_total</code></td><td>5</td><td>7</td></tr>
+<tr><td><code>tor_relay_est_intro_total</code></td><td>4</td><td>6</td></tr>
+<tr><td><code>tor_relay_load_oom_bytes_total</code></td><td>4</td><td>6</td></tr>
+<tr><td><code>tor_relay_streams_total</code></td><td>3</td><td>5</td></tr>
+<tr><td><code>tor_relay_load_global_rate_limit_reached_total</code></td><td>2</td><td>4</td></tr>
+<tr><td><code>tor_relay_load_socket_total</code></td><td>2</td><td>4</td></tr>
+<tr><td><code>tor_relay_traffic_bytes</code></td><td>2</td><td>4</td></tr>
+<tr><td><code>tor_relay_circ_proto_violation_total</code></td><td>1</td><td>3</td></tr>
+<tr><td><code>tor_relay_circuits_total</code></td><td>1</td><td>3</td></tr>
+<tr><td><code>tor_relay_destroy_cell_total</code></td><td>1</td><td>3</td></tr>
+<tr><td><code>tor_relay_drop_cell_total</code></td><td>1</td><td>3</td></tr>
+<tr><td><code>tor_relay_exit_dns_query_total</code></td><td>1</td><td>3</td></tr>
+<tr><td><code>tor_relay_load_tcp_exhaustion_total</code></td><td>1</td><td>3</td></tr>
+<tr><td><code>tor_relay_signing_cert_expiry_timestamp</code></td><td>1</td><td>3</td></tr>
+</tbody><tfoot><tr><th scope="row">Relay total (24 families)</th><td>281</td><td>329</td></tr></tfoot></table></div>
+<h3>Onion service</h3><div class="table-wrap"><table class="family-counts"><thead><tr><th>Family</th><th>Samples</th><th>All lines</th></tr></thead><tbody>
+<tr><td><code>tor_hs_intro_circ_build_time</code></td><td>8</td><td>10</td></tr>
+<tr><td><code>tor_hs_rend_circ_build_time</code></td><td>8</td><td>10</td></tr>
+<tr><td><code>tor_hs_rdv_error_count</code></td><td>5</td><td>7</td></tr>
+<tr><td><code>tor_hs_intro_rejected_intro_req_count</code></td><td>4</td><td>6</td></tr>
+<tr><td><code>tor_hs_app_read_bytes_total</code></td><td>2</td><td>4</td></tr>
+<tr><td><code>tor_hs_app_write_bytes_total</code></td><td>2</td><td>4</td></tr>
+<tr><td><code>tor_hs_intro_established_count</code></td><td>1</td><td>3</td></tr>
+<tr><td><code>tor_hs_intro_num_total</code></td><td>1</td><td>3</td></tr>
+<tr><td><code>tor_hs_pow_suggested_effort</code></td><td>1</td><td>3</td></tr>
+<tr><td><code>tor_hs_rdv_established_count</code></td><td>1</td><td>3</td></tr>
+<tr><td><code>tor_hs_rdv_num_total</code></td><td>1</td><td>3</td></tr>
+<tr><td><code>tor_hs_rdv_pow_pqueue_count</code></td><td>1</td><td>3</td></tr>
+</tbody><tfoot><tr><th scope="row">Onion service total (12 families)</th><td>35</td><td>59</td></tr></tfoot></table></div>
+<h3>Logging</h3><div class="table-wrap"><table class="family-counts"><thead><tr><th>Family</th><th>Samples</th><th>All lines</th></tr></thead><tbody>
+<tr><td><code>tor_bug_reached_count</code></td><td>1</td><td>3</td></tr>
+</tbody><tfoot><tr><th scope="row">Logging total (1 family)</th><td>1</td><td>3</td></tr></tfoot></table></div>
+<p><strong>Grand total: 37 families, 317 samples and 391 lines.</strong></p>
+    <p>Every onion-service sample carries an <code>onion</code> label. Application byte counters also carry a <code>port</code>; <code>tor_hs_rdv_error_count</code> and <code>tor_hs_intro_rejected_intro_req_count</code> expand by <code>reason</code>. Each circuit-build histogram emits five finite buckets at 1,000, 5,000, 10,000, 30,000 and 60,000 milliseconds, plus <code>+Inf</code>, <code>_sum</code> and <code>_count</code>. Bucket labels are printed with two decimal places, such as <code>le="1000.00"</code>.</p>
+
+    <p style="text-align: center;"><a href="/#get-involved" class="btn">Join the Mission</a></p>
+    <div class="footer"><p class="site-copyright">© <span data-copyright-year>2026</span> 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p></div>
+  </article>
+  <!--/email_off-->
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <title>BEGIN_DIR Surges on Our Tor Relays | 1AEO</title>
+  <meta name="description" content="We recorded 3.62 billion BEGIN_DIR stream starts across 775 Tor relays in 48 hours in October 2026, with measured peaks and duration patterns.">
+  <link rel="canonical" href="https://1aeo.com/blog/tor-begin-dir-surges.html">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="BEGIN_DIR Surges on Our Tor Relays">
+  <meta property="og:description" content="We recorded 3.62 billion BEGIN_DIR stream starts across 775 Tor relays in 48 hours in October 2026, with measured peaks and duration patterns.">
+  <meta property="og:url" content="https://1aeo.com/blog/tor-begin-dir-surges.html">
+  <meta property="og:image" content="https://1aeo.com/blog/images/tor-begin-dir-surges-history.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="2160">
+  <meta property="og:image:height" content="1728">
+  <meta property="og:image:alt" content="Hourly BEGIN_DIR stream starts from October 2025 through October 2026, filtered by observed HSDir or V2Dir flags.">
+  <meta property="og:site_name" content="1AEO">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="BEGIN_DIR Surges on Our Tor Relays">
+  <meta name="twitter:description" content="We recorded 3.62 billion BEGIN_DIR stream starts across 775 Tor relays in 48 hours in October 2026, with measured peaks and duration patterns.">
+  <meta name="twitter:image" content="https://1aeo.com/blog/images/tor-begin-dir-surges-history.png">
+  <meta name="twitter:image:alt" content="Hourly BEGIN_DIR stream starts from October 2025 through October 2026, filtered by observed HSDir or V2Dir flags.">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "BEGIN_DIR Surges on Our Tor Relays",
+  "description": "We recorded 3.62 billion BEGIN_DIR stream starts across 775 Tor relays in 48 hours in October 2026, with measured peaks and duration patterns.",
+  "url": "https://1aeo.com/blog/tor-begin-dir-surges.html",
+  "mainEntityOfPage": "https://1aeo.com/blog/tor-begin-dir-surges.html",
+  "image": [
+    "https://1aeo.com/blog/images/tor-begin-dir-surges-history.png"
+  ],
+  "datePublished": "2026-10-23",
+  "dateModified": "2026-10-23",
+  "author": {
+    "@type": "Organization",
+    "name": "1AEO Team"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "1st Amendment Encrypted Openness",
+    "url": "https://1aeo.com/"
+  }
+}
+  </script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; background-color: #121212; color: #ffffff; }
+    .nav { background-color: #1e1e1e; padding: 10px 0; box-shadow: 0 2px 10px rgba(0, 255, 127, 0.2); position: sticky; top: 0; z-index: 1000; }
+    .nav-toggle { display: none; background: none; border: none; font-size: 24px; color: #00ff7f; position: absolute; top: 10px; right: 20px; cursor: pointer; }
+    .nav-links { display: flex; justify-content: center; flex-wrap: wrap; }
+    .nav-links a { color: #00ff7f; text-decoration: none; margin: 0 15px; font-size: 18px; }
+    .nav-links a:hover { text-decoration: underline; }
+    @media (max-width: 600px) { .nav-links { display: none; flex-direction: column; margin-top: 40px; } .nav-links.show { display: flex; } .nav-toggle { display: block; } }
+    .container { max-width: 800px; margin: 50px auto; padding: 20px; background: #1e1e1e; box-shadow: 0px 0px 15px rgba(0, 255, 127, 0.6); border-radius: 10px; text-align: left; }
+    h1, h2, h3 { color: #00ff7f; }
+    h1 { text-align: center; font-size: 26px; }
+    p { font-size: 18px; color: #cccccc; line-height: 1.6; margin-bottom: 1em; }
+    .meta { font-size: 14px; color: #888; margin-bottom: 20px; text-align: center; }
+    ul, ol { color: #cccccc; margin-bottom: 1em; }
+    li { font-size: 18px; margin-bottom: 8px; line-height: 1.6; }
+    code { background-color: #2d2d2d; padding: 2px 6px; border-radius: 3px; font-family: monospace; color: #00ff7f; }
+    pre { background-color: #2d2d2d; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 14px; }
+    pre code { background: none; padding: 0; color: #ffffff; }
+    a { color: #00ff7f; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container img { display: block; margin: 20px auto; max-width: 100%; height: auto; border-radius: 5px; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #444; }
+    th { background-color: #2d2d2d; color: #00ff7f; }
+    td { color: #cccccc; }
+    tr:hover { background-color: #252525; }
+    .warning { background-color: #2d2d2d; border-left: 4px solid #ff6b6b; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .callout { background-color: #2d2d2d; border-left: 4px solid #00ff7f; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; font-size: 14px; color: #777; text-align: center; }
+    .btn { display: inline-block; margin-top: 20px; padding: 12px 24px; font-size: 18px; color: #121212; background-color: #00ff7f; text-decoration: none; font-weight: bold; border-radius: 5px; transition: background 0.3s; }
+    .btn:hover { background-color: #00cc66; text-decoration: none; }
+    .highlight { color: #ff6b6b; font-weight: bold; }
+    .success { color: #00ff7f; font-weight: bold; }
+    .series { font-size: 15px; color: #aaa; background-color: #181818; border-left: 4px solid #00ff7f; padding: 12px 16px; margin: 0 0 24px; border-radius: 0 5px 5px 0; line-height: 1.5; }
+    .series a { color: #00ff7f; }
+    h2, h3 { scroll-margin-top: 70px; }
+    .anchor { color: #3f3f3f; text-decoration: none; margin-left: 8px; font-size: 0.85em; font-weight: normal; }
+    h2:hover .anchor, h3:hover .anchor { color: #00ff7f; }
+  
+  /* Accessibility and responsive figure styles. */
+  :root { color-scheme: dark; }
+  #article { scroll-margin-top: 80px; }
+  p, li, figcaption { overflow-wrap: anywhere; }
+  a:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
+    outline: 2px solid #00ff7f; outline-offset: 5px; border-radius: 2px; }
+  .skip-link { position: absolute; left: 12px; top: -100px; padding: 12px;
+    background: #00ff7f; color: #121212; z-index: 2000; }
+  .skip-link:focus { top: 8px; }
+  .mobile-menu { display: none; }
+  figure { margin: 20px 0; }
+  .figure-link { display: block; border-radius: 5px; }
+  figcaption { font-size: 15px; line-height: 1.6; color: #aaa; margin-top: 14px; }
+  figcaption em { font-style: normal; }
+  .figure-action { font-size: 14px; margin: 10px 0 0; }
+  .table-scroll { overflow-x: auto; overscroll-behavior-x: contain; margin: 20px 0; }
+  .table-scroll table { min-width: 610px; margin: 0; font-variant-numeric: tabular-nums; }
+  td:not(:first-child) { white-space: nowrap; }
+  .scroll-hint { display: none; font-size: 13px; color: #aaa; }
+  @media (max-width: 600px) {
+    .desktop-nav { display: none; }
+    .mobile-menu { display: block; }
+    .mobile-menu summary { list-style: none; }
+    .mobile-menu summary::-webkit-details-marker { display: none; }
+    .mobile-menu[open] .nav-links { display: flex; gap: 12px; }
+    .scroll-hint { display: block; margin: -8px 0 20px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+  .metric-reference { margin-top: 28px; padding-top: 16px; border-top: 1px solid #333; }
+  .metric-reference > h2 { font-size: 20px; }
+  .metric-reference p, .metric-reference li, .metric-reference th, .metric-reference td {
+    font-size: 14px; line-height: 1.6; overflow-wrap: anywhere; }
+  .metric-reference code { font-size: 13px; }
+  .metric-reference .table-scroll table { min-width: 0; table-layout: fixed; }
+  .metric-reference th:first-child, .metric-reference td:first-child { width: 24%; }
+  .metric-reference td { white-space: normal; vertical-align: top; }
+  .metric-reference .scroll-hint { display: none; }
+  @media print {
+    :root { color-scheme: light; }
+    body, .container { background: #fff; color: #111; box-shadow: none; }
+    .container { margin: 0; max-width: none; padding: 0; }
+    .nav, .skip-link, .figure-action, .anchor, .scroll-hint, .btn { display: none; }
+    h1, h2, h3, p, li, a, strong, th, td, figcaption, .meta { color: #111; }
+    code, th { background: #eee; color: #111; }
+    .table-scroll { overflow: visible; }
+    .table-scroll table { min-width: 0; }
+    figure, tr { break-inside: avoid; }
+  }
+</style>
+  <script src="/copyright-year.js" defer></script>
+  <link rel="stylesheet" href="/blog/topics.css">
+</head>
+<body>
+  <a class="skip-link" href="#article">Skip to article</a>
+  <nav class="nav" aria-label="Main navigation">
+    <div class="nav-links desktop-nav"><a href="https://1aeo.com/">Home</a>
+<a href="https://1aeo.com/onionvanity/">Onion Vanity</a>
+<a href="https://1aeo.com/blog/">Blog</a>
+<a href="https://1aeo.com/onionflash/">Onion Flash</a>
+<a href="https://metrics.1aeo.com">Metrics</a>
+<a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
+<a href="https://aroivalidator.1aeo.com">AROI Validator</a>
+<a href="https://routefluxmap.1aeo.com">RouteFluxMap</a>
+<a href="https://1aeo.com/#contact">Contact</a></div>
+    <details class="mobile-menu">
+      <summary class="nav-toggle" aria-label="Navigation menu">&#9776;</summary>
+      <div class="nav-links"><a href="https://1aeo.com/">Home</a>
+<a href="https://1aeo.com/onionvanity/">Onion Vanity</a>
+<a href="https://1aeo.com/blog/">Blog</a>
+<a href="https://1aeo.com/onionflash/">Onion Flash</a>
+<a href="https://metrics.1aeo.com">Metrics</a>
+<a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
+<a href="https://aroivalidator.1aeo.com">AROI Validator</a>
+<a href="https://routefluxmap.1aeo.com">RouteFluxMap</a>
+<a href="https://1aeo.com/#contact">Contact</a></div>
+    </details>
+  </nav>
+  <main id="article" class="container">
+    <article aria-labelledby="article-title">
+      <header>
+        <h1 id="article-title">BEGIN_DIR Surges on Our Tor Relays</h1>
+        <p class="meta"><em>By 1AEO Team • October 23, 2026 • BEGIN_DIR traffic measurements</em></p>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=dos" data-blog-topic="dos" rel="tag">DoS</a> <a href="/blog/?tag=onion-services" data-blog-topic="onion-services" rel="tag">Onion services</a></div>
+      </header>
+      
+
+<p><strong>3.62 billion directory stream starts in just 48 hours.</strong> We recorded that BEGIN_DIR volume across <strong>775 Tor relays reporting HSDir or V2Dir</strong>, in the window ending <strong>October 21, 2026, 01:00 EDT</strong>.</p>
+<p>We assess these surges as <strong>likely denial-of-service traffic</strong>. The MetricsPort counter <code>tor_relay_streams_total{type="BEGIN_DIR"}</code>, collected by Prometheus, combines onion-service descriptor fetches (<code>GET</code>), uploads (<code>POST</code>) and other directory requests. It cannot distinguish request types or malicious intent.</p>
+<h2 id="per-relay-begin-dir-peaks">Per-relay BEGIN_DIR peaks<a aria-label="Link to Per-relay BEGIN_DIR peaks" class="anchor" href="#per-relay-begin-dir-peaks">#</a></h2>
+<p><em>Filter: HSDir or V2Dir. Both peaks below are 120-second averages.</em></p>
+<p><strong>Highest per-relay peak among the periods checked:</strong> about <strong>14,700 BEGIN_DIR starts/s</strong> in September 2026.</p>
+<p><strong>Most recent checked per-relay peak:</strong> about <strong>11,800 BEGIN_DIR starts/s</strong>, in the 48 hours ending October 23, 2026, <strong>01:20 PDT</strong>.</p>
+<figure aria-labelledby="figure-caption-1"><a aria-label="Open this figure at full resolution in a new tab" class="figure-link" href="images/tor-begin-dir-surges-peaks.png" rel="noopener" target="_blank"><img alt="Peak per-relay BEGIN_DIR rates: approximately 1,090 starts/s in November 2025, 8,680 in July 2026, 10,500 in August 2026, 14,700 in September 2026 and 11,800 in the 48 hours ending October 23, 2026, 01:20 PDT. October covers a shorter window. All peaks average 120 seconds." decoding="async" height="1404" src="images/tor-begin-dir-surges-peaks.png" width="2160"/></a><figcaption id="figure-caption-1"><em>Figure: The first four bars cover full months; October covers October 21–23, 2026. These are sample averages, not instantaneous peaks.</em></figcaption><p class="figure-action"><a href="images/tor-begin-dir-surges-peaks.png" rel="noopener" target="_blank">Open full-resolution figure (new tab)</a></p></figure>
+
+<h2 id="a-year-of-waves">History over 12 months<a aria-label="Link to History over 12 months" class="anchor" href="#a-year-of-waves">#</a></h2>
+<p><em>Filter: HSDir or V2Dir throughout counted intervals. Reporting relays vary.</em></p>
+<p><strong>Recorded history total:</strong> <strong>240.86 billion BEGIN_DIR starts</strong>, from October 19, 2025 through October 19, 2026, <strong>22:20 PDT</strong>.</p>
+<p><strong>Largest fleet hourly count:</strong> <strong>916 million BEGIN_DIR starts</strong>, on July 22, 2026, <strong>22:00–23:00 PDT</strong>.</p>
+<figure aria-labelledby="figure-caption-2"><a aria-label="Open this figure at full resolution in a new tab" class="figure-link" href="images/tor-begin-dir-surges-history.png" rel="noopener" target="_blank"><img alt="Hourly BEGIN_DIR stream starts filtered by observed HSDir or V2Dir flags." decoding="async" height="1728" src="images/tor-begin-dir-surges-history.png" width="2160"/></a><figcaption id="figure-caption-2"><em>Figure: Hourly observed counts. Final bucket: 20 minutes. Pacific time.</em></figcaption><p class="figure-action"><a href="images/tor-begin-dir-surges-history.png" rel="noopener" target="_blank">Open full-resolution figure (new tab)</a></p></figure>
+
+<h2 id="what-individual-relays-saw">Above 500 BEGIN_DIR starts/s<a aria-label="Link to Above 500 BEGIN_DIR starts/s" class="anchor" href="#what-individual-relays-saw">#</a></h2>
+<p><em>Window: October 21, 01:20–October 23, 01:20 PDT, 2026. Filter: both HSDir and V2Dir throughout each counted interval. Rates are sample-interval averages.</em></p>
+<p><strong>Relays exceeding 500 BEGIN_DIR starts/s:</strong> <strong>280 of 555 observed relays</strong>.</p>
+<p><strong>Maximum overlap:</strong> <strong>46 relays</strong> with overlapping observations averaging <strong>&gt;500 BEGIN_DIR starts/s</strong>.</p>
+<p><strong>Duration above 500 BEGIN_DIR starts/s:</strong> median <strong>74 minutes</strong>, longest <strong>22 hours 22 minutes</strong>, among <strong>30 fully observed periods</strong>. Another <strong>617 periods</strong> had an unobserved start or end.</p>
+<p><strong>Repeat surges:</strong> <strong>4 relays returned above 500 BEGIN_DIR starts/s 14 times</strong>, after continuously observed periods at or below that rate.</p>
+<h3 id="duration-distributions-two-days-and-twelve-months">Duration distributions: two days and twelve months<a aria-label="Link to Duration distributions: two days and twelve months" class="anchor" href="#duration-distributions-two-days-and-twelve-months">#</a></h3>
+<figure aria-labelledby="figure-caption-3"><a aria-label="Open this figure at full resolution in a new tab" class="figure-link" href="images/tor-begin-dir-surges-duration.png" rel="noopener" target="_blank"><img alt="Grouped percentages of fully observed periods above 500 BEGIN_DIR starts/s: 30 periods from 17 verified relays during October 21–23, 2026, and 8,955 periods from 804 counter series during October 23, 2025–October 23, 2026. Each window is normalized separately; both HSDir and V2Dir are required." decoding="async" height="1728" src="images/tor-begin-dir-surges-duration.png" width="2160"/></a><figcaption id="figure-caption-3"><em>Figure: Percentages use each window's fully observed period count; labels show counts. The windows overlap. Annual counter series are not verified unique historical relays.</em></figcaption><p class="figure-action"><a href="images/tor-begin-dir-surges-duration.png" rel="noopener" target="_blank">Open full-resolution figure (new tab)</a></p></figure>
+
+<h3 id="share-of-observed-time">Share of measured time<a aria-label="Link to Share of measured time" class="anchor" href="#share-of-observed-time">#</a></h3>
+<figure aria-labelledby="figure-caption-4"><a aria-label="Open this figure at full resolution in a new tab" class="figure-link" href="images/tor-begin-dir-surges-time-share-detail.png" rel="noopener" target="_blank"><img alt="555 relays grouped by the percentage of measured time above 500 BEGIN_DIR starts/s. The expanded bins above 50% contain 4, 0, 1, 0, 2 and 18 relays, with exactly 100% separate. Those 18 relays have only 4–130 minutes of usable measurements each within the 48-hour window." decoding="async" height="1800" src="images/tor-begin-dir-surges-time-share-detail.png" width="1728"/></a><figcaption id="figure-caption-4"><em>Figure: All 555 relays, with the range above 50% expanded into narrower bins.</em></figcaption><p class="figure-action"><a href="images/tor-begin-dir-surges-time-share-detail.png" rel="noopener" target="_blank">Open full-resolution figure (new tab)</a></p></figure>
+
+<section aria-labelledby="metrics-used" class="metric-reference"><h2 id="metrics-used">Metrics Used<a aria-label="Link to Metrics Used" class="anchor" href="#metrics-used">#</a></h2><div aria-label="Data table: Measurement; MetricsPort selector. Scroll horizontally if needed." class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">Measurement</th>
+<th scope="col">MetricsPort selector</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BEGIN_DIR starts</td>
+<td><a href="https://spec.torproject.org/tor-spec/opening-streams.html#opening-a-directory-stream"><code>tor_relay_streams_total{type="BEGIN_DIR"}</code></a></td>
+</tr>
+<tr>
+<td>Relay flags</td>
+<td><code>tor_relay_flag{type="HSDir"}</code> and <code>tor_relay_flag{type="V2Dir"}</code></td>
+</tr>
+</tbody>
+</table></div><p class="scroll-hint">Scroll the table horizontally to view all columns.</p><p>Counts sum adjacent counter differences, excluding detected resets, source changes, failed scrapes and gaps over <strong>180 seconds</strong>. Relay counts use verified identities. Fully observed periods require adjacent observations at or below <strong>500 BEGIN_DIR starts/s</strong> on both sides. <a href="https://gitlab.torproject.org/tpo/core/tor/-/blob/tor-0.4.9.14/src/core/or/connection_edge.c#L4696">Counting code</a>.</p></section>
+
+
+
+    </article>
+    <p style="text-align: center;"><a href="https://1aeo.com/#get-involved" class="btn">Join the Mission</a></p>
+    <footer class="footer">
+      <p>© <span data-copyright-year>2026</span> 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p>
+    </footer>
+  </main>
+</body>
+</html>

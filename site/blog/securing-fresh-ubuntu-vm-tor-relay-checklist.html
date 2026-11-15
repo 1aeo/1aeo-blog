@@ -71,6 +71,8 @@
     "description": "Harden a new Ubuntu 24.04/26.04 VM for a Tor relay: unique passwords, key-only SSH, two open ports, Tor from deb.torproject.org, and the checks that prove it."
   }
   </script>
+  <script src="/copyright-year.js" defer></script>
+  <link rel="stylesheet" href="/blog/topics.css">
 </head>
 <body>
   <div class="nav">
@@ -79,6 +81,7 @@
       <a href="/">Home</a>
       <a href="/onionvanity/">Onion Vanity</a>
       <a href="/blog/">Blog</a>
+      <a href="/onionflash/">Onion Flash</a>
       <a href="https://metrics.1aeo.com">Metrics</a>
       <a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
       <a href="https://aroivalidator.1aeo.com">AROI Validator</a>
@@ -91,6 +94,7 @@
     <!--email_off-->
     <h1>Securing a Fresh Ubuntu VM for a Tor Relay: A Beginner's Checklist</h1>
     <p class="meta"><em>By 1AEO Team &bull; Published October 10, 2026 &bull; Updated October 17, 2026 &bull; A non-exit relay on Ubuntu 24.04 or 26.04 LTS</em></p>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=securing-relays" data-blog-topic="securing-relays" rel="tag">Securing relays</a></div>
 
     <p class="series"><strong>Part 1 of a two-part series</strong> on securing Tor relay hosts after the October 2026 intrusions. &nbsp;1.&nbsp;<strong>Securing a Fresh Ubuntu VM for a Tor Relay</strong> (you are here) &mdash; one non-exit relay. &nbsp;2.&nbsp;<strong>Advanced Hardening for Tor Relay Operators</strong> (coming soon) &mdash; several relays, offline keys, monitoring, incident response.</p>
 
@@ -210,7 +214,7 @@ grep -rniE "^\s*(%include|ExitRelay|ExitPolicy)" /etc/tor/     # only "ExitRelay
     <p style="text-align: center;"><a href="/#get-involved" class="btn">Join the Mission</a></p>
 
     <div class="footer">
-      <p>© 2026 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p>
+      <p>© <span data-copyright-year>2026</span> 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p>
     </div>
   </div>
 </body>

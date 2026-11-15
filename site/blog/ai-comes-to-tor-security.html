@@ -102,6 +102,8 @@
   ]
 }
   </script>
+  <script src="/copyright-year.js" defer></script>
+  <link rel="stylesheet" href="/blog/topics.css">
 </head>
 <body>
   <div class="nav">
@@ -112,6 +114,7 @@
           <a href="https://1aeo.com/">Home</a>
           <a href="https://1aeo.com/onionvanity/">Onion Vanity</a>
           <a href="https://1aeo.com/blog/">Blog</a>
+          <a href="https://1aeo.com/onionflash/">Onion Flash</a>
           <a href="https://metrics.1aeo.com">Metrics</a>
           <a href="https://exitdnshealth.1aeo.com">Exit DNS Health</a>
           <a href="https://aroivalidator.1aeo.com">AROI Validator</a>
@@ -123,6 +126,7 @@
     <h1>AI Helps Secure Tor: Obsolete Relay Average Hits a Ten-Year High</h1>
     <p class="dek">Tor’s <a href="https://gitlab.torproject.org/tpo/core/tor/-/blob/tor-0.4.9.14/ChangeLog#L134">0.4.9.13 changelog</a> credits security fixes to the <q>LLM report firehose</q>.</p>
     <p class="meta"><em>By 1AEO Team &bull; October 16, 2026 &bull; AI security reports and relay version trends</em></p>
+      <div class="blog-post-topics" role="group" aria-label="Post topics"><a href="/blog/?tag=securing-relays" data-blog-topic="securing-relays" rel="tag">Securing relays</a></div>
     <p>As AI helps uncover Tor security flaws, the network faces a <strong class="highlight">ten-year high in its average obsolete-relay count</strong>. Our <a href="https://collector.torproject.org/archive/relay-descriptors/consensuses/">2017–2026 reconstruction</a> puts 2026 YTD at <strong>1,465 running relays on obsolete versions</strong>—nearly three times 2025—and <strong>15.0% of observed Running relay-hours</strong>, above the previous full-year high of <strong>9.9% in 2018</strong>.</p>
     <figure>
       <a href="images/ai-tor-security-yearly-version-status-2017-2026.png" target="_blank" rel="noopener"><img src="images/ai-tor-security-yearly-version-status-2017-2026.png" width="4200" height="3150" alt="Ten-year 100% stacked chart of reconstructed Tor relay version-status shares, 2017–2026. Obsolete versions represent 15.0% of observed Running relay-hours in 2026 year-to-date, versus 5.8% in 2025 and a previous full-year high of 9.9% in 2018. The 2026 period is partial and has 91.3% hourly coverage. Chart attributed to 1aeo.com."></a>
@@ -136,7 +140,7 @@
     </figure>
     <p><a href="https://metrics.torproject.org/onionoo.html#details_relay_version_status">“Obsolete”</a> means older than every recommended version. It is not a count of compromised relays or every relay missing the newest security fixes.</p>
     <div class="callout"><p><strong>Keep your relay current:</strong> use <a href="https://support.torproject.org/little-t-tor/getting-started/installing/">Tor’s official packages</a> and enable <a href="https://community.torproject.org/relay/setup/guard/debian-ubuntu/updates/">automatic updates on Debian or Ubuntu</a>. Verify the running version after upgrades.</p></div>
-    <div class="footer"><p>&copy; 2026 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p></div>
+    <div class="footer"><p>&copy; <span data-copyright-year>2026</span> 1st Amendment Encrypted Openness | Privacy First | No Logs | No Borders</p></div>
   </article>
 </body>
 </html>
